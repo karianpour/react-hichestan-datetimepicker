@@ -1,0 +1,107 @@
+# React component for date and time input
+
+A persian(jalaali, jalali, shamsi) date input with picker, 
+which allows the user to type or select the date from the picker.
+
+The component is compatible with react 16.
+
+This module is written using  [moment-jalali](https://github.com/jalaali/moment-jalaali), which is relied on [momentjs](http://momentjs.com/).
+
+This module is written with inspiration of [react-advance-jalaali-datepicker](https://github.com/A-Kasaaian/react-advance-jalaali-datepicker).
+
+
+## Installation
+
+Use `npm i react-hichestan-datetimepicker` in order to install the module.
+
+## Usage
+The component is quite the same as any other similar input, that means no label and decoration is provided for the component.
+
+```
+import {DateTimeInput} from 'react-hichestan-datetimepicker';
+```
+
+and in the render function :
+```
+<DateTimeInput
+  value={this.state.myDateTime}
+  name={'myDateTime'}
+  onChange={this.handleChange}/>
+```
+
+and handle the change like normal input:
+```
+  handleChange = (event) => {
+    const newState = {};
+    newState[event.target.name] = event.target.value;
+    this.setState(newState);
+  };
+
+```
+
+#### component types:
+
+| name | Description |
+| ---- | ----------- |
+| **DateTimeInput** | shows a box allowing you to type or pick a _date_  and a _time_|
+
+
+
+### -DateTimeInput
+
+Property | Type | Required | Default value | Description
+:--- | :--- | :--- | :--- | :---
+name|string|no||The name that will be set while firing the onChange event in the target object
+autoOk|bool|no|true|If true, automatically accept and close the picker on select a date.
+closeLabel|node|no||Override the default text of the &#x27;OK&#x27; button.
+className|string|no||The css class name of the root element.
+container|enum|no|&lt;See the source code&gt;|Used to control how the Date Picker will be displayed when the input field is focused.
+&#x60;dialog&#x60; (default) displays the DatePicker as a dialog with a modal.
+&#x60;inline&#x60; displays the DatePicker below the input field (similar to auto complete).
+dialogContainerStyle|object|no||Override the inline-styles of DatePickerDialog&#x27;s Container element.
+dialogContainerClassName|object|no||Override the inline-styles of DatePickerDialog&#x27;s Container element.
+disabled|bool|no||Disables the DateTimeInput.
+readOnly|bool|no||makes the DateTimeInput readonly.
+onChange|func|no||Callback function that is fired when the date value changes.
+
+@param {null} null Since there is no particular event associated with the change,
+the first argument will always be null.
+@param {object} date The new date.
+onClick|func|no||Callback function that is fired when a click event occurs on the Date Picker&#x27;s &#x60;TextField&#x60;.
+
+@param {object} event Click event targeting the &#x60;TextField&#x60;.
+onDismiss|func|no||Callback function that is fired when the Date Picker&#x27;s dialog is dismissed.
+onFocus|func|no||Callback function that is fired when the Date Picker&#x27;s &#x60;TextField&#x60; gains focus.
+onShow|func|no||Callback function that is fired when the Date Picker&#x27;s dialog is shown.
+filterDate|func|no||a function to filter some dates, return true means that it accept the date and false is to reject it.
+it gives a date &#x27;jYYYY/jMM/jDD&#x27; format as the first parameter
+style|object|no|&lt;See the source code&gt;|Override the inline-styles of the root element.
+value|union|no||Sets the date for the Date Picker programmatically.
+-----
+
+###Contribution
+Feel free to fork and add some feature. If you have time to do improvement on the U/I that will be appreciated.
+
+
+
+### License
+
+<sub>MIT License</sub>  
+<sub>Copyright (c) 2017 Kayvan Arianpour (<karianpour@gmail.com>)</sub>  
+<sub>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</sub>
+
+<sub>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</sub>
+
+<sub>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</sub>

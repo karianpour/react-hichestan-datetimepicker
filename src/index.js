@@ -4,14 +4,26 @@ import Example from './Examples';
 
 const App = () => (
   <div style={{
-    width: 640, margin: "15px auto", direction: 'rtl',
+    width: 640,
+    margin: "15px auto",
+    direction: 'rtl',
     fontSize: 16,
     fontWeight: 400,
   }}>
     <h1>Hello React</h1>
-    <input type="text" placeholder="check the tab index" />
+    <label>فیلد ۱
+      <br/>
+      <input type="text" placeholder="check the tab index" />
+    </label>
+    <br/>
+    <br/>
     <Example/>
-    <input type="text" placeholder="focus on me to see the un-focus style" />
+    <br/>
+    <br/>
+    <label>فیلد آخر
+      <br/>
+      <input type="text" placeholder="focus on me to see the un-focus style" />
+    </label>
   </div>
 );
 
