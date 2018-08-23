@@ -19,12 +19,12 @@ Use `npm i react-hichestan-datetimepicker` in order to install the module.
 ## Usage
 The component is quite the same as any other similar input, that means no label and decoration is provided for the component.
 
-```jsx harmony
+```jsx
 import {DateTimeInput} from 'react-hichestan-datetimepicker';
 ```
 
 and in the render function :
-```jsx harmony
+```jsx
 <DateTimeInput
   value={this.state.myDateTime}
   name={'myDateTime'}
@@ -32,7 +32,7 @@ and in the render function :
 ```
 
 and handle the change like normal input:
-```jsx harmony
+```jsx
   handleChange = (event) => {
     const newState = {};
     newState[event.target.name] = event.target.value;
