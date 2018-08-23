@@ -21,11 +21,7 @@ class DateTimeInput extends Component{
     /**
      * Override the default text of the 'OK' button.
      */
-    okLabel: PropTypes.node,
-    /**
-     * Override the default text of the 'Cancel' button.
-     */
-    cancelLabel: PropTypes.node,
+    closeLabel: PropTypes.node,
     /**
      * The css class name of the root element.
      */
@@ -207,7 +203,10 @@ class DateTimeInput extends Component{
     });
   };
 
-  handleCalendar = () => {
+  handleCalendar = (e) => {
+    if(e && e.preventDefault){
+      e.preventDefault();
+    }
     this.setState({
       openDialog: !this.state.openDialog
     }, ()=>{
@@ -227,8 +226,7 @@ class DateTimeInput extends Component{
       className,
       dialogContainerStyle,
       dialogContainerClassName,
-      okLabel,
-      cancelLabel,
+      closeLabel,
       autoOk,
       onDismiss,
       style,
@@ -242,34 +240,38 @@ class DateTimeInput extends Component{
          onClick={this.handleClick}
          style={style}
     >
-      <DatePart
-        value={this.state.date} disabled={disabled} readOnly={readOnly}
-        onChange={e => this.handleChange('date', e.target.value)}
-      />&nbsp;
-      <TimePart
-        value={this.state.time} disabled={disabled} readOnly={readOnly}
-        onChange={e => this.handleChange('time', e.target.value)}
-      />
+      {this.state.openDialog && (
+        <React.Fragment>
+          <div className={'OutSideClick'} onClick={this.handleCalendar}> </div>
+          <DatePicker
+            onChange={e => {
+              this.handleChange('date', e.target.value);
+              if(autoOk){
+                this.handleCalendar();
+              }
+            }}
+            cancelHandler={this.handleCalendar}
+            selectedDay={this.state.date}
+            style={dialogContainerStyle}
+            className={dialogContainerClassName}
+            closeLabel={closeLabel}
+            onDismiss={onDismiss}
+            filterDate={filterDate}
+          />
+        </React.Fragment>
+      )}
+      <div className={'sub-input-group'}>
+        <DatePart
+          value={this.state.date} disabled={disabled} readOnly={readOnly}
+          onChange={e => this.handleChange('date', e.target.value)}
+        />&nbsp;
+        <TimePart
+          value={this.state.time} disabled={disabled} readOnly={readOnly}
+          onChange={e => this.handleChange('time', e.target.value)}
+        />
+      </div>
       <div className={'input-buttons'} onClick={this.handleCalendar}><span role="img" aria-label="Calendar">&#x1F4C5;</span></div>
       <div className={'input-buttons'} onClick={this.handleEmpty}><span role="img" aria-label="Empty">&#x274C;</span></div>
-      {this.state.openDialog && (
-        <DatePicker
-          onChange={e => {
-            this.handleChange('date', e.target.value)
-            if(autoOk){
-              this.handleCalendar();
-            }
-          }}
-          cancelHandler={this.handleCalendar}
-          selectedDay={this.state.date}
-          style={dialogContainerStyle}
-          className={dialogContainerClassName}
-          okLabel={okLabel}
-          cancelLabel={cancelLabel}
-          onDismiss={onDismiss}
-          filterDate={filterDate}
-        />
-      )}
     </div>
   )
   }

@@ -31,16 +31,26 @@ class Months extends React.Component {
     return result;
   }
 
+  nextMonth = (e) => {
+    e.preventDefault();
+    this.monthClicked(this.props.month + 1)
+  };
+
+  prevMonth = (e) => {
+    e.preventDefault();
+    this.monthClicked(this.props.month - 1)
+  };
+
   render() {
     const {month} = this.props;
     const {monthPickerView} = this.state;
     return (
       <div className="JC-Section">
-        <div className="JC-Nav" onClick={() => this.monthClicked(month - 1)}>&#9654;</div>
+        <div className="JC-Nav" onClick={this.prevMonth}>&#9654;</div>
         <div className="JC-Title" onClick={() => {
           this.setState({monthPickerView: !monthPickerView})
         }}>{months[month - 1]}</div>
-        <div className="JC-Nav" onClick={() => this.monthClicked(month + 1)}>&#9664;</div>
+        <div className="JC-Nav" onClick={this.nextMonth}>&#9664;</div>
         {monthPickerView && <div className="MonthPicker">{this.renderMonths()}</div>}
       </div>
     )

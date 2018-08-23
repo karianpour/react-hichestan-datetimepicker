@@ -17,17 +17,25 @@
   margin: 0;
   padding: 0.1em;
   /*width: 7.8em;*/
-  display: flex;
-  direction: ltr;
+  display: inline-flex;
+  direction: rtl;
   flex-direction: row;
   flex-wrap: nowrap;
   outline-width: 1px;
   outline-style: solid;
   outline-color: black; /*todo set the corrrect color*/
 }
+.sub-input-group {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  direction: rtl;
+  flex-direction: row-reverse;
+  flex-wrap: nowrap;
+}
 .input-group {
   margin: 0;
-  padding: 0.0em;
+  padding: 0;
   display: flex;
   direction: ltr;
   flex-direction: row;
@@ -113,6 +121,15 @@
 
 
 
+.OutSideClick{
+  content: '&quot;&quot';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  z-index: 1;
+  left: 0;
+}
 
 .JDatePicker {
   display: flex;
@@ -166,15 +183,6 @@
   float: right;
   z-index: 2;
   cursor: pointer;
-}
-.JDatePicker .OutSideClick{
-  content: '&quot;&quot';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  z-index: 1;
-  left: 0;
 }
 .JDatePicker .MonthPicker {
   position: absolute;

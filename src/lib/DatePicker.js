@@ -99,7 +99,7 @@ class DatePicker extends Component {
   render() {
     const {
       className,
-      cancelLabel='بستن',
+      closeLabel='بستن',
       style,
       filterDate,
       // ...other
@@ -122,7 +122,7 @@ class DatePicker extends Component {
         </div>
         <Days selectedYear={selectedYear} selectedDay={selectedDay} currentMonth={currentMonth} daysCount={daysCount} firstDay={selectedMonthFirstDay} clickEvent={this.daysClicked} filterDate={filterDate}/>
         <div>
-          <button className="JD-Cancel" onClick={this.cancelPicker}>{cancelLabel}</button>
+          <button className="JD-Cancel" onClick={this.cancelPicker}>{closeLabel}</button>
         </div>
       </div>
     );
