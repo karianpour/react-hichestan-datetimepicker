@@ -16,7 +16,6 @@ class DateTimeInput extends Component{
     name: PropTypes.string,
     /**
      * Callback function that is fired when the date value changes.
-     *
      * @param {string} date and time, The new date and time in iso 8601 format like 2018-08-23T21:06:50Z
      * it is always UTC
      */
@@ -55,7 +54,6 @@ class DateTimeInput extends Component{
     readOnly: PropTypes.bool,
     /**
      * Callback function that is fired when a click event occurs on the Date Picker's `TextField`.
-     *
      * @param {object} event Click event targeting the `main div element`.
      */
     onClick: PropTypes.func,
@@ -72,8 +70,7 @@ class DateTimeInput extends Component{
      */
     onShow: PropTypes.func,
     /**
-     * a function to filter some dates, return true means that it accept the date and false is to reject it.
-     * it gives a date 'jYYYY/jMM/jDD' format as the first parameter
+     * a function to filter some dates, return true means that it accept the date and false is to reject it. It gives a date 'jYYYY/jMM/jDD' format as the first parameter.
      */
     filterDate: PropTypes.func,
     /**

@@ -52,8 +52,7 @@ and handle the change like normal input:
 Property | Type | Required | Default value | Description
 :--- | :--- | :--- | :--- | :---
 name|string|no||The name that will be set while firing the onChange event in the target object
-onChange|func|no||Callback function that is fired when the date value changes. @param {string} date and time, The new date and time in iso 8601 format like 2018-08-23T21:06:50Z
-it is always UTC
+onChange|func|no||Callback function that is fired when the date value changes. @param {string} date and time, The new date and time in iso 8601 format like 2018-08-23T21:06:50Z. it is always UTC
 autoOk|bool|no|true|If true, automatically accept and close the picker on select a date.
 closeLabel|node|no||Override the default text of the &#x27;OK&#x27; button.
 style|object|no|&lt;See the source code&gt;|Override the inline-styles of the root element.
@@ -70,9 +69,13 @@ filterDate|func|no||a function to filter some dates, return true means that it a
 value|union|no||Sets the value for the Date-Time input.
 -----
 
+
+###Date and Time format
+As we always save the date and time in back-end in timestamp, it does not make sense to send the data in any other format than  ISO 8601 date which I find the best date format. 
+
 ###Contribution
 Feel free to fork and add some feature. If you have time to do improvement on the U/I that will be appreciated.
-
+If some one for any reason wants to sand the date and time format in any other format than ISO 8601, we need to inject a date and time formatter into the component.
 
 
 ### License
