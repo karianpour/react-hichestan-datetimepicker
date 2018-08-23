@@ -17,12 +17,12 @@ Use `npm i react-hichestan-datetimepicker` in order to install the module.
 ## Usage
 The component is quite the same as any other similar input, that means no label and decoration is provided for the component.
 
-```
+```jsx harmony
 import {DateTimeInput} from 'react-hichestan-datetimepicker';
 ```
 
 and in the render function :
-```
+```jsx harmony
 <DateTimeInput
   value={this.state.myDateTime}
   name={'myDateTime'}
@@ -30,7 +30,7 @@ and in the render function :
 ```
 
 and handle the change like normal input:
-```
+```jsx harmony
   handleChange = (event) => {
     const newState = {};
     newState[event.target.name] = event.target.value;
@@ -52,31 +52,22 @@ and handle the change like normal input:
 Property | Type | Required | Default value | Description
 :--- | :--- | :--- | :--- | :---
 name|string|no||The name that will be set while firing the onChange event in the target object
+onChange|func|no||Callback function that is fired when the date value changes. @param {string} date and time, The new date and time in iso 8601 format like 2018-08-23T21:06:50Z
+it is always UTC
 autoOk|bool|no|true|If true, automatically accept and close the picker on select a date.
 closeLabel|node|no||Override the default text of the &#x27;OK&#x27; button.
+style|object|no|&lt;See the source code&gt;|Override the inline-styles of the root element.
 className|string|no||The css class name of the root element.
-container|enum|no|&lt;See the source code&gt;|Used to control how the Date Picker will be displayed when the input field is focused.
-&#x60;dialog&#x60; (default) displays the DatePicker as a dialog with a modal.
-&#x60;inline&#x60; displays the DatePicker below the input field (similar to auto complete).
 dialogContainerStyle|object|no||Override the inline-styles of DatePickerDialog&#x27;s Container element.
 dialogContainerClassName|object|no||Override the inline-styles of DatePickerDialog&#x27;s Container element.
 disabled|bool|no||Disables the DateTimeInput.
 readOnly|bool|no||makes the DateTimeInput readonly.
-onChange|func|no||Callback function that is fired when the date value changes.
-
-@param {null} null Since there is no particular event associated with the change,
-the first argument will always be null.
-@param {object} date The new date.
-onClick|func|no||Callback function that is fired when a click event occurs on the Date Picker&#x27;s &#x60;TextField&#x60;.
-
-@param {object} event Click event targeting the &#x60;TextField&#x60;.
-onDismiss|func|no||Callback function that is fired when the Date Picker&#x27;s dialog is dismissed.
-onFocus|func|no||Callback function that is fired when the Date Picker&#x27;s &#x60;TextField&#x60; gains focus.
-onShow|func|no||Callback function that is fired when the Date Picker&#x27;s dialog is shown.
-filterDate|func|no||a function to filter some dates, return true means that it accept the date and false is to reject it.
-it gives a date &#x27;jYYYY/jMM/jDD&#x27; format as the first parameter
-style|object|no|&lt;See the source code&gt;|Override the inline-styles of the root element.
-value|union|no||Sets the date for the Date Picker programmatically.
+onClick|func|no||Callback function that is fired when a click event occurs on the Date Picker&#x27;s &#x60;TextField&#x60;.@param {object} event Click event targeting the &#x60;main div element&#x60;.
+onDismiss|func|no||Callback function that is fired when the Date-Time input&#x27;s dialog is dismissed.
+onFocus|func|no||Callback function that is fired when the Date-Time input&#x27;s &#x60;main div&#x60; gains focus.
+onShow|func|no||Callback function that is fired when the Date-Time input&#x27;s dialog is shown.
+filterDate|func|no||a function to filter some dates, return true means that it accept the date and false is to reject it. it gives a date &#x27;jYYYY/jMM/jDD&#x27; format as the first parameter
+value|union|no||Sets the value for the Date-Time input.
 -----
 
 ###Contribution

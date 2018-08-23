@@ -15,6 +15,13 @@ class DateTimeInput extends Component{
      */
     name: PropTypes.string,
     /**
+     * Callback function that is fired when the date value changes.
+     *
+     * @param {string} date and time, The new date and time in iso 8601 format like 2018-08-23T21:06:50Z
+     * it is always UTC
+     */
+    onChange: PropTypes.func,
+    /**
      * If true, automatically accept and close the picker on select a date.
      */
     autoOk: PropTypes.bool,
@@ -23,15 +30,13 @@ class DateTimeInput extends Component{
      */
     closeLabel: PropTypes.node,
     /**
+     * Override the inline-styles of the root element.
+     */
+    style: PropTypes.object,
+    /**
      * The css class name of the root element.
      */
     className: PropTypes.string,
-    /**
-     * Used to control how the Date Picker will be displayed when the input field is focused.
-     * `dialog` (default) displays the DatePicker as a dialog with a modal.
-     * `inline` displays the DatePicker below the input field (similar to auto complete).
-     */
-    container: PropTypes.oneOf(['dialog', 'inline']),
     /**
      * Override the inline-styles of DatePickerDialog's Container element.
      */
@@ -49,29 +54,21 @@ class DateTimeInput extends Component{
      */
     readOnly: PropTypes.bool,
     /**
-     * Callback function that is fired when the date value changes.
-     *
-     * @param {null} null Since there is no particular event associated with the change,
-     * the first argument will always be null.
-     * @param {object} date The new date.
-     */
-    onChange: PropTypes.func,
-    /**
      * Callback function that is fired when a click event occurs on the Date Picker's `TextField`.
      *
-     * @param {object} event Click event targeting the `TextField`.
+     * @param {object} event Click event targeting the `main div element`.
      */
     onClick: PropTypes.func,
     /**
-     * Callback function that is fired when the Date Picker's dialog is dismissed.
+     * Callback function that is fired when the Date-Time input's dialog is dismissed.
      */
     onDismiss: PropTypes.func,
     /**
-     * Callback function that is fired when the Date Picker's `TextField` gains focus.
+     * Callback function that is fired when the Date-Time input's `main div` gains focus.
      */
     onFocus: PropTypes.func,
     /**
-     * Callback function that is fired when the Date Picker's dialog is shown.
+     * Callback function that is fired when the Date-Time input's dialog is shown.
      */
     onShow: PropTypes.func,
     /**
@@ -80,11 +77,7 @@ class DateTimeInput extends Component{
      */
     filterDate: PropTypes.func,
     /**
-     * Override the inline-styles of the root element.
-     */
-    style: PropTypes.object,
-    /**
-     * Sets the date for the Date Picker programmatically.
+     * Sets the value for the Date-Time input.
      */
     value: PropTypes.oneOfType([
       PropTypes.string,
@@ -94,7 +87,6 @@ class DateTimeInput extends Component{
 
   static defaultProps = {
     autoOk: true,
-    container: 'dialog',
     style: {},
   };
 
