@@ -9,6 +9,8 @@ This module is written using  [moment-jalali](https://github.com/jalaali/moment-
 
 This module is written with inspiration of [react-advance-jalaali-datepicker](https://github.com/A-Kasaaian/react-advance-jalaali-datepicker).
 
+##Demo
+Here you can experience a live [demo](https://karianpour.github.io/react-hichestan-datetimepicker/)
 
 ## Installation
 
@@ -77,6 +79,12 @@ As we always save the date and time in back-end in timestamp, it does not make s
 Feel free to fork and add some feature. If you have time to do improvement on the U/I that will be appreciated.
 If some one for any reason wants to sand the date and time format in any other format than ISO 8601, we need to inject a date and time formatter into the component.
 
+To start, make a clone and run:
+```bash
+npm install
+npm start
+```
+and browse [http://localhost:3000](http://localhost:3000)
 
 ### License
 
