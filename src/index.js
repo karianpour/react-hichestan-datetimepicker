@@ -4,7 +4,6 @@ import Example from './Examples';
 
 const App = () => (
   <div style={{
-    width: 640,
     margin: "15px auto",
     padding: "0 15px",
     direction: 'rtl',

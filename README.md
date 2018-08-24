@@ -74,10 +74,22 @@ value|union|no||Sets the value for the Date-Time input.
 -----
 
 
-###Date and Time format
+### Date and Time format
 As we always save the date and time in back-end in timestamp, it does not make sense to send the data in any other format than  ISO 8601 date which I find the best date format. 
 
-###Contribution
+### On Mobile
+On mobile the out side click works only if the page size and the view matches. In some cases the out side click div element cannot occupy all the page.
+
+
+### ToDo
+- In mobile device it is not a good experience to type in input text, having select make more sense.
+- Creating date only field.
+- Making the fields show farsi numbers.
+- Data formatter function injection, to let the developer set and get the value in any other format that the back-end needs.
+
+
+
+### Contribution
 Feel free to fork and add some feature. If you have time to do improvement on the U/I that will be appreciated.
 If some one for any reason wants to sand the date and time format in any other format than ISO 8601, we need to inject a date and time formatter into the component.
 
