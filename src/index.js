@@ -10,10 +10,11 @@ const App = () => (
     fontSize: 16,
     fontWeight: 400,
   }}>
-    <h1>Hello React</h1>
-    <label>فیلد ۱
+    <h1>تست فیلد تاریخ</h1>
+    <p>برای تست چند فیلد تکست کنار فیلدها قرار گرفته‌اند تا ترتیب حرکت با کلید تب نیز تست شود.</p>
+    <label>فیلد اول
       <br/>
-      <input type="text" placeholder="check the tab index" />
+      <input type="text" placeholder="از اینجا کلید تب را چند بار بزنید" />
     </label>
     <br/>
     <br/>
@@ -22,7 +23,7 @@ const App = () => (
     <br/>
     <label>فیلد آخر
       <br/>
-      <input type="text" placeholder="focus on me to see the un-focus style" />
+      <input type="text" placeholder="این فیلد آخر است" />
     </label>
   </div>
 );
