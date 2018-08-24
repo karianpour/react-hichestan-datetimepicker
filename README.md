@@ -9,6 +9,10 @@ This module is written using  [moment-jalali](https://github.com/jalaali/moment-
 
 This module is written with inspiration of [react-advance-jalaali-datepicker](https://github.com/A-Kasaaian/react-advance-jalaali-datepicker).
 
+#### Why an other date picker
+There are multiple jalaali date and time pickers on npm and github, but there is a lack of simplicity and compatibility. This lib is aim to be compatible with React 16 and also be compatible with other field inputs.
+The components simply get a `value` and a `name` as props, and fires `onChange` with `event` argument. The `event` object has `target` property containing the `name` and new `value`, so it can be put in a form just like any other input in that form and share the `handleChange` function.
+
 
 ## Demo
 
@@ -99,6 +103,13 @@ npm install
 npm start
 ```
 and browse [http://localhost:3000](http://localhost:3000)
+
+### Acknowledgement
+The project is bootstrapped by create-component-lib.
+
+Thanks to the [moment-jalali](https://github.com/jalaali/moment-jalaali), and [momentjs](http://momentjs.com/) libraries.
+
+This module is written with inspiration of [react-advance-jalaali-datepicker](https://github.com/A-Kasaaian/react-advance-jalaali-datepicker).
 
 ### License
 
