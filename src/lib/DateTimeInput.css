@@ -174,14 +174,16 @@
 }
 .JDatePicker button {
   border: none;
-  color: #fff;
   font-size: 16px;
   margin: 5px 10px;
   padding: 5px;
   border-radius: 5px;
-
+  cursor: pointer;
+  color: #eee;
+  background-color: #426084;
 }
 .JDatePicker button:hover {
+  color: #333;
   background-color: #7fc6ff;
 }
 .JDatePicker .JC-YearInput {

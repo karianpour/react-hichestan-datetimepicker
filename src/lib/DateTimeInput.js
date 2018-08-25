@@ -250,7 +250,7 @@ class DateTimeInput extends Component{
             onChange={e => {
               this.handleChange('date', e.target.value);
               if(autoOk){
-                // this.handleCalendar();
+                this.handleCalendar();
               }
             }}
             cancelHandler={this.handleCalendar}
