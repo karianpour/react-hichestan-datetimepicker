@@ -172,9 +172,9 @@
   color: #fff;
   font-size: 16px;
   margin: 5px 10px;
-  width: 40px;
-  height: 26px;
+  padding: 5px;
   border-radius: 5px;
+
 }
 .JDatePicker button:hover {
   background-color: #7fc6ff;
