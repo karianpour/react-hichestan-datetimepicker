@@ -6,6 +6,7 @@ import {isEqualDateTime, isEqualMoment} from './dateUtils';
 import moment from 'moment-jalaali';
 import "./DateTimeInput.css";
 import DatePicker from './DatePicker';
+import {CalendarIcon, DeleteIcon} from './Picker/Icons';
 
 class DateTimeInput extends Component{
 
@@ -259,8 +260,8 @@ class DateTimeInput extends Component{
           onChange={e => this.handleChange('time', e.target.value)}
         />
       </div>
-      <div className={'input-buttons'} onClick={this.handleCalendar}><span role="img" aria-label="Calendar">&#x1F4C5;</span></div>
-      <div className={'input-buttons'} onClick={this.handleEmpty}><span role="img" aria-label="Empty">&#x274C;</span></div>
+      <div className={'input-buttons'} onClick={this.handleCalendar}><CalendarIcon/></div>
+      <div className={'input-buttons'} onClick={this.handleEmpty}><DeleteIcon/></div>
     </div>
   )
   }

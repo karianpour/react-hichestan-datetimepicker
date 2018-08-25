@@ -1,5 +1,5 @@
 import React from 'react';
-import {mapToFarsi} from '../../dateUtils';
+import {mapToFarsi} from '../dateUtils';
 import moment from 'moment-jalaali';
 
 const yearArray = [];

@@ -1,5 +1,5 @@
 import React from 'react';
-import {isEqualDate, mapToFarsi} from '../../dateUtils';
+import {isEqualDate, mapToFarsi} from '../dateUtils';
 
 class Days extends React.Component {
 

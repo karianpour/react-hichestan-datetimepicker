@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import "./DateTimeInput.css";
-import Years from './Picker/Partials/Years';
-import Months from './Picker/Partials/Months';
-import Days from './Picker/Partials/Days';
+import Years from './Picker/Years';
+import Months from './Picker/Months';
+import Days from './Picker/Days';
 import moment from 'moment-jalaali';
 import {isEqualDate} from './dateUtils';
 
