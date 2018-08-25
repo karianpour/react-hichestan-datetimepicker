@@ -13,7 +13,10 @@ class DatePart extends Component{
     last_props_value: undefined,
   };
 
-  lastUpdatedField = undefined;
+  constructor(props) {
+    super(props);
+    this.dayRef = React.createRef();
+  }
 
   static setupState(newDate) {
     if(newDate) {
@@ -42,7 +45,7 @@ class DatePart extends Component{
     if (prevState.last_props_value !== nextProps.value) {
       const newDate = nextProps.value;
       if (!isEqualDate(prevState.date, newDate)) {
-        console.log('Date Received Props', prevState.last_props_value, nextProps.value);
+        // console.log('Date Received Props', prevState.last_props_value, nextProps.value);
         const newState = DatePart.setupState(newDate);
         newState.last_props_value = newDate;
         return newState;
@@ -57,7 +60,6 @@ class DatePart extends Component{
 
   handleChange = (element, value) => {
     const newState = {};
-    this.lastUpdatedField = element;
     newState[element] = this.checkAndReturn(element, value);
     this.setState(newState, ()=>{
       const formatted = `${this.state.year}/${this.state.month}/${this.state.day}`;
@@ -77,7 +79,7 @@ class DatePart extends Component{
   checkAndReturn = (element, value)=>{
     if(value==='') return '';
     const v = Number(value);
-    console.log('d', element, value)
+    // console.log('d', element, value);
 
     if(element === 'year' && (v<0 || v>1500)){
       return '';
@@ -114,6 +116,12 @@ class DatePart extends Component{
     }
   };
 
+  focusOnElement = () => {
+    if(this.dayRef.current){
+      this.dayRef.current.focus();
+    }
+  };
+
   render(){
     const {year, month, day} = this.state;
 
@@ -121,7 +129,7 @@ class DatePart extends Component{
 
     return (
     <div className="input-group-date">
-      <input
+      <input ref={this.dayRef}
         type="text"
         className="day-input"
         disabled={disabled}

@@ -16,7 +16,7 @@ class Days extends React.Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     if (prevState.last_props_value !== nextProps.selectedDay) {
       if (!isEqualDate(prevState.selectedDay, nextProps.selectedDay)) {
-        console.log('Days Received Props', prevState.selectedDay, nextProps.selectedDay);
+        // console.log('Days Received Props', prevState.selectedDay, nextProps.selectedDay);
         return {
           daysCount: nextProps.daysCount,
           selectedYear: nextProps.selectedYear,
@@ -33,7 +33,10 @@ class Days extends React.Component {
     return null;
   }
 
-  dayClicked(element) {
+  dayClicked(element, e) {
+    if(e){
+      e.preventDefault();
+    }
     if (!!this.state.selectedDay && !!this.refs[this.state.selectedDay]) {
       this.refs[this.state.selectedDay].className = this.refs[this.state.selectedDay].className.replace('selected', '');
     }
@@ -79,7 +82,7 @@ class Days extends React.Component {
         result.push(<div className={'day-items' + addedClass}
                          ref={date} key={i}
                          style={{marginRight: marginRight}}
-                         onClick={() => this.dayClicked(date)}
+                         onClick={(e) => this.dayClicked(date, e)}
         >{number}</div>);
       }
     }

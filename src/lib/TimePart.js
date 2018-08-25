@@ -10,7 +10,10 @@ class TimePart extends Component{
     last_props_value: undefined,
   };
 
-  lastUpdatedField = undefined;
+  constructor(props) {
+    super(props);
+    this.hourRef = React.createRef();
+  }
 
   static setupState(newTime) {
     if (newTime) {
@@ -41,7 +44,7 @@ class TimePart extends Component{
     if (prevState.last_props_value !== nextProps.value) {
       const newTime = nextProps.value;
       if (!isEqualTime(prevState.time, newTime)) {
-        console.log('Time Received Props', prevState.last_props_value, nextProps.value);
+        // console.log('Time Received Props', prevState.last_props_value, nextProps.value);
         const newState = TimePart.setupState(newTime);
         newState.last_props_value = newTime;
         return newState;
@@ -59,7 +62,6 @@ class TimePart extends Component{
       hour: this.state.hour,
       minute: this.state.minute,
     };
-    this.lastUpdatedField = element;
     newState[element] = this.checkAndReturn(element, value);
     newState.time = this.format(newState);
     this.setState(newState, ()=>{
@@ -112,14 +114,21 @@ class TimePart extends Component{
     }
   };
 
+  focusOnElement = () => {
+    if(this.hourRef.current){
+      this.hourRef.current.focus();
+    }
+  };
+
   render(){
     const {hour, minute} = this.state;
 
-    const {disabled, readonly: readOnly} = this.props;
+    const {disabled, readOnly} = this.props;
 
     return (
     <div className="input-group">
       <input
+        ref={this.hourRef}
         type="text"
         className="hour-input"
         disabled={disabled}

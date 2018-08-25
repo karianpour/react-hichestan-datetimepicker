@@ -21,7 +21,7 @@ class DatePicker extends Component {
   }
 
   daysInMonth = (month, selectedYear)=>{
-    console.log('month', month, typeof month);
+    // console.log('month', month, typeof month);
     if(0 < month && month < 7) {
       return 31;
     }else if(6 < month && month < 12) {

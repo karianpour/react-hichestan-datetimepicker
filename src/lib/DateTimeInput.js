@@ -96,6 +96,12 @@ class DateTimeInput extends Component{
     openDialog: false,
   };
 
+  constructor(props) {
+    super(props);
+    this.containerPart = React.createRef();
+    this.timePart = React.createRef();
+  }
+
   static setupState(m){
     const newState = {};
     if(m && m.isValid()){
@@ -113,7 +119,7 @@ class DateTimeInput extends Component{
     const newDate = DateTimeInput.getControlledDate(nextProps);
     if (!isEqualMoment(prevState.last_props_value, newDate)) {
       if (!isEqualDateTime(prevState.date, newDate)) {
-        console.log('DateTime Received Props', prevState.last_props_value, newDate);
+        // console.log('DateTime Received Props', prevState.last_props_value, newDate);
         const newState = DateTimeInput.setupState(newDate);
         newState.last_props_value = newDate;
         return newState;
@@ -197,16 +203,21 @@ class DateTimeInput extends Component{
     if(e && e.preventDefault){
       e.preventDefault();
     }
+
+    if(!!(this.state.openDialog && this.state.date && (!this.state.time || this.state.time === '00:00'))){
+      this.timePart.current.focusOnElement();
+    }else{
+      this.containerPart.current.focus();
+    }
+
     this.setState({
       openDialog: !this.state.openDialog
     }, ()=>{
-      console.log('closeed', this.state.openDialog);
       if(this.state.openDialog && this.props.onShow){
         this.props.onShow();
       }
     });
   };
-
 
 
   render(){
@@ -224,8 +235,10 @@ class DateTimeInput extends Component{
       // ...other
     } = this.props;
 
+    const {date, time, focusOnHour} = this.state;
+
     return (
-    <div className={"main-input-group"+(className?" "+className:"")} tabIndex="-1"
+    <div ref={this.containerPart} className={"main-input-group"+(className?" "+className:"")} tabIndex="-1"
          onFocus={this.handleFocus}
          onClick={this.handleClick}
          style={style}
@@ -237,11 +250,11 @@ class DateTimeInput extends Component{
             onChange={e => {
               this.handleChange('date', e.target.value);
               if(autoOk){
-                this.handleCalendar();
+                // this.handleCalendar();
               }
             }}
             cancelHandler={this.handleCalendar}
-            selectedDay={this.state.date}
+            selectedDay={date}
             style={dialogContainerStyle}
             className={dialogContainerClassName}
             closeLabel={closeLabel}
@@ -252,11 +265,11 @@ class DateTimeInput extends Component{
       )}
       <div className={'sub-input-group'}>
         <DatePart
-          value={this.state.date} disabled={disabled} readOnly={readOnly}
+          value={date} disabled={disabled} readOnly={readOnly}
           onChange={e => this.handleChange('date', e.target.value)}
         />&nbsp;
-        <TimePart
-          value={this.state.time} disabled={disabled} readOnly={readOnly}
+        <TimePart ref={this.timePart}
+          value={time} focusOnHour={focusOnHour} disabled={disabled} readOnly={readOnly}
           onChange={e => this.handleChange('time', e.target.value)}
         />
       </div>
