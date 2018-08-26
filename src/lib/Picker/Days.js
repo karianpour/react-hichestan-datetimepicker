@@ -1,5 +1,6 @@
 import React from 'react';
 import {isEqualDate, mapToFarsi} from '../dateUtils';
+import moment from 'moment-jalaali';
 
 class Days extends React.Component {
 
@@ -11,6 +12,7 @@ class Days extends React.Component {
       selectedYear: this.props.selectedYear,
       last_props_value: this.props.selectedDay,
     };
+    this.today = moment(new Date()).format('jYYYY/jMM/jDD');
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -69,7 +71,8 @@ class Days extends React.Component {
 
       const date = year +'/'+ month +'/'+ (i < 10?'0':'') + i.toString();
 
-      if (date === selectedDay) addedClass = ' selected';
+      if (date === this.today) addedClass += ' today';
+      if (date === selectedDay) addedClass += ' selected';
 
       const enable = this.isDateEnabled(date);
 

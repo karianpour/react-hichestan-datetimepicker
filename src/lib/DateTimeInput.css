@@ -260,3 +260,8 @@
   background: #7fc6ff;
   color: #333;
 }
+.JDatePicker .day-items.today {
+  text-decoration: underline;
+  font-weight: 900;
+  color: darkred;
+}
