@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import "./DateTimeInput.css";
-import {isEqualTime} from './dateUtils';
+import {isEqualTime, mapToFarsi, mapToLatin, stripAnyThingButDigits} from './dateUtils';
 
 class TimePart extends Component{
   state = {
@@ -41,10 +41,11 @@ class TimePart extends Component{
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
+    console.log('a')
     if (prevState.last_props_value !== nextProps.value) {
       const newTime = nextProps.value;
       if (!isEqualTime(prevState.time, newTime)) {
-        // console.log('Time Received Props', prevState.last_props_value, nextProps.value);
+        console.log('Time Received Props', prevState.last_props_value, nextProps.value);
         const newState = TimePart.setupState(newTime);
         newState.last_props_value = newTime;
         return newState;
@@ -133,8 +134,8 @@ class TimePart extends Component{
         className="hour-input"
         disabled={disabled}
         readOnly={readOnly}
-        value={hour}
-        onChange={e => this.handleChange('hour', e.target.value)}
+        value={mapToFarsi(hour)}
+        onChange={e => this.handleChange('hour', mapToLatin(stripAnyThingButDigits(e.target.value)))}
       />
       <span className={'input-colon'}>:</span>
       <input
@@ -142,8 +143,8 @@ class TimePart extends Component{
         className="minute-input"
         disabled={disabled}
         readOnly={readOnly}
-        value={minute}
-        onChange={e => this.handleChange('minute', e.target.value)}
+        value={mapToFarsi(minute)}
+        onChange={e => this.handleChange('minute', mapToLatin(stripAnyThingButDigits(e.target.value)))}
       />
     </div>
   )

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import "./DateTimeInput.css";
-import {isEqualDate} from './dateUtils';
+import {isEqualDate, mapToFarsi, mapToLatin, stripAnyThingButDigits} from './dateUtils';
 import moment from 'moment-jalaali';
 
 class DatePart extends Component{
@@ -54,15 +54,28 @@ class DatePart extends Component{
           last_props_value: newDate
         };
       }
+    // }else{
+    //   const formatted = DatePart.formatState(prevState);
+    //   if(prevState.date !== formatted){
+    //     console.log('b', prevState.date, formatted)
+    //     return {
+    //       date: formatted
+    //     };
+    //   }
     }
     return null;
   }
+
+  static formatState = (state) => {
+    if(!state.year || !state.month || !state.day) return undefined;
+    return `${state.year}/${state.month}/${state.day}`;
+  };
 
   handleChange = (element, value) => {
     const newState = {};
     newState[element] = this.checkAndReturn(element, value);
     this.setState(newState, ()=>{
-      const formatted = `${this.state.year}/${this.state.month}/${this.state.day}`;
+      const formatted = DatePart.formatState(this.state);
       const m = moment(formatted, 'jYYYY/jMM/jDD');
       const newState2 = {};
       if(m.isValid()){
@@ -134,8 +147,8 @@ class DatePart extends Component{
         className="day-input"
         disabled={disabled}
         readOnly={readOnly}
-        value={day}
-        onChange={e => this.handleChange('day', e.target.value)}
+        value={mapToFarsi(day)}
+        onChange={e => this.handleChange('day', mapToLatin(stripAnyThingButDigits(e.target.value)))}
       />
       <span className={'input-slash'}>/</span>
       <input
@@ -143,8 +156,8 @@ class DatePart extends Component{
         className="month-input"
         disabled={disabled}
         readOnly={readOnly}
-        value={month}
-        onChange={e => this.handleChange('month', e.target.value)}
+        value={mapToFarsi(month)}
+        onChange={e => this.handleChange('month', mapToLatin(stripAnyThingButDigits(e.target.value)))}
       />
       <span className={'input-slash'}>/</span>
       <input
@@ -152,8 +165,8 @@ class DatePart extends Component{
         className="year-input"
         disabled={disabled}
         readOnly={readOnly}
-        value={year}
-        onChange={e => this.handleChange('year', e.target.value)}
+        value={mapToFarsi(year)}
+        onChange={e => this.handleChange('year', mapToLatin(stripAnyThingButDigits(e.target.value)))}
       />
     </div>
   )

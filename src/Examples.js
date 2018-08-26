@@ -9,6 +9,7 @@ class Example extends Component {
 
   handleChange = (event) => {
     const newState = {};
+    console.log(event.target.formatted);
     newState[event.target.name] = event.target.value;
     this.setState(newState, ()=>{
       console.log('after', this.state)

@@ -109,8 +109,8 @@ class DateTimeInput extends Component{
       newState.date = formatted.substring(0, 10);
       newState.time = formatted.substring(11, 17);
     }else{
-      newState.date = undefined;
-      newState.time = undefined;
+      // newState.date = undefined;
+      // newState.time = undefined;
     }
     return newState;
   }
@@ -177,7 +177,8 @@ class DateTimeInput extends Component{
       const e = {
         target: {
           name: this.props.name,
-          value: formatted,
+          value: formatted.iso,
+          formatted
         }
       };
       this.props.onChange(e);
@@ -185,9 +186,10 @@ class DateTimeInput extends Component{
   };
 
   formatValue = (date, time) => {
-    const formatted = `${date} ${time}`;
+    if(!date) return {};
+    const formatted = `${date}${time ? ' ' + time : ''}`;
     const m = moment(formatted, 'jYYYY/jMM/jDD HH:mm');
-    return m.toISOString();
+    return {formatted, iso: m.toISOString(), moment: m};
   };
 
   handleEmpty = () => {

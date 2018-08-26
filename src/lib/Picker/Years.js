@@ -19,7 +19,8 @@ class Years extends React.Component {
     }
   }
 
-  yearChanged = () => {
+  yearChanged = (e) => {
+    if(e && e.preventDefault()) e.preventDefault();
     const {year} = this.refs;
     const {changeEvent} = this.props;
     this.setState({

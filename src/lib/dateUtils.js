@@ -27,19 +27,19 @@ export function isEqualDate(m1, m2) {
   ));
 }
 
-const mapDigit = {
-  1: "۱",
-  2: "۲",
-  3: "۳",
-  4: "۴",
-  5: "۵",
-  6: "۶",
-  7: "۷",
-  8: "۸",
-  9: "۹",
-  0: "۰"
-};
-
 export function mapToFarsi(str) {
-  return str.toString().replace(/1|2|3|4|5|6|7|8|9|0/gi, function(e) { return mapDigit[e] })
+  if(!str) return str;
+  return str.toString().replace(/[1234567890]/gi, e => String.fromCharCode(e.charCodeAt(0) + 1728))
 }
+
+export function mapToLatin(str) {
+  if(!str) return str;
+  return str.toString().replace(/[۱۲۳۴۵۶۷۸۹۰]/gi, e => String.fromCharCode(e.charCodeAt(0) - 1728))
+}
+
+export function stripAnyThingButDigits(str) {
+  if(!str) return str;
+  return str.toString().replace(/[^1234567890۱۲۳۴۵۶۷۸۹۰]/gi, '');
+}
+
+//console.log(stripAnyThingButDigits('4523245dfkjgahdfg54y۸ثف۷خث۸قفصث۵۶۷۴۷۸'))
