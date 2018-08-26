@@ -50,6 +50,8 @@ class DatePicker extends Component {
       }, ()=>{
         this.props.onChange({target: {name: this.props.name, value: momentDay}});
       });
+    }else{
+      this.props.cancelHandler();
     }
   };
 

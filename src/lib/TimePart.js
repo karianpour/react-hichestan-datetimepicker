@@ -41,11 +41,10 @@ class TimePart extends Component{
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    console.log('a')
     if (prevState.last_props_value !== nextProps.value) {
       const newTime = nextProps.value;
       if (!isEqualTime(prevState.time, newTime)) {
-        console.log('Time Received Props', prevState.last_props_value, nextProps.value);
+        // console.log('Time Received Props', prevState.last_props_value, nextProps.value);
         const newState = TimePart.setupState(newTime);
         newState.last_props_value = newTime;
         return newState;
