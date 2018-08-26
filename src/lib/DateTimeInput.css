@@ -44,11 +44,12 @@
 }
 .input-group-date {
   margin: 0;
-  padding: 0.0em;
+  padding: 0;
   display: flex;
   direction: ltr;
   flex-direction: row-reverse;
   flex-wrap: nowrap;
+  align-items: center;
 }
 .year-input {
   display: inline-flex;

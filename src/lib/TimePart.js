@@ -13,6 +13,7 @@ class TimePart extends Component{
   constructor(props) {
     super(props);
     this.hourRef = React.createRef();
+    this.minuteRef = React.createRef();
   }
 
   static setupState(newTime) {
@@ -120,6 +121,19 @@ class TimePart extends Component{
     }
   };
 
+  focusNext = (e) => {
+    e.preventDefault();
+    if(!this.hourRef.current || !this.minuteRef.current) {
+      return;
+    }
+
+    if(document.activeElement === this.hourRef.current){
+      this.minuteRef.current.focus();
+    }else if(document.activeElement === this.minuteRef.current){
+      if(this.props.focusNext) this.props.focusNext('time');
+    }
+  };
+
   render(){
     const {hour, minute} = this.state;
 
@@ -127,9 +141,11 @@ class TimePart extends Component{
 
     return (
     <div className="input-group">
+      <form className="input-group">
       <input
         ref={this.hourRef}
         type="text"
+        inputMode={"numeric"}
         className="hour-input"
         disabled={disabled}
         readOnly={readOnly}
@@ -138,13 +154,18 @@ class TimePart extends Component{
       />
       <span className={'input-colon'}>:</span>
       <input
+        ref={this.minuteRef}
         type="text"
+        inputMode={"numeric"}
         className="minute-input"
         disabled={disabled}
         readOnly={readOnly}
         value={mapToFarsi(minute)}
         onChange={e => this.handleChange('minute', mapToLatin(stripAnyThingButDigits(e.target.value)))}
+        onSubmit={e => console.log('ok')}
       />
+        <button onClick={this.focusNext} style={{display: 'none'}}/>
+      </form>
     </div>
   )
   }

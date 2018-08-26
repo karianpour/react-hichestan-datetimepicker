@@ -16,6 +16,8 @@ class DatePart extends Component{
   constructor(props) {
     super(props);
     this.dayRef = React.createRef();
+    this.monthRef = React.createRef();
+    this.yearRef = React.createRef();
   }
 
   static setupState(newDate) {
@@ -135,6 +137,21 @@ class DatePart extends Component{
     }
   };
 
+  focusNext = (e) => {
+    e.preventDefault();
+    if(!this.monthRef.current || !this.yearRef.current || !this.dayRef.current) {
+      return;
+    }
+
+    if(document.activeElement === this.dayRef.current){
+      this.monthRef.current.focus();
+    }else if(document.activeElement === this.monthRef.current){
+      this.yearRef.current.focus();
+    }else if(document.activeElement === this.yearRef.current){
+      if(this.props.focusNext) this.props.focusNext('date');
+    }
+  };
+
   render(){
     const {year, month, day} = this.state;
 
@@ -142,8 +159,10 @@ class DatePart extends Component{
 
     return (
     <div className="input-group-date">
+      <form className="input-group-date">
       <input ref={this.dayRef}
         type="text"
+        inputMode={"numeric"}
         className="day-input"
         disabled={disabled}
         readOnly={readOnly}
@@ -151,8 +170,9 @@ class DatePart extends Component{
         onChange={e => this.handleChange('day', mapToLatin(stripAnyThingButDigits(e.target.value)))}
       />
       <span className={'input-slash'}>/</span>
-      <input
+      <input ref={this.monthRef}
         type="text"
+        inputMode={"numeric"}
         className="month-input"
         disabled={disabled}
         readOnly={readOnly}
@@ -160,14 +180,17 @@ class DatePart extends Component{
         onChange={e => this.handleChange('month', mapToLatin(stripAnyThingButDigits(e.target.value)))}
       />
       <span className={'input-slash'}>/</span>
-      <input
+      <input ref={this.yearRef}
         type="text"
+        inputMode={"numeric"}
         className="year-input"
         disabled={disabled}
         readOnly={readOnly}
         value={mapToFarsi(year)}
         onChange={e => this.handleChange('year', mapToLatin(stripAnyThingButDigits(e.target.value)))}
       />
+      <button onClick={this.focusNext} style={{display: 'none'}}/>
+      </form>
     </div>
   )
   }

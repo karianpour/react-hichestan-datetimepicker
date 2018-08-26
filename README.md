@@ -18,6 +18,17 @@ The components simply get a `value` and a `name` as props, and fires `onChange` 
 
 Here you can experience a live [demo](https://karianpour.github.io/react-hichestan-datetimepicker/)
 
+### Features
+
+- Farsi digits are rendered, and the farsi keyboeard is supported as well as latin.
+- Date picker, with month click and year click to change.
+- Ability to type the date.
+- Focus to the next field on enter.
+- Correct tab indexes, day->month->year->hour->minute.
+- Highlighting today.
+- Align the picker to the right of the main input.
+- Compatible input onChange event.
+
 ## Installation
 
 Use `npm i react-hichestan-datetimepicker` in order to install the module.

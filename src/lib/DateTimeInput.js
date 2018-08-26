@@ -222,6 +222,14 @@ class DateTimeInput extends Component{
   };
 
 
+  handleFocusNext = (e) => {
+    if(e==='date'){
+      if(this.timePart.current) this.timePart.current.focusOnElement();
+    }else if(e==='time'){
+      if(this.containerPart.current) this.containerPart.current.focus();
+    }
+  };
+
   render(){
     const {
       disabled,
@@ -237,7 +245,7 @@ class DateTimeInput extends Component{
       // ...other
     } = this.props;
 
-    const {date, time, focusOnHour} = this.state;
+    const {date, time} = this.state;
 
     return (
     <div ref={this.containerPart} className={"main-input-group"+(className?" "+className:"")} tabIndex="-1"
@@ -267,11 +275,11 @@ class DateTimeInput extends Component{
       )}
       <div className={'sub-input-group'}>
         <DatePart
-          value={date} disabled={disabled} readOnly={readOnly}
+          value={date} focusNext={this.handleFocusNext} disabled={disabled} readOnly={readOnly}
           onChange={e => this.handleChange('date', e.target.value)}
         />&nbsp;
         <TimePart ref={this.timePart}
-          value={time} focusOnHour={focusOnHour} disabled={disabled} readOnly={readOnly}
+          value={time} focusNext={this.handleFocusNext}  disabled={disabled} readOnly={readOnly}
           onChange={e => this.handleChange('time', e.target.value)}
         />
       </div>
