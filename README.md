@@ -20,7 +20,7 @@ Here you can experience a live [demo](https://karianpour.github.io/react-hichest
 
 ### Features
 
-- Farsi digits are rendered, and the farsi keyboeard is supported as well as latin.
+- Farsi digits are rendered, and the farsi keyboard is supported as well as latin.
 - Date picker, with month click and year click to change.
 - Ability to type the date.
 - Focus to the next field on enter.
@@ -99,7 +99,6 @@ On mobile the out side click works only if the page size and the view matches. I
 ### ToDo
 - In mobile device it is not a good experience to type in input text, having select make more sense.
 - Creating date only field.
-- Making the fields show farsi numbers.
 - Data formatter function injection, to let the developer set and get the value in any other format that the back-end needs.
 
 
