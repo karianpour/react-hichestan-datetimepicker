@@ -6,6 +6,8 @@ import Days from './Picker/Days';
 import moment from 'moment-jalaali';
 import {isEqualDate} from './dateUtils';
 
+moment.loadPersian([]);
+
 class DatePicker extends Component {
 
   constructor(props) {
