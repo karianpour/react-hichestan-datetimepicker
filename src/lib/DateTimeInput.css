@@ -142,14 +142,19 @@
 
 .JDatePicker {
   display: flex;
-  margin-top: 2em;
+  /*margin-top: 2em;*/
   flex-flow: column;
   flex-wrap: nowrap;
   direction: rtl;
   width: 300px;
   min-height: 210px;
   padding: 5px;
-  position: absolute;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 30%;
+  margin-left: auto;
+  margin-right: auto;
   background: #fff;
   border-radius: 5px;
   box-shadow: 2px 2px 7px 4px #000;
