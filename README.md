@@ -114,6 +114,13 @@ npm start
 ```
 and browse [http://localhost:3000](http://localhost:3000)
 
+For publishing
+```bash
+./build-example.sh
+npm run build
+npm publish
+```
+
 ### Acknowledgement
 The project is bootstrapped by create-component-lib.
 
