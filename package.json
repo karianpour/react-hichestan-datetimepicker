@@ -24,6 +24,7 @@
     "rimraf": "^2.6.2"
   },
   "dependencies": {
-    "moment-jalaali": "^0.7.4"
+    "moment-jalaali": "^0.7.4",
+    "shallow-equal": "^1.0.0"
   }
 }

@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import {DateTimeInput} from './lib';
+import {DateInput, DateInputWithDialog} from './lib';
 
 class Example extends Component {
   state = {
-    value: '',
+    value1: '2018-12-04T00:00:00Z',
+    value1_formatted: '',
     value2: '',
+    value2_formatted: '',
     date_sample_1: undefined,
     date_sample_2: '2018-08-23T04:57:12Z',
   };
@@ -12,10 +15,9 @@ class Example extends Component {
   handleChange = (event) => {
     const newState = {};
     const t = event.target;
-    console.log(t.formatted);
+    console.log('target change on the example page : ', t);
     newState[t.name] = t.value;
-    newState.value = t.value ? t.value : '';
-    newState.value2 = t.formatted && t.formatted.formatted ? t.formatted.formatted : '';
+    newState[t.name+'_formatted'] = t.formatted ? t.formatted : '';
     this.setState(newState, ()=>{
       console.log('after', this.state)
     });
@@ -24,14 +26,39 @@ class Example extends Component {
   render(){
     return (
       <React.Fragment>
-        <div>
-          <br/>
-          <br/>
-          <br/>
-          <label>خروجی زمان استاندارد. این را در دیتا استفاده کنید
+        <div style={{width: 250}}>
+          <label>ورودی تاریخ بدون پاپ‌آپ
             <br/>
-            <input type="text" dir={'ltr'} style={{width: 250}} value={this.state.value} placeholder="از اینجا کلید تب را چند بار بزنید" />
+            <DateInput
+              value={this.state.value1}
+              name={'value1'}
+              onChange={this.handleChange}
+              style={{textAlign: 'right'}}
+              placeholder="فیلد تاریخ فقط تایپی" />
+            <br/>
+            خروجی
+            <br/>
+            <input type="text" dir={'ltr'} value={this.state.value1} readOnly/>
+            <br/>
+            <input type="text" dir={'ltr'} value={this.state.value1_formatted} readOnly/>
           </label>
+          <br/>
+          <br/>
+          <label>ورودی تاریخ با پاپ‌آپ
+            <br/>
+            <DateInputWithDialog
+              value={this.state.value2}
+              name={'value2'}
+              onChange={this.handleChange}
+              placeholder="فیلد تاریخ فقط تایپی" />
+            <br/>
+            خروجی
+            <br/>
+            <input type="text" dir={'ltr'}  value={this.state.value2} readOnly/>
+            <br/>
+            <input type="text" dir={'ltr'}  value={this.state.value2_formatted} readOnly/>
+          </label>
+          <br/>
           <br/>
           <br/>
           <label>
@@ -41,6 +68,12 @@ class Example extends Component {
               value={this.state.date_sample_1}
               name={'date_sample_1'}
               onChange={this.handleChange}/>
+            <br/>
+            خروجی زمان استاندارد. این را در دیتابیس استفاده کنید
+            <br/>
+            <input type="text" dir={'ltr'}  value={this.state.date_sample_1} readOnly/>
+            <br/>
+            <input type="text" dir={'ltr'}  value={this.state.date_sample_1_formatted} readOnly/>
           </label>
         </div>
         <br/>
@@ -52,14 +85,47 @@ class Example extends Component {
               value={this.state.date_sample_2}
               name={'date_sample_2'}
               onChange={this.handleChange}/>
+            <br/>
+            خروجی زمان استاندارد. این را در دیتابیس استفاده کنید
+            <br/>
+            <input type="text" dir={'ltr'}  value={this.state.date_sample_2} readOnly/>
+            <br/>
+            <input type="text" dir={'ltr'}  value={this.state.date_sample_2_formatted} readOnly/>
           </label>
-        </div>
-        <br/>
-        <br/>
-        <label>خروجی تاریخ شمسی
           <br/>
-          <input type="text" dir={'ltr'} style={{width: 250}} value={this.state.value2} placeholder="این فیلد آخر است" />
-        </label>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+        </div>
       </React.Fragment>
     );
   }
