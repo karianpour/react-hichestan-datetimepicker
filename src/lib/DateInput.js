@@ -102,15 +102,21 @@ class DateInput extends Component {
   };
 
   jumpToDay = () => {
-    this.inputRef.current.setSelectionRange(8, 10);
+    this.values.selectionStart = 8;
+    this.values.selectionEnd = 10;
+    this.inputRef.current.setSelectionRange(this.values.selectionStart, this.values.selectionEnd);
   };
 
   jumpToMonth = () => {
-    this.inputRef.current.setSelectionRange(5, 7);
+    this.values.selectionStart = 5;
+    this.values.selectionEnd = 7;
+    this.inputRef.current.setSelectionRange(this.values.selectionStart, this.values.selectionEnd);
   };
 
   jumpToYear = () => {
-    this.inputRef.current.setSelectionRange(0, 4);
+    this.values.selectionStart = 0;
+    this.values.selectionEnd = 4;
+    this.inputRef.current.setSelectionRange(this.values.selectionStart, this.values.selectionEnd);
   };
 
   isCaretAtDay = (selectionStart) => {
@@ -146,12 +152,12 @@ class DateInput extends Component {
       event.preventDefault();
       // console.log('digit');
       this.updateState(this.updateValue(event.target, event.key, this.props.numberFormat));
-    }else if(event.key==='.' || event.key==='/' || event.key==='-' 
+    }else if(event.key==='.' || event.key==='/' || event.key==='-' || event.key==='*' || event.key==='#' 
              || 
-             event.keyCode===188 || event.keyCode===189 || event.keyCode===190 || event.keyCode===191
+             event.keyCode===188 || event.keyCode===189 || event.keyCode===190 || event.keyCode===191 
              ){
       event.preventDefault();
-      if(event.ctrlKey || event.shiftKey || event.metaKey){
+      if(event.ctrlKey || event.shiftKey || event.metaKey || event.key==='#'){
         this.jumpToPrevious();
       }else{
         this.jumpToNext();
@@ -163,6 +169,8 @@ class DateInput extends Component {
       }else{
         if(this.jumpToNext()) event.preventDefault();
       }
+    }else if(event.keyCode===13){ //return
+      this.hideKeyboard();
     }else if((event.ctrlKey || event.metaKey) && (event.keyCode===67 || event.keyCode===86)){ //copy/paste
     }else if((event.ctrlKey || event.metaKey) && (event.keyCode===82)){ //refresh key
     }else if(event.keyCode===116){ // F5 refresh key
@@ -172,25 +180,56 @@ class DateInput extends Component {
     }else{
       // console.log('other');
       //console.log('keyCode: ', event.keyCode, 'key: ', event.key, 'ctrlKey: ', event.ctrlKey);
-      // this.rr.current.innerText = `keyCode: ${event.keyCode} key:  ${event.key} ctrlKey: ${event.ctrlKey}`;
+      //  this.rr.current.innerText = `keyCode: ${event.keyCode} key:  ${event.key} ctrlKey: ${event.ctrlKey}`;
       event.preventDefault();
     }
   };
+
+  hideKeyboard = () => {
+    this.inputRef.current.blur();
+  }
 
   handlePaste = (event) => {
     event.preventDefault();
 
     const enteredValue = stripAnyThingButDigits((event.clipboardData || window.clipboardData).getData('text'));
 
-    this.updateState(this.updateValue(event.target, enteredValue, this.props.numberFormat));
+    console.log({enteredValue});
+    //TODO check the enteredValue and try to find a date on it and put it in the input
+
+    // this.updateState(this.updateValue(event.target, enteredValue, this.props.numberFormat));
   };
 
   handleInput = (event) => {
+    event.preventDefault();
     if(this.values.valueToShow===event.target.value) return;
 
-    const enteredValue = stripAnyThingButDigits(event.target.value);
+    const inputValue = event.target.value;
+    // const enteredValue = stripAnyThingButDigits(event.target.value);
+    // this.rr.current.innerText = `${event.target.value}`;
+    
+    if(this.inputRef.current.value !== this.values.valueToShow){
+      this.inputRef.current.value = this.values.valueToShow;
+      this.inputRef.current.setSelectionRange(this.values.selectionStart, this.values.selectionEnd);
+    }
 
-    this.updateState(this.recheckValue(event.target, enteredValue, this.props.numberFormat));
+    if(this.hasStringACharToGoToNext(inputValue)){
+      this.jumpToNext();
+    }
+
+    // this.updateState(this.rollbackValue());
+  };
+
+  hasStringACharToGoToNext = (str) => {
+    if(str.indexOf('.')>=0) return true;
+    if(str.indexOf(',')>=0) return true;
+    // if(str.indexOf('/')>=0) return true;
+    if(str.indexOf('-')>=0) return true;
+    if(str.indexOf(';')>=0) return true;
+    if(str.indexOf('*')>=0) return true;
+    if(str.indexOf('#')>=0) return true;
+    if(str.indexOf(' ')>=0) return true;
+    return false;
   };
 
   mapValue = (value, numberFormat) => {
