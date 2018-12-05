@@ -51,6 +51,10 @@ class DateInput extends Component {
      */
     onFocus: PropTypes.func,
     /**
+     * Callback function that is fired when the user press F4 to open the dialog.
+     */
+    onShowDialog: PropTypes.func,
+    /**
      * Sets the value for the Date-Time input.
      */
     value: PropTypes.oneOfType([
@@ -275,10 +279,16 @@ class DateInput extends Component {
     }else if((event.ctrlKey || event.metaKey) && (event.keyCode===82)){ //refresh key
     }else if((event.ctrlKey || event.metaKey) && (event.keyCode===73)){ //inspector
     }else if((event.ctrlKey || event.metaKey) && (event.keyCode===65)){ //select all
-    }else if(event.keyCode===114){ // F4
+    }else if(event.keyCode===115){ // F4
+      if(this.props.onShowDialog) {
+        event.preventDefault();
+        this.props.onShowDialog();
+      }
     }else if(event.keyCode>=112 && event.keyCode<=123){ // All other F keys
-      console.log('open dialog');
     }else if(event.keyCode===229){ //android bug workaround
+      //K1 : I guess that we have to save the caret position as the input will change it, we need it to know where we have to jump to in handleInput function
+      this.values.selectionStart = this.inputRef.current.selectionStart;
+      this.values.selectionEnd = this.inputRef.current.selectionEnd;
     }else{
       // console.log('other');
       // console.log('keyCode: ', event.keyCode, 'key: ', event.key, 'ctrlKey: ', event.ctrlKey);
@@ -444,24 +454,29 @@ class DateInput extends Component {
     let year = Number(value.substring(0, seperator1));
     let month = Number(value.substring(seperator1+1, seperator2));
     let day = Number(value.substring(seperator2+1, seperator3));
-    let hour = Number(value.substring(seperator3+1, seperator4));
-    let minute = Number(value.substring(seperator4+1));
+    let hour = value.substring(seperator3+1, seperator4);
+    let minute = value.substring(seperator4+1);
+
+    if(hour.trim()==='' || minute.trim()==='') return false;
+
+    hour = Number(hour);
+    minute = Number(minute);
 
     if (isNaN(day) || isNaN(month) || isNaN(year) || isNaN(hour) || isNaN(minute)) return false;
 
     if(year < 1300 || year > 1450) return false;
 
-    if(month <1 || month > 12) return false;
+    if(month < 1 || month > 12) return false;
     
-    if(day <1 || day > 31) return false;
+    if(day < 1 || day > 31) return false;
 
     if(month > 6 && day > 30) return false;
  
     if(month === 12 && day > 29 && !LeapYears.find(y => y === year)) return false;
 
-    if(hour >= 24) return false;
+    if(hour < 0 || hour >= 24) return false;
 
-    if(minute >= 60) return false;
+    if(minute < 0 || minute >= 60) return false;
 
     return true;
   };
@@ -518,10 +533,10 @@ class DateInput extends Component {
 
     if(sanitizeHour){
       if(hour.length===0){
-        hour = '  ';
+        hour = '00';
       }else if(hour.length===1){
         if(hour === '0' || hour === ' '){
-          hour = '  ';
+          hour = '00';
         }else{
           hour = '0' + hour;
         }
@@ -530,10 +545,10 @@ class DateInput extends Component {
 
     if(sanitizeMinute){
       if(minute.length===0){
-        minute = '  ';
+        minute = '00';
       }else if(minute.length===1){
         if(minute === '0' || minute === ' '){
-          minute = '  ';
+          minute = '00';
         }else{
           minute = '0' + minute;
         }
@@ -806,7 +821,7 @@ class DateInput extends Component {
   }
 
   render() {
-    const {value, onChange, onFocus, onBlur, onInput, onPast, onKeyDown, pattern, inputMode, type, ref, numberFormat, ...rest} = this.props;
+    const {value, onChange, onFocus, onBlur, onInput, onPast, onKeyDown, onShowDialog, pattern, inputMode, type, ref, numberFormat, ...rest} = this.props;
     const {valueToShow} = this.values;
 
     // const localInputMode = this.props.type === 'tel' ? 'tel' : 'numeric'; // as we use type=tel, then we do not need it any more

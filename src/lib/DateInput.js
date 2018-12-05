@@ -49,6 +49,10 @@ class DateInput extends Component {
      */
     onFocus: PropTypes.func,
     /**
+     * Callback function that is fired when the user press F4 to open the dialog.
+     */
+    onShowDialog: PropTypes.func,
+    /**
      * Sets the value for the Date-Time input.
      */
     value: PropTypes.oneOfType([
@@ -233,13 +237,19 @@ class DateInput extends Component {
     }else if((event.ctrlKey || event.metaKey) && (event.keyCode===82)){ //refresh key
     }else if((event.ctrlKey || event.metaKey) && (event.keyCode===73)){ //inspector
     }else if((event.ctrlKey || event.metaKey) && (event.keyCode===65)){ //select all
-    }else if(event.keyCode===114){ // F4
+    }else if(event.keyCode===115){ // F4
+      if(this.props.onShowDialog) {
+        event.preventDefault();
+        this.props.onShowDialog();
+      }
     }else if(event.keyCode>=112 && event.keyCode<=123){ // All other F keys
-      console.log('open dialog');
     }else if(event.keyCode===229){ //android bug workaround
+      //K1 : I guess that we have to save the caret position as the input will change it, we need it to know where we have to jump to in handleInput function
+      this.values.selectionStart = this.inputRef.current.selectionStart;
+      this.values.selectionEnd = this.inputRef.current.selectionEnd;
     }else{
       // console.log('other');
-      //console.log('keyCode: ', event.keyCode, 'key: ', event.key, 'ctrlKey: ', event.ctrlKey);
+      // console.log('keyCode: ', event.keyCode, 'key: ', event.key, 'ctrlKey: ', event.ctrlKey);
       //  this.rr.current.innerText = `keyCode: ${event.keyCode} key:  ${event.key} ctrlKey: ${event.ctrlKey}`;
       event.preventDefault();
     }
@@ -660,7 +670,7 @@ class DateInput extends Component {
   }
 
   render() {
-    const {value, onChange, onFocus, onBlur, onInput, onPast, onKeyDown, pattern, inputMode, type, ref, numberFormat, ...rest} = this.props;
+    const {value, onChange, onFocus, onBlur, onInput, onPast, onKeyDown, onShowDialog, pattern, inputMode, type, ref, numberFormat, ...rest} = this.props;
     const {valueToShow} = this.values;
 
     // const localInputMode = this.props.type === 'tel' ? 'tel' : 'numeric'; // as we use type=tel, then we do not need it any more

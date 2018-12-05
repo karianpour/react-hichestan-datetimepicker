@@ -168,6 +168,7 @@ class DateInputWithDialog extends Component {
           disabled={disabled}
           readOnly={readOnly}
           value={value}
+          onShowDialog={this.handleCalendar}
           {...rest}
         />
         <div className={'date-input-with-dialog-input-buttons date-input-with-dialog-calendar'} onClick={this.handleCalendar}><CalendarIcon/></div>
