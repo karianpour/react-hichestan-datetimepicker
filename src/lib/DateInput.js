@@ -51,12 +51,13 @@ class DateInput extends Component {
   };
 
   emptyValue() {
-    console.log('oh perfect ');
     this.updateState(this.resetValues());
   };
 
   handleFocus = (event) => {
-    this.jumpToDay();
+    if(this.isValueEmpty(this.values.value)){
+      this.jumpToDay();
+    }
     if(this.props.onFocus){
       this.props.onFocus(event);
     }
@@ -101,20 +102,25 @@ class DateInput extends Component {
     return false;
   };
 
+  isValueEmpty = (value) => {
+    if(value.replace(/[ /]/g, '')==='') return true;
+    return false;
+  }; 
+
   jumpToDay = () => {
-    this.values.selectionStart = 8;
+    this.values.selectionStart = 10;
     this.values.selectionEnd = 10;
     this.inputRef.current.setSelectionRange(this.values.selectionStart, this.values.selectionEnd);
   };
 
   jumpToMonth = () => {
-    this.values.selectionStart = 5;
+    this.values.selectionStart = 7;
     this.values.selectionEnd = 7;
     this.inputRef.current.setSelectionRange(this.values.selectionStart, this.values.selectionEnd);
   };
 
   jumpToYear = () => {
-    this.values.selectionStart = 0;
+    this.values.selectionStart = 4;
     this.values.selectionEnd = 4;
     this.inputRef.current.setSelectionRange(this.values.selectionStart, this.values.selectionEnd);
   };
@@ -173,8 +179,9 @@ class DateInput extends Component {
       this.hideKeyboard();
     }else if((event.ctrlKey || event.metaKey) && (event.keyCode===67 || event.keyCode===86)){ //copy/paste
     }else if((event.ctrlKey || event.metaKey) && (event.keyCode===82)){ //refresh key
-    }else if(event.keyCode===116){ // F5 refresh key
+    }else if((event.ctrlKey || event.metaKey) && (event.keyCode===73)){ //inspector
     }else if(event.keyCode===114){ // F4
+    }else if(event.keyCode>=112 && event.keyCode<=123){ // All other F keys
       console.log('open dialog');
     }else if(event.keyCode===229){ //android bug workaround
     }else{
@@ -203,7 +210,6 @@ class DateInput extends Component {
   handleInput = (event) => {
     event.preventDefault();
     if(this.values.valueToShow===event.target.value) return;
-
     const inputValue = event.target.value;
     // const enteredValue = stripAnyThingButDigits(event.target.value);
     // this.rr.current.innerText = `${event.target.value}`;
@@ -265,7 +271,7 @@ class DateInput extends Component {
     }
 
     let fireOnChangeInTheEnd = false;
-    console.log('values on updateState', this.values)
+    //console.log('values on updateState', this.values)
     if(this.inputRef.current.value !== this.values.valueToShow){
       fireOnChangeInTheEnd = true;
       this.inputRef.current.value = this.values.valueToShow;
@@ -346,6 +352,10 @@ class DateInput extends Component {
 
   sanitizeValues = (values, sanitizeDay, sanitizeMonth, sanitizeYear) => {
     const {value} = values;
+    if(this.isValueEmpty(this.values.value)){
+      //console.log('no sanitation')
+      return null;
+    }
     const seperator1 = value.indexOf(SEPERATOR);
     const seperator2 = value.indexOf(SEPERATOR, seperator1+1);
     if(seperator1===-1 || seperator2===-1) {
@@ -494,7 +504,7 @@ class DateInput extends Component {
   };
 
   inspectYear = (year, selectionStart) => {
-    let newYear = year.trim() === '' ? year : year.replace(/ /g, '0');
+    let newYear = year;
     let newStartPosition = selectionStart;
     const caretPosition = selectionStart;
     if(newYear.length>4){
@@ -515,23 +525,8 @@ class DateInput extends Component {
     return {
       value,
       valueToShow: this.mapValue(value, this.props.numberFormat),
-      selectionStart: 8,
+      selectionStart: 10,
       selectionEnd: 10,
-    };
-  };
-
-  recheckValue = (element, enteredValue, numberFormat) => {
-    let valueToShow = this.mapValue(enteredValue, numberFormat);
-    let selectionStart = element.selectionStart;
-    let selectionEnd = element.selectionEnd;
-
-    const value = mapToLatin(valueToShow);
-
-    return {
-      value,
-      valueToShow,
-      selectionStart,
-      selectionEnd,
     };
   };
 
@@ -540,15 +535,15 @@ class DateInput extends Component {
     let selectionStart = element.selectionStart;
     let selectionEnd = element.selectionEnd;
 
-    // console.log({selectionStart, selectionEnd})
-
     if(selectionStart===selectionEnd){
       if(qty < 0) {
         if(selectionStart===0) return;
+        if(valueToShow.substring(selectionStart + qty, selectionStart)===SEPERATOR) return;
         valueToShow = valueToShow.substring(0, selectionStart + qty) + valueToShow.substring(selectionEnd);
         selectionStart += qty;
       }else{
         if(selectionEnd===valueToShow.length) return;
+        if(valueToShow.substring(selectionStart, selectionStart + qty)===SEPERATOR) return;
         valueToShow = valueToShow.substring(0, selectionStart) + valueToShow.substring(selectionEnd+qty);
       }
     }else{
