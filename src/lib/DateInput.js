@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import shallowEqualObjects from 'shallow-equal/objects';
 import moment from 'moment-jalaali';
+import {inspectYear, inspectMonth, inspectDay, mapToLatin, mapToFarsi, readDateFromValue, hasStringACharToGoToNext, LeapYears, maxDayFor} from './dateUtils';
 
 export const NUMBER_FORMAT_FARSI = 'FARSI';
 export const NUMBER_FORMAT_LATIN = 'LATIN';
 const DATE_SEPERATOR =  '/';// this is arabic date seperator ' ؍' but it is right to left glyph and as the numbers are left to right there will be caret position problem
 const SEPERATORES_REGEX = new RegExp(`[ ${DATE_SEPERATOR}]`, 'g');
 const DATE_FORMAT = `jYYYY${DATE_SEPERATOR}jMM${DATE_SEPERATOR}jDD`;
-const LeapYears = [1387, 1391, 1395, 1399, 1403, 1408, 1412, 1416, 1383, 1379, 1375, 1370, 1366, 1362, 1358, 1354];
+const EMPTY_VALUE = `    ${DATE_SEPERATOR}  ${DATE_SEPERATOR}`;
 
 class DateInput extends Component {
 
@@ -72,24 +73,9 @@ class DateInput extends Component {
     this.previousValue = this.values.value;
   }
 
-  readDateFromValue = (value) => {
-    if(!value) return '';
-    if (typeof value === 'string') {
-      value = mapToLatin(value);
-      let m = moment(new Date(value));
-      if(m.isValid() && m.year() > 1700) return m;
-      m = moment(value, DATE_FORMAT);
-      if(m.isValid()) return m;
-    }else if (value instanceof moment) {
-      return value;
-    }else{
-      console.warn('unknown value type ', value)
-    }
-    return '';
-  };
 
   readValuesFromProps = (props) => {
-    const moment = this.readDateFromValue(props.value);
+    const moment = readDateFromValue(props.value, DATE_FORMAT);
     const valueIsValid = moment && moment.isValid();
     const value = valueIsValid ? moment.format(DATE_FORMAT) : '';
     const iso = valueIsValid ? moment.format(): '';
@@ -264,7 +250,7 @@ class DateInput extends Component {
   handlePaste = (event) => {
     event.preventDefault();
 
-    const moment = this.readDateFromValue((event.clipboardData || window.clipboardData).getData('text'));
+    const moment = readDateFromValue((event.clipboardData || window.clipboardData).getData('text'), DATE_FORMAT);
 
     const valueIsValid = moment && moment.isValid();
     if(valueIsValid){
@@ -299,33 +285,23 @@ class DateInput extends Component {
       this.inputRef.current.setSelectionRange(this.values.selectionStart, this.values.selectionEnd);
     }
 
-    if(this.hasStringACharToGoToNext(inputValue)){
+    if(hasStringACharToGoToNext(inputValue)){
       this.jumpToNext();
     }
 
     // this.updateState(this.rollbackValue());
   };
 
-  hasStringACharToGoToNext = (str) => {
-    if(str.indexOf('.')>=0) return true;
-    if(str.indexOf(',')>=0) return true;
-    // if(str.indexOf('/')>=0) return true;
-    if(str.indexOf('-')>=0) return true;
-    if(str.indexOf(';')>=0) return true;
-    if(str.indexOf('*')>=0) return true;
-    if(str.indexOf('#')>=0) return true;
-    if(str.indexOf(' ')>=0) return true;
-    if(str.indexOf('،')>=0) return true;
-    return false;
-  };
-
   mapValue = (value, numberFormat) => {
     if(numberFormat===NUMBER_FORMAT_FARSI){
-      return mapToFarsi(value);
+      const mapped = mapToFarsi(value);
+      return mapped || EMPTY_VALUE;
     }else if(numberFormat===NUMBER_FORMAT_LATIN){
-      return mapToLatin(value);
+      const mapped = mapToLatin(value);
+      return mapped || EMPTY_VALUE;
     }
-    return mapToFarsi(value);
+    const mapped = mapToFarsi(value);
+    return mapped || EMPTY_VALUE;
   };
 
 
@@ -387,18 +363,6 @@ class DateInput extends Component {
     });
 
     return values; 
-  };
-
-
-  maxDayFor = (month, year) => {
-    if(!month) return 31;
-    month = Number(month);
-    if(month < 7) return 31;
-    if(month > 7 && month < 12) return 30;
-    if(!year) return 30;
-    year = Number(year);
-    if(month === 12 && LeapYears.find(y => y===year)) return 30;
-    return 29;
   };
 
 
@@ -506,15 +470,15 @@ class DateInput extends Component {
     let newYear = year;
 
     if(values.selectionStart>seperator2){
-      const inspected = this.inspectDay(day, values.selectionStart, seperator2, this.maxDayFor(newMonth));
+      const inspected = inspectDay(day, values.selectionStart, seperator2, maxDayFor(newMonth));
       newStartPosition =  inspected.newStartPosition;
       newDay = inspected.newDay;
     }else if(values.selectionStart<=seperator2 && values.selectionStart>seperator1){
-      const inspected = this.inspectMonth(month, values.selectionStart, seperator1);
+      const inspected = inspectMonth(month, values.selectionStart, seperator1);
       newStartPosition =  inspected.newStartPosition;
       newMonth = inspected.newMonth;
     }else if(values.selectionStart<=seperator1){
-      const inspected = this.inspectYear(year, values.selectionStart);
+      const inspected = inspectYear(year, values.selectionStart);
       newStartPosition =  inspected.newStartPosition;
       newYear = inspected.newYear;
     }
@@ -527,76 +491,6 @@ class DateInput extends Component {
       selectionStart: newStartPosition,
       selectionEnd: newStartPosition,
     };
-  };
-
-  inspectDay = (day, selectionStart, seperator2, max) => {
-    let newDay = day.trim() === '' ? day : day.replace(/ /g, '0');
-    let newStartPosition = selectionStart;
-
-    const caretPosition = selectionStart - seperator2 - 1;
-    if(newDay.length>2){
-      if(caretPosition<=2){
-        newDay = newDay.substring(0, 2);
-        newStartPosition = 8 + caretPosition;
-      }else if(caretPosition>2){
-        newDay = newDay.substring(caretPosition-2, caretPosition);
-        newStartPosition = 10;
-      }
-    }
-    if(newDay>max){
-      if(caretPosition===0){
-        newDay = '  ';
-        newStartPosition = 10;
-      }else{
-        newDay = day.substring(caretPosition-1, caretPosition);
-        newStartPosition = 9;
-      }
-    }
-
-    return {newDay, newStartPosition};
-  };
-
-  inspectMonth = (month, selectionStart, seperator1) => {
-    let newMonth = month.trim() === '' ? month : month.replace(/ /g, '0');
-    let newStartPosition = selectionStart;
-    const caretPosition = selectionStart - seperator1 - 1;
-    if(newMonth.length>2){
-      if(caretPosition<=2){
-        newMonth = newMonth.substring(0, 2);
-        newStartPosition = 5 + caretPosition;
-      }else if(caretPosition>2){
-        newMonth = newMonth.substring(caretPosition-2, caretPosition);
-        newStartPosition = 7;
-      }
-    }
-    if(newMonth>12){
-      if(caretPosition===0){
-        newMonth = '  ';
-        newStartPosition = 7;
-      }else{
-        newMonth = month.substring(caretPosition-1, caretPosition);
-        newStartPosition = 6;
-      }
-    }
-
-    return {newMonth, newStartPosition};
-  };
-
-  inspectYear = (year, selectionStart) => {
-    let newYear = year;
-    let newStartPosition = selectionStart;
-    const caretPosition = selectionStart;
-    if(newYear.length>4){
-      if(caretPosition<=4){
-        newYear = newYear.substring(0, 4);
-        newStartPosition = caretPosition;
-      }else if(caretPosition>4){
-        newYear = newYear.substring(caretPosition-4, caretPosition);
-        newStartPosition = 4;
-      }
-    }
-
-    return {newYear, newStartPosition};
   };
 
   resetValues = () => {
@@ -701,19 +595,3 @@ class DateInput extends Component {
   }
 }
 export default DateInput;
-
-
-export function mapToFarsi(str) {
-  if(!str) return `    ${DATE_SEPERATOR}  ${DATE_SEPERATOR}  `;
-  return str.toString().replace(/[1234567890]/gi, e => String.fromCharCode(e.charCodeAt(0) + 1728))
-}
-
-export function mapToLatin(str) {
-  if(!str) return `    ${DATE_SEPERATOR}  ${DATE_SEPERATOR}  `;
-  return str.toString().replace(/[۱۲۳۴۵۶۷۸۹۰]/gi, e => String.fromCharCode(e.charCodeAt(0) - 1728))
-}
-
-export function stripAnyThingButDigits(str) {
-  if(!str) return str;
-  return str.toString().replace(/[^1234567890۱۲۳۴۵۶۷۸۹۰]/gi, '');
-}
