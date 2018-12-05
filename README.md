@@ -37,12 +37,24 @@ Use `npm i react-hichestan-datetimepicker` in order to install the module.
 The component is quite the same as any other similar input, that means no label and decoration is provided for the component.
 
 ```jsx
-import {DateTimeInput} from 'react-hichestan-datetimepicker';
+import {DateTimeInput, DateTimeInputSimple, DateInput, DateInputSimple} from 'react-hichestan-datetimepicker';
 ```
 
 and in the render function :
 ```jsx
 <DateTimeInput
+  value={this.state.myDateTime}
+  name={'myDateTime'}
+  onChange={this.handleChange}/>
+<DateTimeInputSimple
+  value={this.state.myDateTime}
+  name={'myDateTime'}
+  onChange={this.handleChange}/>
+<DateInput
+  value={this.state.myDateTime}
+  name={'myDateTime'}
+  onChange={this.handleChange}/>
+<DateInputSimple
   value={this.state.myDateTime}
   name={'myDateTime'}
   onChange={this.handleChange}/>

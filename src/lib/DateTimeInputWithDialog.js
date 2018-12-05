@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import DateInput from './DateInput';
+import DateTimeInput from './DateTimeInput';
 import {CalendarIcon, DeleteIcon} from './Picker/Icons';
 import DatePicker from './DatePicker';
 import moment from 'moment-jalaali';
 import './DateInputWithDialog.css';
 
 const DATE_SEPERATOR =  '/';// this is arabic date seperator ' ؍' but it is right to left glyph and as the numbers are left to right there will be caret position problem
-const DATE_FORMAT = `jYYYY${DATE_SEPERATOR}jMM${DATE_SEPERATOR}jDD`;
+const MIDDLE_SEPERATOR =  '\xa0';
+const TIME_SEPERATOR =  ':';
+const DATE_FORMAT = `jYYYY${DATE_SEPERATOR}jMM${DATE_SEPERATOR}jDD${MIDDLE_SEPERATOR}HH${TIME_SEPERATOR}mm`;
 
 class DateInputWithDialog extends Component {
 
@@ -161,7 +163,7 @@ class DateInputWithDialog extends Component {
 
     return (
       <div className='date-input-with-dialog-main'>
-        <DateInput
+        <DateTimeInput
           className={`date-input-with-dialog-input ${this.props.className ? this.props.className : ''}`} 
           disabled={disabled}
           readOnly={readOnly}

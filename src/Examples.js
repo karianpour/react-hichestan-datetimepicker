@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import {DateTimeInput} from './lib';
-import {DateInput, DateInputWithDialog} from './lib';
+import {} from './lib';
+import {DateTimeInput, DateTimeInputSimple, DateInput, DateInputSimple} from './lib';
 
 class Example extends Component {
   state = {
@@ -8,8 +8,10 @@ class Example extends Component {
     value1_formatted: '',
     value2: '',
     value2_formatted: '',
-    date_sample_1: undefined,
-    date_sample_2: '2018-08-23T04:57:12Z',
+    value3: '',
+    value3_formatted: '',
+    value4: '2018-08-23T06:57:12+03:00',
+    value4_formatted: '',
   };
 
   handleChange = (event) => {
@@ -46,7 +48,7 @@ class Example extends Component {
           <br/>
           <label>ورودی تاریخ با پاپ‌آپ
             <br/>
-            <DateInputWithDialog
+            <DateInputSimple
               value={this.state.value2}
               name={'value2'}
               onChange={this.handleChange}
@@ -62,69 +64,42 @@ class Example extends Component {
           <br/>
           <br/>
           <label>
-            نمونه ۱
+            ورود زمان
             <br/>
             <DateTimeInput
-              value={this.state.date_sample_1}
-              name={'date_sample_1'}
+              value={this.state.value3}
+              name={'value3'}
               onChange={this.handleChange}/>
             <br/>
-            خروجی زمان استاندارد. این را در دیتابیس استفاده کنید
+            خروجی
             <br/>
-            <input type="text" dir={'ltr'}  value={this.state.date_sample_1} readOnly/>
+            <input type="text" dir={'ltr'}  value={this.state.value3} readOnly/>
             <br/>
-            <input type="text" dir={'ltr'}  value={this.state.date_sample_1_formatted} readOnly/>
+            <input type="text" dir={'ltr'}  value={this.state.value3_formatted} readOnly/>
           </label>
-        </div>
-        <br/>
-        <div>
+          <br/>
+          <br/>
           <label>
-            نمونه ۲
+            ورود زمان با پاپ‌آپ
             <br/>
-            <DateTimeInput
-              value={this.state.date_sample_2}
-              name={'date_sample_2'}
+            <DateTimeInputSimple
+              value={this.state.value4}
+              name={'value4'}
               onChange={this.handleChange}/>
             <br/>
-            خروجی زمان استاندارد. این را در دیتابیس استفاده کنید
+            خروجی
             <br/>
-            <input type="text" dir={'ltr'}  value={this.state.date_sample_2} readOnly/>
+            <input type="text" dir={'ltr'}  value={this.state.value4} readOnly/>
             <br/>
-            <input type="text" dir={'ltr'}  value={this.state.date_sample_2_formatted} readOnly/>
+            <input type="text" dir={'ltr'}  value={this.state.value4_formatted} readOnly/>
           </label>
           <br/>
           <br/>
           <br/>
+          <p style={{height: 1000}}>
+          خروجی زمان استاندارد را در دیتابیس استفاده کنید
+          </p>
           <br/>
-          <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
         </div>
       </React.Fragment>
     );

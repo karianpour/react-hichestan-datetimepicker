@@ -1,13 +1,61 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import shallowEqualObjects from 'shallow-equal/objects';
 import moment from 'moment-jalaali';
 
 export const NUMBER_FORMAT_FARSI = 'FARSI';
 export const NUMBER_FORMAT_LATIN = 'LATIN';
-const SEPERATOR =  '/';// this is arabic date seperator ' ؍' but it is right to left glyph and as the numbers are left to right there will be caret position problem
+const DATE_SEPERATOR =  '/';// this is arabic date seperator ' ؍' but it is right to left glyph and as the numbers are left to right there will be caret position problem
+const SEPERATORES_REGEX = new RegExp(`[ ${DATE_SEPERATOR}]`, 'g');
+const DATE_FORMAT = `jYYYY${DATE_SEPERATOR}jMM${DATE_SEPERATOR}jDD`;
 const LeapYears = [1387, 1391, 1395, 1399, 1403, 1408, 1412, 1416, 1383, 1379, 1375, 1370, 1366, 1362, 1358, 1354];
 
 class DateInput extends Component {
+
+  static propTypes = {
+    /**
+     * The name that will be set while firing the onChange event in the target object
+     */
+    name: PropTypes.string,
+    /**
+     * Callback function that is fired when the date value changes.
+     * @param {string} date and time, The new date and time in iso 8601 format like 2018-08-23T21:06:50Z
+     * it is always UTC
+     */
+    onChange: PropTypes.func,
+    /**
+     * Override the inline-styles of the root element.
+     */
+    style: PropTypes.object,
+    /**
+     * The css class name of the root element.
+     */
+    className: PropTypes.string,
+    /**
+     * Disables the DateTimeInput.
+     */
+    disabled: PropTypes.bool,
+    /**
+     * makes the DateTimeInput readonly.
+     */
+    readOnly: PropTypes.bool,
+    /**
+     * Callback function that is fired when a click event occurs on the Date Picker's `TextField`.
+     * @param {object} event Click event targeting the `main div element`.
+     */
+    onClick: PropTypes.func,
+    /**
+     * Callback function that is fired when the Date-Time input's `main div` gains focus.
+     */
+    onFocus: PropTypes.func,
+    /**
+     * Sets the value for the Date-Time input.
+     */
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.instanceOf(moment)
+    ]),
+  };
 
   constructor(props) {
     super(props);
@@ -23,7 +71,11 @@ class DateInput extends Component {
   readDateFromValue = (value) => {
     if(!value) return '';
     if (typeof value === 'string') {
-      return moment(new Date(value));
+      value = mapToLatin(value);
+      let m = moment(new Date(value));
+      if(m.isValid() && m.year() > 1700) return m;
+      m = moment(value, DATE_FORMAT);
+      if(m.isValid()) return m;
     }else if (value instanceof moment) {
       return value;
     }else{
@@ -35,8 +87,8 @@ class DateInput extends Component {
   readValuesFromProps = (props) => {
     const moment = this.readDateFromValue(props.value);
     const valueIsValid = moment && moment.isValid();
-    const value = valueIsValid ? moment.format('jYYYY/jMM/jDD') : '';
-    const iso = valueIsValid ? moment.toISOString(): '';
+    const value = valueIsValid ? moment.format(DATE_FORMAT) : '';
+    const iso = valueIsValid ? moment.format(): '';
     const valueToShow = this.mapValue(value, props.numberFormat);
 
     return {
@@ -103,7 +155,7 @@ class DateInput extends Component {
   };
 
   isValueEmpty = (value) => {
-    if(value.replace(/[ /]/g, '')==='') return true;
+    if(value.replace(SEPERATORES_REGEX, '')==='') return true;
     return false;
   }; 
 
@@ -180,6 +232,7 @@ class DateInput extends Component {
     }else if((event.ctrlKey || event.metaKey) && (event.keyCode===67 || event.keyCode===86)){ //copy/paste
     }else if((event.ctrlKey || event.metaKey) && (event.keyCode===82)){ //refresh key
     }else if((event.ctrlKey || event.metaKey) && (event.keyCode===73)){ //inspector
+    }else if((event.ctrlKey || event.metaKey) && (event.keyCode===65)){ //select all
     }else if(event.keyCode===114){ // F4
     }else if(event.keyCode>=112 && event.keyCode<=123){ // All other F keys
       console.log('open dialog');
@@ -199,12 +252,27 @@ class DateInput extends Component {
   handlePaste = (event) => {
     event.preventDefault();
 
-    const enteredValue = stripAnyThingButDigits((event.clipboardData || window.clipboardData).getData('text'));
+    const moment = this.readDateFromValue((event.clipboardData || window.clipboardData).getData('text'));
 
-    console.log({enteredValue});
-    //TODO check the enteredValue and try to find a date on it and put it in the input
+    const valueIsValid = moment && moment.isValid();
+    if(valueIsValid){
+      // console.log({parsedValue: moment.format()});
+      const value = valueIsValid ? moment.format(DATE_FORMAT) : '';
+      const iso = valueIsValid ? moment.format(): '';
+      const valueToShow = this.mapValue(value, this.props.numberFormat);
+  
+      const newState = {
+        value,
+        valueToShow,
+        valueIsValid,
+        iso,
+        moment,
+        selectionStart: undefined,
+        selectionEnd: undefined,
+      };
 
-    // this.updateState(this.updateValue(event.target, enteredValue, this.props.numberFormat));
+      this.updateState(newState);
+    }
   };
 
   handleInput = (event) => {
@@ -260,13 +328,11 @@ class DateInput extends Component {
     }else{
       this.values.valueIsValid = this.isValueValidData(this.values.value);
       if(this.values.valueIsValid){
-        this.values.moment = moment(this.values.value, 'jYYYY/jMM/jDD');
-        const date = this.values.moment.toDate();
-        this.values.moment = moment(new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000));
-        this.values.iso = this.values.moment.toISOString();
+        this.values.moment = moment(this.values.value, DATE_FORMAT);
+        this.values.iso = this.values.moment.format();
       }else{
-        this.values.iso = '';
         this.values.moment = null;
+        this.values.iso = '';
       }
     }
 
@@ -325,8 +391,8 @@ class DateInput extends Component {
 
   isValueValidData = (value) => {
     if(!value) return false;
-    const seperator1 = value.indexOf(SEPERATOR);
-    const seperator2 = value.indexOf(SEPERATOR, seperator1+1);
+    const seperator1 = value.indexOf(DATE_SEPERATOR);
+    const seperator2 = value.indexOf(DATE_SEPERATOR, seperator1+1);
     if(seperator1===-1 || seperator2===-1) {
       return false;
     }
@@ -356,8 +422,8 @@ class DateInput extends Component {
       //console.log('no sanitation')
       return null;
     }
-    const seperator1 = value.indexOf(SEPERATOR);
-    const seperator2 = value.indexOf(SEPERATOR, seperator1+1);
+    const seperator1 = value.indexOf(DATE_SEPERATOR);
+    const seperator2 = value.indexOf(DATE_SEPERATOR, seperator1+1);
     if(seperator1===-1 || seperator2===-1) {
       return this.resetValues();
     }
@@ -396,7 +462,7 @@ class DateInput extends Component {
       year = baseYear.substring(0, 4 - year.length) + year;
     }
 
-    const newValue = `${year}${SEPERATOR}${month}${SEPERATOR}${day}`;
+    const newValue = `${year}${DATE_SEPERATOR}${month}${DATE_SEPERATOR}${day}`;
 
     if(value !== newValue){
       return {
@@ -409,8 +475,8 @@ class DateInput extends Component {
 
   inspectValues = (values) => {
     const {value} = values;
-    const seperator1 = value.indexOf(SEPERATOR);
-    const seperator2 = value.indexOf(SEPERATOR, seperator1+1);
+    const seperator1 = value.indexOf(DATE_SEPERATOR);
+    const seperator2 = value.indexOf(DATE_SEPERATOR, seperator1+1);
     if(seperator1===-1 || seperator2===-1) {
       return this.resetValues();
     }
@@ -440,7 +506,7 @@ class DateInput extends Component {
       newYear = inspected.newYear;
     }
 
-    const newValue = `${newYear}${SEPERATOR}${newMonth}${SEPERATOR}${newDay}`;
+    const newValue = `${newYear}${DATE_SEPERATOR}${newMonth}${DATE_SEPERATOR}${newDay}`;
 
     return {
       value: newValue,
@@ -538,12 +604,12 @@ class DateInput extends Component {
     if(selectionStart===selectionEnd){
       if(qty < 0) {
         if(selectionStart===0) return;
-        if(valueToShow.substring(selectionStart + qty, selectionStart)===SEPERATOR) return;
+        if(valueToShow.substring(selectionStart + qty, selectionStart)===DATE_SEPERATOR) return;
         valueToShow = valueToShow.substring(0, selectionStart + qty) + valueToShow.substring(selectionEnd);
         selectionStart += qty;
       }else{
         if(selectionEnd===valueToShow.length) return;
-        if(valueToShow.substring(selectionStart, selectionStart + qty)===SEPERATOR) return;
+        if(valueToShow.substring(selectionStart, selectionStart + qty)===DATE_SEPERATOR) return;
         valueToShow = valueToShow.substring(0, selectionStart) + valueToShow.substring(selectionEnd+qty);
       }
     }else{
@@ -625,12 +691,12 @@ export default DateInput;
 
 
 export function mapToFarsi(str) {
-  if(!str) return `    ${SEPERATOR}  ${SEPERATOR}  `;
+  if(!str) return `    ${DATE_SEPERATOR}  ${DATE_SEPERATOR}  `;
   return str.toString().replace(/[1234567890]/gi, e => String.fromCharCode(e.charCodeAt(0) + 1728))
 }
 
 export function mapToLatin(str) {
-  if(!str) return `    ${SEPERATOR}  ${SEPERATOR}  `;
+  if(!str) return `    ${DATE_SEPERATOR}  ${DATE_SEPERATOR}  `;
   return str.toString().replace(/[۱۲۳۴۵۶۷۸۹۰]/gi, e => String.fromCharCode(e.charCodeAt(0) - 1728))
 }
 
