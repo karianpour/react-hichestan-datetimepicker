@@ -148,7 +148,6 @@
   direction: rtl;
   width: 300px;
   min-height: 210px;
-  padding: 5px;
   position: absolute;
   /* left: 0; */
   right: 0;
@@ -157,8 +156,10 @@
   margin-right: auto;
   background: #fff;
   border-radius: 5px;
-  box-shadow: 2px 2px 7px 4px #000;
-  z-index: 1;
+  font-family: Vazir;
+  box-shadow: 0 0 4px darkgray;
+  padding: 10px;
+  z-index: 3;
 }
 
 .JDatePicker .JC-Section {
@@ -168,8 +169,10 @@
 }
 .JDatePicker .JC-Nav {
   display: inline-block;
+  -ms-flex-positive: 1;
   flex-grow: 1;
   text-align: center;
+  color: #0000008f;
 }
 .JDatePicker .JC-Title {
   display: inline-block;
@@ -186,7 +189,10 @@
   border-radius: 5px;
   cursor: pointer;
   color: #eee;
-  background-color: #426084;
+  font-family: Vazir;
+  width: 100%;
+  background-color: #00abff;
+  font-weight: 800;
 }
 .JDatePicker button:hover {
   color: #333;
@@ -199,27 +205,38 @@
   float: right;
   z-index: 2;
   cursor: pointer;
+  height: 25px;
+  margin: 10px 0;
+  border: none;
+  background-color: transparent;
+  font-family: Vazir;
+  text-align-last: center;
+}
+.JDatePicker select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
 }
 .JDatePicker .MonthPicker {
   position: absolute;
   display: flex;
   flex-wrap: wrap;
-  width: 100%;
   background: #fff;
   text-align: center;
   padding: 5px;
   top: 26px;
   border-radius: 5px;
-  box-shadow: 2px 2px 7px 4px #000;
   z-index: 1;
+  width: 90%;
+  box-shadow: 0 0 4px #000000;
 }
 .JDatePicker .MonthItems:hover{
   background: aliceblue;
   color: #777;
 }
 .JDatePicker .MonthItems.selected {
-  background: #7fc6ff;
-  color: #333;
+  background: #35abff;
+  color: white;
+  font-weight: 800;
 }
 .JDatePicker .MonthItems {
   display: inline-block;
@@ -231,7 +248,9 @@
   font-size: 14px;
 }
 
-
+.days-titles {
+  padding: 10px;
+}
 .days-titles div {
   width: 14.28%;
   display: inline-block;
@@ -248,12 +267,19 @@
   position: relative;
   display: inline-block;
   background: #f7f7f7;
+  border-radius: 8px;
+  padding: 10px;
 }
 .JDatePicker .JC-days .holder {
   line-height: 24px;
 }
 .JDatePicker .day-items{
   width: 14.28%;
+  color: #5d5d5d;
+  display: flex;
+  height: 30px;
+  justify-content: center;
+  align-items: center;
   float: right;
   text-align: center;
   cursor: pointer;
@@ -263,11 +289,17 @@
   color: #777;
 }
 .JDatePicker .day-items.selected {
-  background: #7fc6ff;
-  color: #333;
+  background: #00abff;
+  border-radius: 8px;
+  color: white;
+  font-weight: 800;
 }
 .JDatePicker .day-items.today {
-  text-decoration: underline;
-  font-weight: 900;
-  color: darkred;
+  text-decoration: none;
+  font-weight: 800;
+  color: black;
+}
+.JDatePicker > div:last-child {
+  display: flex;
+  margin-top: 10px;
 }
