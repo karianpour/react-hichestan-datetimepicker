@@ -53,7 +53,6 @@ class Years extends React.Component {
       <div className="JC-Section">
         {!editable && <span className="JC-Title" onClick={() => this.setState({editable: true})}>{yearString}</span>}
         {editable && this.renderYearEditor(year)}
-        {editable && <div className={'OutSideClick'} onClick={this.yearChanged}> </div>}
       </div>
     )
   }
