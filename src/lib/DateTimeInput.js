@@ -355,6 +355,7 @@ class DateInput extends Component {
     if(str.indexOf('*')>=0) return true;
     if(str.indexOf('#')>=0) return true;
     if(str.indexOf(' ')>=0) return true;
+    if(str.indexOf('،')>=0) return true;
     return false;
   };
 

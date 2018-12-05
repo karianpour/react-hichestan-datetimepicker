@@ -247,6 +247,8 @@ class DateInput extends Component {
       //K1 : I guess that we have to save the caret position as the input will change it, we need it to know where we have to jump to in handleInput function
       this.values.selectionStart = this.inputRef.current.selectionStart;
       this.values.selectionEnd = this.inputRef.current.selectionEnd;
+      //  this.rr.current.innerText = `setting ss to ${this.values.selectionStart}  ${this.values.selectionEnd}`;
+
     }else{
       // console.log('other');
       // console.log('keyCode: ', event.keyCode, 'key: ', event.key, 'ctrlKey: ', event.ctrlKey);
@@ -290,7 +292,7 @@ class DateInput extends Component {
     if(this.values.valueToShow===event.target.value) return;
     const inputValue = event.target.value;
     // const enteredValue = stripAnyThingButDigits(event.target.value);
-    // this.rr.current.innerText = `${event.target.value}`;
+    // this.rr.current.innerText = `V : ${inputValue}`;
     
     if(this.inputRef.current.value !== this.values.valueToShow){
       this.inputRef.current.value = this.values.valueToShow;
@@ -313,6 +315,7 @@ class DateInput extends Component {
     if(str.indexOf('*')>=0) return true;
     if(str.indexOf('#')>=0) return true;
     if(str.indexOf(' ')>=0) return true;
+    if(str.indexOf('،')>=0) return true;
     return false;
   };
 
