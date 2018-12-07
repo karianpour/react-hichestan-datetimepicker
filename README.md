@@ -140,6 +140,8 @@ Thanks to the [moment-jalali](https://github.com/jalaali/moment-jalaali), and [m
 
 This module is written with inspiration of [react-advance-jalaali-datepicker](https://github.com/A-Kasaaian/react-advance-jalaali-datepicker).
 
+Thanks for the beautiful font [Nahid](https://rastikerdar.github.io/nahid-font/)
+
 ### License
 
 <sub>MIT License</sub>  

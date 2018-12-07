@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no">
     <meta name="theme-color" content="#000000">
     <!--
       manifest.json provides metadata used when your web app is added to the
@@ -19,7 +19,22 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>react-hichestan-datetimepicker</title>
+    <style>
+      @font-face {
+        font-family: Nahid;
+        src: url('%PUBLIC_URL%/asset/Nahid.eot');
+        src: url('%PUBLIC_URL%/asset/Nahid.eot?#iefix') format('embedded-opentype'),
+            url('%PUBLIC_URL%/asset/Nahid.woff') format('woff'),
+            url('%PUBLIC_URL%/asset/Nahid.ttf') format('truetype');
+        font-weight: normal;
+      }
+      html *
+      {
+        font-family: Nahid;
+        font-size: 16px;
+      }
+    </style>
   </head>
   <body>
     <noscript>

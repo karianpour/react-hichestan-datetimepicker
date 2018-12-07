@@ -484,7 +484,7 @@ class DateInput extends Component {
     const {value} = values;
     const splittedValue = this.splitValue(value);
     if(splittedValue==='') {
-      return null;
+      return this.resetValues();
     }
     if(!splittedValue) {
       return this.resetValues();
@@ -548,6 +548,8 @@ class DateInput extends Component {
     }
 
     selectionEnd = selectionStart;
+
+
 
     const value = mapToLatin(valueToShow);
 
