@@ -17,6 +17,10 @@ class DateInput extends Component {
 
   static propTypes = {
     /**
+     * The ref to pass on the input, if empty it will be created internally
+     */
+    inputRef: PropTypes.any,
+    /**
      * The name that will be set while firing the onChange event in the target object
      */
     name: PropTypes.string,
@@ -72,7 +76,14 @@ class DateInput extends Component {
     super(props);
     this.emptyValue = this.emptyValue.bind(this);
 
-    this.inputRef = props.ref ? props.ref : React.createRef();
+    let ref;
+    if(props.inputRef && typeof props.inputRef === 'function'){
+      ref = props.inputRef();
+    }else if(props.inputRef && typeof props.inputRef === 'object'){
+      ref = props.inputRef;
+    }
+
+    this.inputRef = ref ? ref : React.createRef();
     // this.rr = React.createRef();
 
     this.values = this.readValuesFromProps(props);
@@ -668,7 +679,7 @@ class DateInput extends Component {
   }
 
   render() {
-    const {value, onChange, onFocus, onBlur, onInput, onPast, onKeyDown, onShowDialog, pattern, inputMode, type, ref, numberFormat, ...rest} = this.props;
+    const {value, onChange, onFocus, onBlur, onInput, onPast, onKeyDown, onShowDialog, pattern, inputMode, type, inputRef, numberFormat, ...rest} = this.props;
     const {valueToShow} = this.values;
 
     // const localInputMode = this.props.type === 'tel' ? 'tel' : 'numeric'; // as we use type=tel, then we do not need it any more
