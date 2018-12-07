@@ -209,3 +209,7 @@ export function maxDayFor (month, year) {
   if(month === 12 && LeapYears.find(y => y===year)) return 30;
   return 29;
 }
+
+export function baseYear () {
+  return '1397';
+}

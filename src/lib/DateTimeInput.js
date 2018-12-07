@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import shallowEqualObjects from 'shallow-equal/objects';
 import moment from 'moment-jalaali';
-import {inspectYear, inspectMonth, inspectDay, inspectHour, inspectMinute, mapToLatin, mapToFarsi, readDateFromValue, hasStringACharToGoToNext, LeapYears, maxDayFor} from './dateUtils';
+import {inspectYear, inspectMonth, inspectDay, inspectHour, inspectMinute, mapToLatin, mapToFarsi, readDateFromValue, hasStringACharToGoToNext, LeapYears, maxDayFor, baseYear} from './dateUtils';
 
 export const NUMBER_FORMAT_FARSI = 'FARSI';
 export const NUMBER_FORMAT_LATIN = 'LATIN';
@@ -111,7 +111,8 @@ class DateInput extends Component {
   };
 
   handleBlur = (event) => {
-    this.updateState(this.sanitizeValues(this.values, true, true, true, true, true));
+    const splittedValue = this.splitValue(this.values.value);
+    this.updateState(this.sanitizeValues(splittedValue, this.values, true, true, true, true, true));
     if(this.props.onBlur){
       this.props.onBlur(event);
     }
@@ -119,46 +120,50 @@ class DateInput extends Component {
 
   jumpToNext = () => {
     const selectionStart = this.inputRef.current.selectionStart;
-    if(this.isCaretAtDay(selectionStart)){
-      this.updateState(this.sanitizeValues(this.values, true, false, false, false, false));
+    const splittedValue = this.splitValue(this.values.value);
+
+    if(this.isCaretAtDay(splittedValue, selectionStart)){
+      this.updateState(this.sanitizeValues(splittedValue, this.values, true, false, false, false, false));
       this.jumpToMonth();
       return true;
-    }else if(this.isCaretAtMonth(selectionStart)){
-      this.updateState(this.sanitizeValues(this.values, false, true, false, false, false));
+    }else if(this.isCaretAtMonth(splittedValue, selectionStart)){
+      this.updateState(this.sanitizeValues(splittedValue, this.values, false, true, false, false, false));
       this.jumpToYear();
       return true;
-    }else if(this.isCaretAtYear(selectionStart)){
-      this.updateState(this.sanitizeValues(this.values, false, false, true, false, false));
+    }else if(this.isCaretAtYear(splittedValue, selectionStart)){
+      this.updateState(this.sanitizeValues(splittedValue, this.values, false, false, true, false, false));
       this.jumpToHour();
       return true;
-    }else if(this.isCaretAtHour(selectionStart)){
-      this.updateState(this.sanitizeValues(this.values, false, false, false, true, false));
+    }else if(this.isCaretAtHour(splittedValue, selectionStart)){
+      this.updateState(this.sanitizeValues(splittedValue, this.values, false, false, false, true, false));
       this.jumpToMinute();
       return true;
-    }else if(this.isCaretAtMinute(selectionStart)){
-      this.updateState(this.sanitizeValues(this.values, false, false, false, false, true));
+    }else if(this.isCaretAtMinute(splittedValue, selectionStart)){
+      this.updateState(this.sanitizeValues(splittedValue, this.values, false, false, false, false, true));
     }
     return false;
   };
 
   jumpToPrevious = () => {
     const selectionStart = this.inputRef.current.selectionStart;
-    if(this.isCaretAtDay(selectionStart)){
-      this.updateState(this.sanitizeValues(this.values, true, false, false, false, false));
-    }else if(this.isCaretAtMonth(selectionStart)){
-      this.updateState(this.sanitizeValues(this.values, false, true, false, false, false));
+    const splittedValue = this.splitValue(this.values.value);
+
+    if(this.isCaretAtDay(splittedValue, selectionStart)){
+      this.updateState(this.sanitizeValues(splittedValue, this.values, true, false, false, false, false));
+    }else if(this.isCaretAtMonth(splittedValue, selectionStart)){
+      this.updateState(this.sanitizeValues(splittedValue, this.values, false, true, false, false, false));
       this.jumpToDay();
       return true;
-    }else if(this.isCaretAtYear(selectionStart)){
-      this.updateState(this.sanitizeValues(this.values, false, false, true, false, false));
+    }else if(this.isCaretAtYear(splittedValue, selectionStart)){
+      this.updateState(this.sanitizeValues(splittedValue, this.values, false, false, true, false, false));
       this.jumpToMonth();
       return true;
-    }else if(this.isCaretAtHour(selectionStart)){
-      this.updateState(this.sanitizeValues(this.values, false, false, false, true, false));
+    }else if(this.isCaretAtHour(splittedValue, selectionStart)){
+      this.updateState(this.sanitizeValues(splittedValue, this.values, false, false, false, true, false));
       this.jumpToYear();
       return true;
-    }else if(this.isCaretAtMinute(selectionStart)){
-      this.updateState(this.sanitizeValues(this.values, false, false, false, false, true));
+    }else if(this.isCaretAtMinute(splittedValue, selectionStart)){
+      this.updateState(this.sanitizeValues(splittedValue, this.values, false, false, false, false, true));
       this.jumpToHour();
       return true;
     }
@@ -200,27 +205,6 @@ class DateInput extends Component {
     this.inputRef.current.setSelectionRange(this.values.selectionStart, this.values.selectionEnd);
   };
 
-  isCaretAtDay = (selectionStart) => {
-    return selectionStart>=8 && selectionStart<=10;
-  };
-
-  isCaretAtMonth = (selectionStart) => {
-    return selectionStart>=5 && selectionStart<=7;
-  };
-
-  isCaretAtYear = (selectionStart) => {
-    return selectionStart>=0 && selectionStart<=4;
-  };
-
-  isCaretAtHour = (selectionStart) => {
-    return selectionStart>=11 && selectionStart<=13;
-  };
-
-  isCaretAtMinute = (selectionStart) => {
-    return selectionStart>=14 && selectionStart<=16;
-  };
-
-
   handleKeyDown = (event) => {
     // console.log('keyCode: ', event.keyCode, 'key: ', event.key);
     if(event.keyCode===8) { //backspace
@@ -253,6 +237,9 @@ class DateInput extends Component {
       }
     }else if(event.keyCode>=36 && event.keyCode<=40){ //arrows
     }else if(event.keyCode===9){ //tab
+      if(Math.abs(this.inputRef.current.selectionStart - this.inputRef.current.selectionEnd)===this.inputRef.current.value.length){
+        return;
+      }
       if(event.ctrlKey || event.shiftKey || event.metaKey){
         if(this.jumpToPrevious()) event.preventDefault();
       }else{
@@ -406,24 +393,63 @@ class DateInput extends Component {
   };
 
 
-  isValueValidData = (value) => {
-    if(!value) return false;
+  isCaretAtDay = (splittedValue, selectionStart) => {
+    return splittedValue && selectionStart<=splittedValue.seperator3 && selectionStart>splittedValue.seperator2;
+  };
+
+  isCaretAtMonth = (splittedValue, selectionStart) => {
+    return splittedValue && selectionStart<=splittedValue.seperator2 && selectionStart>splittedValue.seperator1;
+  };
+
+  isCaretAtYear = (splittedValue, selectionStart) => {
+    return splittedValue && selectionStart<=splittedValue.seperator1;
+  };
+
+  isCaretAtHour = (splittedValue, selectionStart) => {
+    return splittedValue && selectionStart<=splittedValue.seperator4 && selectionStart>splittedValue.seperator3;
+  };
+
+  isCaretAtMinute = (splittedValue, selectionStart) => {
+    return splittedValue && selectionStart>splittedValue.seperator4;
+  };
+
+
+  splitValue = (value) => {
+    if(this.isValueEmpty(value)){
+      return '';
+    }
     const seperator1 = value.indexOf(DATE_SEPERATOR);
     const seperator2 = value.indexOf(DATE_SEPERATOR, seperator1+1);
     const seperator3 = value.indexOf(MIDDLE_SEPERATOR, seperator2+1);
     const seperator4 = value.indexOf(TIME_SEPERATOR, seperator3+1);
     if(seperator1===-1 || seperator2===-1 || seperator3===-1 || seperator4===-1) {
+      return null;
+    }
+
+    const year = value.substring(0, seperator1);
+    const month = value.substring(seperator1+1, seperator2);
+    const day = value.substring(seperator2+1, seperator3);
+    const hour = value.substring(seperator3+1, seperator4);
+    const minute = value.substring(seperator4+1);
+ 
+    return {
+      year, month, day, hour, minute, seperator1, seperator2, seperator3, seperator4
+    };
+  };
+  
+  isValueValidData = (value) => {
+    if(!value) return false;
+    const splittedValue = this.splitValue(value);
+    if(splittedValue==='' || !splittedValue) {
       return false;
     }
 
-    let year = Number(value.substring(0, seperator1));
-    let month = Number(value.substring(seperator1+1, seperator2));
-    let day = Number(value.substring(seperator2+1, seperator3));
-    let hour = value.substring(seperator3+1, seperator4);
-    let minute = value.substring(seperator4+1);
-
+    let {year, month, day, hour, minute} = splittedValue;
     if(hour.trim()==='' || minute.trim()==='') return false;
 
+    year = Number(year);
+    month = Number(month);
+    day = Number(day);
     hour = Number(hour);
     minute = Number(minute);
 
@@ -446,25 +472,17 @@ class DateInput extends Component {
     return true;
   };
 
-  sanitizeValues = (values, sanitizeDay, sanitizeMonth, sanitizeYear, sanitizeHour, sanitizeMinute) => {
+  sanitizeValues = (splittedValue, values, sanitizeDay, sanitizeMonth, sanitizeYear, sanitizeHour, sanitizeMinute) => {
     const {value} = values;
-    if(this.isValueEmpty(this.values.value)){
-      //console.log('no sanitation')
+    if(splittedValue==='') {
       return null;
     }
-    const seperator1 = value.indexOf(DATE_SEPERATOR);
-    const seperator2 = value.indexOf(DATE_SEPERATOR, seperator1+1);
-    const seperator3 = value.indexOf(MIDDLE_SEPERATOR, seperator2+1);
-    const seperator4 = value.indexOf(TIME_SEPERATOR, seperator3+1);
-    if(seperator1===-1 || seperator2===-1 || seperator3===-1 || seperator4===-1) {
+
+    if(!splittedValue) {
       return this.resetValues();
     }
 
-    let year = value.substring(0, seperator1);
-    let month = value.substring(seperator1+1, seperator2);
-    let day = value.substring(seperator2+1, seperator3);
-    let hour = value.substring(seperator3+1, seperator4);
-    let minute = value.substring(seperator4+1);
+    let {year, month, day, hour, minute} = splittedValue;
 
     if(sanitizeDay){
       if(day.length===0){
@@ -491,9 +509,8 @@ class DateInput extends Component {
     }
 
     if(sanitizeYear){
-      const baseYear = '1397';
       year = year.trim();
-      year = baseYear.substring(0, 4 - year.length) + year;
+      year = baseYear().substring(0, 4 - year.length) + year;
     }
 
     if(sanitizeHour){
@@ -533,52 +550,39 @@ class DateInput extends Component {
 
   inspectValues = (values) => {
     const {value} = values;
-    const seperator1 = value.indexOf(DATE_SEPERATOR);
-    const seperator2 = value.indexOf(DATE_SEPERATOR, seperator1+1);
-    const seperator3 = value.indexOf(MIDDLE_SEPERATOR, seperator2+1);
-    const seperator4 = value.indexOf(TIME_SEPERATOR, seperator3+1);
-    if(seperator1===-1 || seperator2===-1 || seperator3===-1 || seperator4===-1) {
+    const splittedValue = this.splitValue(value);
+    if(splittedValue==='') {
+      return null;
+    }
+    if(!splittedValue) {
       return this.resetValues();
     }
-
-    let year = value.substring(0, seperator1);
-    let month = value.substring(seperator1+1, seperator2);
-    let day = value.substring(seperator2+1, seperator3);
-    let hour = value.substring(seperator3+1, seperator4);
-    let minute = value.substring(seperator4+1);
-
-    // console.log({value, year, month, day, hour, minute, seperator1, seperator2, seperator3, seperator4, selectionStart: values.selectionStart});
-
+    let {year, month, day, hour, minute} = splittedValue;
     let newStartPosition = values.selectionStart;
-    let newDay = day;
-    let newMonth = month;
-    let newYear = year;
-    let newHour = hour;
-    let newMinute = minute;
 
-    if(values.selectionStart<=seperator3 && values.selectionStart>seperator2){
-      const inspected = inspectDay(day, values.selectionStart, seperator2, maxDayFor(newMonth));
+    if(this.isCaretAtDay(splittedValue, values.selectionStart)){
+      const inspected = inspectDay(day, values.selectionStart, splittedValue.seperator2, maxDayFor(month));
       newStartPosition =  inspected.newStartPosition;
-      newDay = inspected.newDay;
-    }else if(values.selectionStart<=seperator2 && values.selectionStart>seperator1){
-      const inspected = inspectMonth(month, values.selectionStart, seperator1);
+      day = inspected.newDay;
+    }else if(this.isCaretAtMonth(splittedValue, values.selectionStart)){
+      const inspected = inspectMonth(month, values.selectionStart, splittedValue.seperator1);
       newStartPosition =  inspected.newStartPosition;
-      newMonth = inspected.newMonth;
-    }else if(values.selectionStart<=seperator1){
+      month = inspected.newMonth;
+    }else if(this.isCaretAtYear(splittedValue, values.selectionStart)){
       const inspected = inspectYear(year, values.selectionStart);
       newStartPosition =  inspected.newStartPosition;
-      newYear = inspected.newYear;
-    }else if(values.selectionStart<=seperator4 && values.selectionStart>seperator3){
-      const inspected = inspectHour(hour, values.selectionStart, seperator3);
+      year = inspected.newYear;
+    }else if(this.isCaretAtHour(splittedValue, values.selectionStart)){
+      const inspected = inspectHour(hour, values.selectionStart, splittedValue.seperator3);
       newStartPosition =  inspected.newStartPosition;
-      newHour = inspected.newHour;
-    }else if(values.selectionStart>seperator4){
-      const inspected = inspectMinute(minute, values.selectionStart, seperator4);
+      hour = inspected.newHour;
+    }else if(this.isCaretAtMinute(splittedValue, values.selectionStart)){
+      const inspected = inspectMinute(minute, values.selectionStart, splittedValue.seperator4);
       newStartPosition =  inspected.newStartPosition;
-      newMinute = inspected.newMinute;
+      minute = inspected.newMinute;
     }
 
-    const newValue = `${newYear}${DATE_SEPERATOR}${newMonth}${DATE_SEPERATOR}${newDay}${MIDDLE_SEPERATOR}${newHour}${TIME_SEPERATOR}${newMinute}`;
+    const newValue = `${year}${DATE_SEPERATOR}${month}${DATE_SEPERATOR}${day}${MIDDLE_SEPERATOR}${hour}${TIME_SEPERATOR}${minute}`;
 
     return {
       value: newValue,

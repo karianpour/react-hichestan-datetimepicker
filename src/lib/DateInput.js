@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import shallowEqualObjects from 'shallow-equal/objects';
 import moment from 'moment-jalaali';
-import {inspectYear, inspectMonth, inspectDay, mapToLatin, mapToFarsi, readDateFromValue, hasStringACharToGoToNext, LeapYears, maxDayFor} from './dateUtils';
+import {inspectYear, inspectMonth, inspectDay, mapToLatin, mapToFarsi, readDateFromValue, hasStringACharToGoToNext, LeapYears, maxDayFor, baseYear} from './dateUtils';
 
 export const NUMBER_FORMAT_FARSI = 'FARSI';
 export const NUMBER_FORMAT_LATIN = 'LATIN';
 const DATE_SEPERATOR =  '/';// this is arabic date seperator ' ؍' but it is right to left glyph and as the numbers are left to right there will be caret position problem
 const SEPERATORES_REGEX = new RegExp(`[ ${DATE_SEPERATOR}]`, 'g');
 const DATE_FORMAT = `jYYYY${DATE_SEPERATOR}jMM${DATE_SEPERATOR}jDD`;
-const EMPTY_VALUE = `    ${DATE_SEPERATOR}  ${DATE_SEPERATOR}`;
+const EMPTY_VALUE = `    ${DATE_SEPERATOR}  ${DATE_SEPERATOR}  `;
 
 class DateInput extends Component {
 
@@ -106,7 +106,8 @@ class DateInput extends Component {
   };
 
   handleBlur = (event) => {
-    this.updateState(this.sanitizeValues(this.values, true, true, true));
+    const splittedValue = this.splitValue(this.values.value);
+    this.updateState(this.sanitizeValues(splittedValue, this.values, true, true, true));
     if(this.props.onBlur){
       this.props.onBlur(event);
     }
@@ -114,30 +115,34 @@ class DateInput extends Component {
 
   jumpToNext = () => {
     const selectionStart = this.inputRef.current.selectionStart;
-    if(this.isCaretAtDay(selectionStart)){
-      this.updateState(this.sanitizeValues(this.values, true, false, false));
+    const splittedValue = this.splitValue(this.values.value);
+
+    if(this.isCaretAtDay(splittedValue, selectionStart)){
+      this.updateState(this.sanitizeValues(splittedValue, this.values, true, false, false));
       this.jumpToMonth();
       return true;
-    }else if(this.isCaretAtMonth(selectionStart)){
-      this.updateState(this.sanitizeValues(this.values, false, true, false));
+    }else if(this.isCaretAtMonth(splittedValue, selectionStart)){
+      this.updateState(this.sanitizeValues(splittedValue, this.values, false, true, false));
       this.jumpToYear();
       return true;
-    }else if(this.isCaretAtYear(selectionStart)){
-      this.updateState(this.sanitizeValues(this.values, false, false, true));
+    }else if(this.isCaretAtYear(splittedValue, selectionStart)){
+      this.updateState(this.sanitizeValues(splittedValue, this.values, false, false, true));
     }
     return false;
   };
 
   jumpToPrevious = () => {
     const selectionStart = this.inputRef.current.selectionStart;
-    if(this.isCaretAtDay(selectionStart)){
-      this.updateState(this.sanitizeValues(this.values, true, false, false));
-    }else if(this.isCaretAtMonth(selectionStart)){
-      this.updateState(this.sanitizeValues(this.values, false, true, false));
+    const splittedValue = this.splitValue(this.values.value);
+
+    if(this.isCaretAtDay(splittedValue, selectionStart)){
+      this.updateState(this.sanitizeValues(splittedValue, this.values, true, false, false));
+    }else if(this.isCaretAtMonth(splittedValue, selectionStart)){
+      this.updateState(this.sanitizeValues(splittedValue, this.values, false, true, false));
       this.jumpToDay();
       return true;
-    }else if(this.isCaretAtYear(selectionStart)){
-      this.updateState(this.sanitizeValues(this.values, false, false, true));
+    }else if(this.isCaretAtYear(splittedValue, selectionStart)){
+      this.updateState(this.sanitizeValues(splittedValue, this.values, false, false, true));
       this.jumpToMonth();
       return true;
     }
@@ -166,19 +171,6 @@ class DateInput extends Component {
     this.values.selectionEnd = 4;
     this.inputRef.current.setSelectionRange(this.values.selectionStart, this.values.selectionEnd);
   };
-
-  isCaretAtDay = (selectionStart) => {
-    return selectionStart>=8 && selectionStart<=10;
-  };
-
-  isCaretAtMonth = (selectionStart) => {
-    return selectionStart>=5 && selectionStart<=7;
-  };
-
-  isCaretAtYear = (selectionStart) => {
-    return selectionStart>=0 && selectionStart<=4;
-  };
-
 
   handleKeyDown = (event) => {
     // console.log('keyCode: ', event.keyCode, 'key: ', event.key);
@@ -212,6 +204,9 @@ class DateInput extends Component {
       }
     }else if(event.keyCode>=36 && event.keyCode<=40){ //arrows
     }else if(event.keyCode===9){ //tab
+      if(Math.abs(this.inputRef.current.selectionStart - this.inputRef.current.selectionEnd)===this.inputRef.current.value.length){
+        return;
+      }
       if(event.ctrlKey || event.shiftKey || event.metaKey){
         if(this.jumpToPrevious()) event.preventDefault();
       }else{
@@ -365,18 +360,47 @@ class DateInput extends Component {
     return values; 
   };
 
+  isCaretAtDay = (splittedValue, selectionStart) => {
+    return splittedValue && selectionStart>splittedValue.seperator2;
+  };
 
-  isValueValidData = (value) => {
-    if(!value) return false;
+  isCaretAtMonth = (splittedValue, selectionStart) => {
+    return splittedValue && selectionStart<=splittedValue.seperator2 && selectionStart>splittedValue.seperator1;
+  };
+
+  isCaretAtYear = (splittedValue, selectionStart) => {
+    return splittedValue && selectionStart<=splittedValue.seperator1;
+  };
+
+  splitValue = (value) => {
+    if(this.isValueEmpty(value)){
+      return '';
+    }
     const seperator1 = value.indexOf(DATE_SEPERATOR);
     const seperator2 = value.indexOf(DATE_SEPERATOR, seperator1+1);
     if(seperator1===-1 || seperator2===-1) {
+      return null;
+    }
+
+    const year = value.substring(0, seperator1);
+    const month = value.substring(seperator1+1, seperator2);
+    const day = value.substring(seperator2+1);
+    return {
+      year, month, day, seperator1, seperator2
+    };
+  };
+
+  isValueValidData = (value) => {
+    if(!value) return false;
+    const splittedValue = this.splitValue(value);
+    if(splittedValue==='' || !splittedValue) {
       return false;
     }
 
-    let year = Number(value.substring(0, seperator1));
-    let month = Number(value.substring(seperator1+1, seperator2));
-    let day = Number(value.substring(seperator2+1));
+    let {year, month, day} = splittedValue;
+    year = Number(year);
+    month = Number(month);
+    day = Number(day);
 
     if (isNaN(day) || isNaN(month) || isNaN(year)) return false;
 
@@ -393,21 +417,17 @@ class DateInput extends Component {
     return true;
   };
 
-  sanitizeValues = (values, sanitizeDay, sanitizeMonth, sanitizeYear) => {
+  sanitizeValues = (splittedValue, values, sanitizeDay, sanitizeMonth, sanitizeYear) => {
     const {value} = values;
-    if(this.isValueEmpty(this.values.value)){
-      //console.log('no sanitation')
+    if(splittedValue==='') {
       return null;
     }
-    const seperator1 = value.indexOf(DATE_SEPERATOR);
-    const seperator2 = value.indexOf(DATE_SEPERATOR, seperator1+1);
-    if(seperator1===-1 || seperator2===-1) {
+
+    if(!splittedValue) {
       return this.resetValues();
     }
 
-    let year = value.substring(0, seperator1);
-    let month = value.substring(seperator1+1, seperator2);
-    let day = value.substring(seperator2+1);
+    let {year, month, day} = splittedValue;
 
     if(sanitizeDay){
       if(day.length===0){
@@ -434,9 +454,8 @@ class DateInput extends Component {
     }
 
     if(sanitizeYear){
-      const baseYear = '1397';
       year = year.trim();
-      year = baseYear.substring(0, 4 - year.length) + year;
+      year = baseYear().substring(0, 4 - year.length) + year;
     }
 
     const newValue = `${year}${DATE_SEPERATOR}${month}${DATE_SEPERATOR}${day}`;
@@ -452,38 +471,32 @@ class DateInput extends Component {
 
   inspectValues = (values) => {
     const {value} = values;
-    const seperator1 = value.indexOf(DATE_SEPERATOR);
-    const seperator2 = value.indexOf(DATE_SEPERATOR, seperator1+1);
-    if(seperator1===-1 || seperator2===-1) {
+    const splittedValue = this.splitValue(value);
+    if(splittedValue==='') {
+      return null;
+    }
+    if(!splittedValue) {
       return this.resetValues();
     }
 
-    let year = value.substring(0, seperator1);
-    let month = value.substring(seperator1+1, seperator2);
-    let day = value.substring(seperator2+1);
-
-    //console.log({value, year, month, day, seperator1, seperator2, selectionStart: values.selectionStart});
-
+    let {year, month, day} = splittedValue;
     let newStartPosition = values.selectionStart;
-    let newDay = day;
-    let newMonth = month;
-    let newYear = year;
 
-    if(values.selectionStart>seperator2){
-      const inspected = inspectDay(day, values.selectionStart, seperator2, maxDayFor(newMonth));
+    if(this.isCaretAtDay(splittedValue, values.selectionStart)){
+      const inspected = inspectDay(day, values.selectionStart, splittedValue.seperator2, maxDayFor(month));
       newStartPosition =  inspected.newStartPosition;
-      newDay = inspected.newDay;
-    }else if(values.selectionStart<=seperator2 && values.selectionStart>seperator1){
-      const inspected = inspectMonth(month, values.selectionStart, seperator1);
+      day = inspected.newDay;
+    }else if(this.isCaretAtMonth(splittedValue, values.selectionStart)){
+      const inspected = inspectMonth(month, values.selectionStart, splittedValue.seperator1);
       newStartPosition =  inspected.newStartPosition;
-      newMonth = inspected.newMonth;
-    }else if(values.selectionStart<=seperator1){
+      month = inspected.newMonth;
+    }else if(this.isCaretAtYear(splittedValue, values.selectionStart)){
       const inspected = inspectYear(year, values.selectionStart);
       newStartPosition =  inspected.newStartPosition;
-      newYear = inspected.newYear;
+      year = inspected.newYear;
     }
 
-    const newValue = `${newYear}${DATE_SEPERATOR}${newMonth}${DATE_SEPERATOR}${newDay}`;
+    const newValue = `${year}${DATE_SEPERATOR}${month}${DATE_SEPERATOR}${day}`;
 
     return {
       value: newValue,

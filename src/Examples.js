@@ -4,7 +4,7 @@ import {DateTimeInput, DateTimeInputSimple, DateInput, DateInputSimple} from './
 
 class Example extends Component {
   state = {
-    value1: '2018-12-04T00:00:00Z',
+    value1: '',
     value1_formatted: '',
     value2: '',
     value2_formatted: '',
