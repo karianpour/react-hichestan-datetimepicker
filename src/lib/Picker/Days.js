@@ -1,10 +1,10 @@
 import React from 'react';
-import {isEqualDate, mapToFarsi} from '../dateUtils';
+import { isEqualDate, mapToFarsi } from '../dateUtils';
 import moment from 'moment-jalaali';
 
 class Days extends React.Component {
 
-  constructor(props) {
+  constructor ( props ) {
     super(props);
     this.state = {
       selectedDay: this.props.selectedDay,
@@ -15,9 +15,9 @@ class Days extends React.Component {
     this.today = moment(new Date()).format('jYYYY/jMM/jDD');
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (prevState.last_props_value !== nextProps.selectedDay) {
-      if (!isEqualDate(prevState.selectedDay, nextProps.selectedDay)) {
+  static getDerivedStateFromProps ( nextProps, prevState ) {
+    if ( prevState.last_props_value !== nextProps.selectedDay ) {
+      if ( !isEqualDate(prevState.selectedDay, nextProps.selectedDay) ) {
         // console.log('Days Received Props', prevState.selectedDay, nextProps.selectedDay);
         return {
           daysCount: nextProps.daysCount,
@@ -25,7 +25,7 @@ class Days extends React.Component {
           selectedDay: nextProps.selectedDay,
           last_props_value: nextProps.selectedDay,
         };
-      }else{
+      } else {
         return {
           last_props_value: nextProps.selectedDay,
         };
@@ -35,64 +35,64 @@ class Days extends React.Component {
     return null;
   }
 
-  dayClicked(element, e) {
-    if(e){
+  dayClicked ( element, e ) {
+    if ( e ) {
       e.preventDefault();
     }
-    if (!!this.state.selectedDay && !!this.refs[this.state.selectedDay]) {
+    if ( !!this.state.selectedDay && !!this.refs[this.state.selectedDay] ) {
       this.refs[this.state.selectedDay].className = this.refs[this.state.selectedDay].className.replace('selected', '');
     }
-    this.setState({selectedDay: element}, ()=>{
+    this.setState({selectedDay: element}, () => {
       this.refs[element].className += ' selected';
       this.props.clickEvent(element);
     });
   }
 
-  isDateEnabled = (date) => {
-    if(this.props.filterDate){
+  isDateEnabled = ( date ) => {
+    if ( this.props.filterDate ) {
       return this.props.filterDate(date)
     }
     return true;
   };
 
-  renderDays() {
+  renderDays () {
     let {firstDay, currentMonth, selectedDay} = this.props;
     let {daysCount, selectedYear} = this.state;
     let year = selectedYear.toString();
     let month = currentMonth.toString();
-    if (month.length === 1) month = '0' + month;
+    if ( month.length === 1 ) month = '0' + month;
 
     const result = [];
-    for (let i = 1; daysCount >= i; i++) {
+    for ( let i = 1; daysCount >= i; i++ ) {
       let addedClass = '';
       let marginRight = '0%';
       let number = mapToFarsi(i);
-      if (i === 1) marginRight = (firstDay * 14.28) + '%';
+      if ( i === 1 ) marginRight = (firstDay * 14.28) + '%';
 
-      const date = year +'/'+ month +'/'+ (i < 10?'0':'') + i.toString();
+      const date = year + '/' + month + '/' + (i < 10 ? '0' : '') + i.toString();
 
-      if (date === this.today) addedClass += ' today';
-      if (date === selectedDay) addedClass += ' selected';
+      if ( date === this.today ) addedClass += ' today';
+      if ( date === selectedDay ) addedClass += ' selected';
 
       const enable = this.isDateEnabled(date);
 
-      if (!enable) {
+      if ( !enable ) {
         result.push(<div className={'day-items' + addedClass}
                          ref={date} key={i}
                          style={{background: '#ccc', cursor: 'default', marginRight: marginRight}}
         >{number}</div>);
-      } else if (enable) {
+      } else if ( enable ) {
         result.push(<div className={'day-items' + addedClass}
                          ref={date} key={i}
                          style={{marginRight: marginRight}}
-                         onClick={(e) => this.dayClicked(date, e)}
+                         onClick={( e ) => this.dayClicked(date, e)}
         >{number}</div>);
       }
     }
     return result;
   }
 
-  render() {
+  render () {
     return (
       <div className="JC-days">
         <div className="holder">

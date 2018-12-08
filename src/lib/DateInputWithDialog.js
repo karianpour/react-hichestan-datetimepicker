@@ -164,9 +164,10 @@ class DateInputWithDialog extends Component {
             <div className='date-input-with-dialog-main'>
                 <div className={'date-input-with-dialog-input-buttons date-input-with-dialog-empty'}
                      onClick={this.handleEmpty}><DeleteIcon/></div>
+                <div className={'date-input-with-dialog-input-buttons date-input-with-dialog-calendar'}
+                     onClick={this.handleCalendar}><CalendarIcon/></div>
                 <DateInput
-                    onClick={this.handleCalendar}
-                    className={`date-input-with-dialog-input ${this.props.className ? this.props.className : ''}`}
+                    className={`date-input-with-dialog-input ${className ? className : ''}`}
                     disabled={disabled}
                     readOnly={readOnly}
                     value={value}
