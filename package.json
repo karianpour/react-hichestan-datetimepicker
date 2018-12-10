@@ -1,6 +1,23 @@
 {
   "name": "react-hichestan-datetimepicker",
-  "version": "0.2.5",
+  "version": "0.2.6",
+  "description": "A serie of react components to manipulate persian (jalali) date.",
+  "author": "Hichestan",
+  "copyright.owner": "Hichestan Corp.",
+  "license": "MIT",
+  "keywords": [
+    "React",
+    "Jalali",
+    "Persian",
+    "Datepicker",
+    "DateField",
+    "DateInput"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/karianpour/react-hichestan-datetimepicker"
+  },
+
   "main": "dist/index.js",
   "module": "dist/index.js",
   "files": [
