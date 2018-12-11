@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import shallowEqualObjects from 'shallow-equal/objects';
 import moment from 'moment-jalaali';
-import {inspectYear, inspectMonth, inspectDay, inspectHour, inspectMinute, mapToLatin, mapToFarsi, readDateFromValue, hasStringACharToGoToNext, LeapYears, maxDayFor, baseYear} from './dateUtils';
+import {inspectYear, inspectMonth, inspectDay, inspectHour, inspectMinute, mapToLatin, mapToFarsi, readDateFromValue, hasStringACharToGoToNext, LeapYears, maxDayFor, baseYear, NUMBER_FORMAT_LATIN, NUMBER_FORMAT_FARSI} from './dateUtils';
 
-export const NUMBER_FORMAT_FARSI = 'FARSI';
-export const NUMBER_FORMAT_LATIN = 'LATIN';
 const DATE_SEPERATOR =  '/';// this is arabic date seperator ' ؍' but it is right to left glyph and as the numbers are left to right there will be caret position problem
 const MIDDLE_SEPERATOR =  '\xa0';
 const TIME_SEPERATOR =  ':';
@@ -24,6 +22,10 @@ class DateInput extends Component {
      * The name that will be set while firing the onChange event in the target object
      */
     name: PropTypes.string,
+    /**
+     * The number format to show 'FARSI' / 'LATIN'
+     */
+    numberFormat: PropTypes.string,
     /**
      * Callback function that is fired when the date value changes.
      * @param {string} date and time, The new date and time in iso 8601 format like 2018-08-23T21:06:50Z

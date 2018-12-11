@@ -1,5 +1,8 @@
 import moment from 'moment-jalaali';
 
+export const NUMBER_FORMAT_FARSI = 'FARSI';
+export const NUMBER_FORMAT_LATIN = 'LATIN';
+
 export function isEqualMoment(m1, m2) {
   return !!((!m1 && !m2) || (m1 && m2
     && (m1.jYear() === m2.jYear())
