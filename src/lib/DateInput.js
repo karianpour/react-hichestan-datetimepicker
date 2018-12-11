@@ -213,7 +213,7 @@ class DateInput extends Component {
       }else{
         this.jumpToNext();
       }
-    }else if(event.keyCode>=36 && event.keyCode<=40){ //arrows
+    }else if(event.keyCode>=35 && event.keyCode<=40){ //arrows
     }else if(event.keyCode===9){ //tab
       if(Math.abs(this.inputRef.current.selectionStart - this.inputRef.current.selectionEnd)===this.inputRef.current.value.length){
         return;
@@ -301,13 +301,13 @@ class DateInput extends Component {
   mapValue = (value, numberFormat) => {
     if(numberFormat===NUMBER_FORMAT_FARSI){
       const mapped = mapToFarsi(value);
-      return mapped || EMPTY_VALUE;
+      return mapped;
     }else if(numberFormat===NUMBER_FORMAT_LATIN){
       const mapped = mapToLatin(value);
-      return mapped || EMPTY_VALUE;
+      return mapped;
     }
     const mapped = mapToFarsi(value);
-    return mapped || EMPTY_VALUE;
+    return mapped;
   };
 
 
@@ -353,6 +353,11 @@ class DateInput extends Component {
     let valueToShow = element.value;
     let selectionStart = element.selectionStart;
     let selectionEnd = element.selectionEnd;
+    if(valueToShow===''){
+      valueToShow = EMPTY_VALUE;
+      selectionStart = 10;
+      selectionEnd = 10;
+    }
 
     valueToShow = valueToShow.substring(0, selectionStart) + enteredValueMapped + valueToShow.substring(selectionEnd);
 
@@ -483,9 +488,6 @@ class DateInput extends Component {
   inspectValues = (values) => {
     const {value} = values;
     const splittedValue = this.splitValue(value);
-    if(splittedValue==='') {
-      return this.resetValues();
-    }
     if(!splittedValue) {
       return this.resetValues();
     }
@@ -548,8 +550,6 @@ class DateInput extends Component {
     }
 
     selectionEnd = selectionStart;
-
-
 
     const value = mapToLatin(valueToShow);
 
