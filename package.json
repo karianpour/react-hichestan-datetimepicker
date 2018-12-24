@@ -17,7 +17,6 @@
     "type": "git",
     "url": "https://github.com/karianpour/react-hichestan-datetimepicker"
   },
-
   "main": "dist/index.js",
   "module": "dist/index.js",
   "files": [
@@ -32,12 +31,15 @@
     "docs": "react-doc-generator ./src/lib/ -o DOCUMENTATION.md"
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-react": "^7.0.0",
     "babel-cli": "^6.26.0",
     "prop-types": "^15.6.2",
-    "react": "^16.5.2",
+    "react": "^16.7.0",
     "react-doc-generator": "^1.2.5",
-    "react-dom": "^16.5.2",
-    "react-scripts": "^1.1.5",
+    "react-dom": "^16.7.0",
+    "react-scripts": "^2.1.2",
     "rimraf": "^2.6.2"
   },
   "dependencies": {
