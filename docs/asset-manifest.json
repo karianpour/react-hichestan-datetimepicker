@@ -1,13 +1,6 @@
 {
-  "main.css": "/react-hichestan-datetimepicker/static/css/main.a5dd9c7b.chunk.css",
-  "main.js": "/react-hichestan-datetimepicker/static/js/main.c98a9595.chunk.js",
-  "main.js.map": "/react-hichestan-datetimepicker/static/js/main.c98a9595.chunk.js.map",
-  "static/js/1.917e464e.chunk.js": "/react-hichestan-datetimepicker/static/js/1.917e464e.chunk.js",
-  "static/js/1.917e464e.chunk.js.map": "/react-hichestan-datetimepicker/static/js/1.917e464e.chunk.js.map",
-  "runtime~main.js": "/react-hichestan-datetimepicker/static/js/runtime~main.2c994587.js",
-  "runtime~main.js.map": "/react-hichestan-datetimepicker/static/js/runtime~main.2c994587.js.map",
-  "static/css/main.a5dd9c7b.chunk.css.map": "/react-hichestan-datetimepicker/static/css/main.a5dd9c7b.chunk.css.map",
-  "index.html": "/react-hichestan-datetimepicker/index.html",
-  "precache-manifest.858cc64c5f6344d042ad7f95d3adf32a.js": "/react-hichestan-datetimepicker/precache-manifest.858cc64c5f6344d042ad7f95d3adf32a.js",
-  "service-worker.js": "/react-hichestan-datetimepicker/service-worker.js"
+  "main.css": "static/css/main.f789602c.css",
+  "main.css.map": "static/css/main.f789602c.css.map",
+  "main.js": "static/js/main.b7834f52.js",
+  "main.js.map": "static/js/main.b7834f52.js.map"
 }
