@@ -8,13 +8,13 @@
   position: relative;
 }
 .date-input-with-dialog-input {
-  position: absolute;
+  /* position: absolute; */
   width: 100%;
   height: 100%;
   text-align: right;
 }
 .date-input-with-dialog-input-buttons {
-  display: block;
+  display: flex;
   position: absolute;
   margin: 0;
   padding: 0.1em;
