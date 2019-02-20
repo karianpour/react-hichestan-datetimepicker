@@ -16,8 +16,8 @@ class Days extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (prevState.last_props_value !== nextProps.selectedDay) {
-      if (!isEqualDate(prevState.selectedDay, nextProps.selectedDay)) {
+    if (prevState.daysCount!==nextProps.daysCount || prevState.last_props_value !== nextProps.selectedDay) {
+      if (prevState.daysCount!==nextProps.daysCount || !isEqualDate(prevState.selectedDay, nextProps.selectedDay)) {
         // console.log('Days Received Props', prevState.selectedDay, nextProps.selectedDay);
         return {
           daysCount: nextProps.daysCount,

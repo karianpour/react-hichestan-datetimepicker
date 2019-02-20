@@ -19,7 +19,7 @@ class DatePicker extends Component {
       selectedDay: this.props.selectedDay ? moment(new Date(this.props.selectedDay)).format('jYYYY/jMM/jDD') : '',
     };
   
-    this.state.daysCount = this.daysInMonth(parseInt(moment().format("jMM"), 10), parseInt(moment().format("jYYYY")));
+    this.state.daysCount = this.daysInMonth(parseInt(moment().format("jMM"), 10), parseInt(moment().format("jYYYY"), 10));
   }
 
   daysInMonth = (month, selectedYear)=>{
