@@ -1,6 +1,6 @@
 {
   "name": "react-hichestan-datetimepicker",
-  "version": "0.2.12",
+  "version": "0.2.13",
   "description": "A serie of react components to manipulate persian (jalali) date.",
   "author": "Hichestan",
   "copyright.owner": "Hichestan Corp.",
@@ -32,18 +32,32 @@
     "docs": "react-doc-generator ./src/lib/ -o DOCUMENTATION.md"
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
     "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-preset-react": "^6.24.1",
+    "babel-preset-react-app": "^9.0.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "^3.0.0",
     "prop-types": "^15.6.2",
-    "react": "^16.7.0",
     "react-doc-generator": "^1.2.5",
-    "react-dom": "^16.7.0",
-    "react-scripts": "^1.1.5",
     "rimraf": "^2.6.2"
   },
   "dependencies": {
     "moment-jalaali": "^0.7.4",
     "shallow-equal": "^1.0.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
