@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import shallowEqualObjects from 'shallow-equal/objects';
 import {isValueEmpty, isValueValidDate, splitDateValue, formatJalaali, inspectYear, inspectMonth, inspectDay, mapToLatin, mapToFarsi, readDateFromValue, hasStringACharToGoToNext, maxDayFor, baseYear, NUMBER_FORMAT_LATIN, NUMBER_FORMAT_FARSI} from './dateUtils';
+import jalaali from 'jalaali-js';
 
 const DATE_SEPERATOR =  '/';// this is arabic date seperator ' ؍' but it is right to left glyph and as the numbers are left to right there will be caret position problem
 const EMPTY_VALUE = `    ${DATE_SEPERATOR}  ${DATE_SEPERATOR}  `;
@@ -36,11 +37,11 @@ class DateInput extends Component {
      */
     className: PropTypes.string,
     /**
-     * Disables the DateTimeInput.
+     * Disables the DateInput.
      */
     disabled: PropTypes.bool,
     /**
-     * makes the DateTimeInput readonly.
+     * makes the DateInput readonly.
      */
     readOnly: PropTypes.bool,
     /**
@@ -56,6 +57,10 @@ class DateInput extends Component {
      * Callback function that is fired when the user press F4 to open the dialog.
      */
     onShowDialog: PropTypes.func,
+    /**
+     * makes the DateInput gregorian.
+     */
+    gregorian: PropTypes.bool,
     /**
      * Sets the value for the Date-Time input.
      */
@@ -279,16 +284,24 @@ class DateInput extends Component {
 
   handleInput = (event) => {
     event.preventDefault();
-    // debugger;
     if(this.values.valueToShow===event.target.value) return;
     const inputValue = mapToLatin(event.target.value);
+    let fireOnChangeInTheEnd = false;
     
     const date = isValueValidDate(inputValue);
     if(!!date){
+      const j = jalaali.toJalaali(date.getFullYear(), date.getMonth()+1, date.getDate());
       this.values.valueIsValid = true;
       this.values.date = date;
       this.values.iso = this.values.date.toISOString();
-    }else if(this.inputRef.current.value !== this.values.valueToShow){
+      this.values.value = formatJalaali(j);
+      this.values.valueToShow = this.mapValue(this.values.value, this.props.numberFormat);
+      this.values.selectionStart = 0;
+      this.values.selectionEnd = 0;
+      fireOnChangeInTheEnd = true;
+    }
+    
+    if(this.inputRef.current.value !== this.values.valueToShow){
       this.inputRef.current.value = this.values.valueToShow;
       this.inputRef.current.setSelectionRange(this.values.selectionStart, this.values.selectionEnd);
     }
@@ -298,7 +311,9 @@ class DateInput extends Component {
       this.jumpToNext();
     }
 
-    // this.updateState(this.rollbackValue());
+    if(fireOnChangeInTheEnd){
+      this.fireOnChange();
+    }
   };
 
   mapValue = (value, numberFormat) => {
@@ -523,6 +538,7 @@ class DateInput extends Component {
   };
 
   fireOnChange = () => {
+    debugger;
     if(this.props.onChange){
       const value = this.values.valueIsValid ? this.values.value : '';
       if(this.previousValue !== value){

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import shallowEqualObjects from 'shallow-equal/objects';
 import {isValueEmpty, isValueValidDateTime, splitDateTimeValue, formatJalaali, formatTime, inspectYear, inspectMonth, inspectDay, inspectHour, inspectMinute, mapToLatin, mapToFarsi, readDateFromValue, hasStringACharToGoToNext, maxDayFor, baseYear, NUMBER_FORMAT_LATIN, NUMBER_FORMAT_FARSI} from './dateUtils';
+import jalaali from 'jalaali-js';
 
 const DATE_SEPERATOR =  '/';// this is arabic date seperator ' ؍' but it is right to left glyph and as the numbers are left to right there will be caret position problem
 const MIDDLE_SEPERATOR =  '\xa0';
@@ -58,6 +59,10 @@ class DateInput extends Component {
      * Callback function that is fired when the user press F4 to open the dialog.
      */
     onShowDialog: PropTypes.func,
+    /**
+     * makes the DateTimeInput gregorian.
+     */
+    gregorian: PropTypes.bool,
     /**
      * Sets the value for the Date-Time input.
      */
@@ -312,15 +317,23 @@ class DateInput extends Component {
   handleInput = (event) => {
     event.preventDefault();
     if(this.values.valueToShow===event.target.value) return;
-    const inputValue = event.target.value;
-    // this.rr.current.innerText = `${inputValue}`;
+    const inputValue = mapToLatin(event.target.value);
+    let fireOnChangeInTheEnd = false;
     
     const date = isValueValidDateTime(inputValue);
     if(!!date){
+      const j = jalaali.toJalaali(date.getFullYear(), date.getMonth()+1, date.getDate());
       this.values.valueIsValid = true;
       this.values.date = date;
       this.values.iso = this.values.date.toISOString();
-    }else if(this.inputRef.current.value !== this.values.valueToShow){
+      this.values.value = formatJalaali(j) + MIDDLE_SEPERATOR + formatTime(date);
+      this.values.valueToShow = this.mapValue(this.values.value, this.props.numberFormat);
+      this.values.selectionStart = 0;
+      this.values.selectionEnd = 0;
+      fireOnChangeInTheEnd = true;
+    }
+    
+    if(this.inputRef.current.value !== this.values.valueToShow){
       this.inputRef.current.value = this.values.valueToShow;
       this.inputRef.current.setSelectionRange(this.values.selectionStart, this.values.selectionEnd);
     }
@@ -329,7 +342,9 @@ class DateInput extends Component {
       this.jumpToNext();
     }
 
-    // this.updateState(this.rollbackValue());
+    if(fireOnChangeInTheEnd){
+      this.fireOnChange();
+    }
   };
 
 
