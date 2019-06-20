@@ -3,11 +3,8 @@ import PropTypes from 'prop-types';
 import DateInput from './DateInput';
 import {CalendarIcon, DeleteIcon} from './Picker/Icons';
 import DatePicker from './DatePicker';
-import moment from 'moment-jalaali';
 import './DateInputWithDialog.css';
-
-const DATE_SEPERATOR =  '/';// this is arabic date seperator ' ؍' but it is right to left glyph and as the numbers are left to right there will be caret position problem
-const DATE_FORMAT = `jYYYY${DATE_SEPERATOR}jMM${DATE_SEPERATOR}jDD`;
+import { formatJalaali } from './dateUtils';
 
 class DateInputWithDialog extends Component {
 
@@ -80,7 +77,7 @@ class DateInputWithDialog extends Component {
      */
     value: PropTypes.oneOfType([
       PropTypes.string,
-      PropTypes.instanceOf(moment)
+      PropTypes.instanceOf(Date),
     ]),
   };
 
@@ -107,17 +104,17 @@ class DateInputWithDialog extends Component {
     });
   };
 
-  handleDateChange = (value) => {
+  handleDateChange = (date) => {
     const newState = {};
 
-    if(!value){
-      newState.formatted = '';
-      newState.moment = null;
+    if(!date){
+      newState.date = null;
       newState.iso = '';
+      newState.formatted = '';
     }else{
-      newState.formatted = value;
-      newState.moment = moment(value, DATE_FORMAT);
-      newState.iso = newState.moment.format();
+      newState.date = date;
+      newState.iso = date.toISOString();
+      newState.formatted = formatJalaali(date);
     }
 
     this.setState(newState, ()=>{
@@ -136,7 +133,7 @@ class DateInputWithDialog extends Component {
           name: this.props.name,
           value: this.state.iso,
           formatted: this.state.formatted,
-          moment: this.state.moment,
+          date: this.state.date,
         }
       };
       this.props.onChange(e);
@@ -158,6 +155,10 @@ class DateInputWithDialog extends Component {
       filterDate,
       ...rest
     } = this.props;
+
+    const {
+      date
+    } = this.state;
 
     return (
       <div className='date-input-with-dialog-main'>
@@ -182,7 +183,7 @@ class DateInputWithDialog extends Component {
                 }
               }}
               cancelHandler={this.handleCalendar}
-              selectedDay={value}
+              selectedDay={date}
               style={dialogContainerStyle}
               className={dialogContainerClassName}
               closeLabel={closeLabel}

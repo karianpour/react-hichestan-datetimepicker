@@ -1,6 +1,7 @@
 import React from 'react';
 
-const months = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+const jalaaliMonths = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+const gregorianMonths = ['ژانویه', 'فوریه', 'مارچ', 'آپریل', 'می', 'جون', 'جولای', 'آگوست', 'سپتامبر', 'اکتبر', 'نوامبر', 'دسامبر'];
 
 class Months extends React.Component {
   constructor(props) {
@@ -19,8 +20,10 @@ class Months extends React.Component {
   }
 
   renderMonths() {
+    const {gregorian} = this.props;
     const {selectedMonth} = this.state;
     const result = [];
+    const months = gregorian ? gregorianMonths : jalaaliMonths;
     for (let i = 1; months.length >= i; i++) {
       if (selectedMonth === i) {
         result.push(<div key={i} className="MonthItems selected">{months[i - 1]}</div>);
@@ -41,8 +44,11 @@ class Months extends React.Component {
   };
 
   render() {
-    const {month} = this.props;
+    const {month, gregorian} = this.props;
     const {monthPickerView} = this.state;
+
+    const months = gregorian ? gregorianMonths : jalaaliMonths;
+
     return (
       <div className="JC-Section">
         <div className="JC-Nav" onClick={this.prevMonth}>&#9654;</div>

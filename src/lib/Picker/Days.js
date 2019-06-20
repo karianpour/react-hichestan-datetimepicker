@@ -1,6 +1,6 @@
 import React from 'react';
-import {isEqualDate, mapToFarsi} from '../dateUtils';
-import moment from 'moment-jalaali';
+import { mapToFarsi } from '../dateUtils';
+import jalaali from 'jalaali-js';
 
 class Days extends React.Component {
 
@@ -8,42 +8,23 @@ class Days extends React.Component {
     super(props);
     this.state = {
       selectedDay: this.props.selectedDay,
-      daysCount: this.props.daysCount,
-      selectedYear: this.props.selectedYear,
-      last_props_value: this.props.selectedDay,
     };
-    this.today = moment(new Date()).format('jYYYY/jMM/jDD');
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (prevState.daysCount!==nextProps.daysCount || prevState.last_props_value !== nextProps.selectedDay) {
-      if (prevState.daysCount!==nextProps.daysCount || !isEqualDate(prevState.selectedDay, nextProps.selectedDay)) {
-        // console.log('Days Received Props', prevState.selectedDay, nextProps.selectedDay);
-        return {
-          daysCount: nextProps.daysCount,
-          selectedYear: nextProps.selectedYear,
-          selectedDay: nextProps.selectedDay,
-          last_props_value: nextProps.selectedDay,
-        };
-      }else{
-        return {
-          last_props_value: nextProps.selectedDay,
-        };
-      }
-    }
-
-    return null;
+    const now = new Date();
+    this.today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   }
 
   dayClicked(element, e) {
     if(e){
       e.preventDefault();
     }
-    if (!!this.state.selectedDay && !!this.refs[this.state.selectedDay]) {
-      this.refs[this.state.selectedDay].className = this.refs[this.state.selectedDay].className.replace('selected', '');
+    if (!!this.state.selectedDay) {
+      const selectedRef = this.state.selectedDay.getTime().toString();
+      if(!!this.refs[selectedRef]){
+        this.refs[selectedRef].className = this.refs[selectedRef].className.replace('selected', '');
+      }
     }
     this.setState({selectedDay: element}, ()=>{
-      this.refs[element].className += ' selected';
+      this.refs[element.getTime().toString()].className += ' selected';
       this.props.clickEvent(element);
     });
   }
@@ -56,34 +37,40 @@ class Days extends React.Component {
   };
 
   renderDays() {
-    let {firstDay, currentMonth, selectedDay} = this.props;
-    let {daysCount, selectedYear} = this.state;
-    let year = selectedYear.toString();
-    let month = currentMonth.toString();
-    if (month.length === 1) month = '0' + month;
+    let { gregorian, firstDay, selectedYear, currentMonth, selectedDay, daysCount } = this.props;
+    let year = selectedYear;
+    let month = currentMonth;
 
     const result = [];
-    for (let i = 1; daysCount >= i; i++) {
+    for (let i = 1; i <= daysCount; i++) {
       let addedClass = '';
       let marginRight = '0%';
       let number = mapToFarsi(i);
       if (i === 1) marginRight = (firstDay * 14.28) + '%';
 
-      const date = year +'/'+ month +'/'+ (i < 10?'0':'') + i.toString();
+      let date;
+      if(gregorian){
+        date = new Date(year, month - 1, i);
+      }else{
+        const g = jalaali.toGregorian(year, month, i);
+        date = new Date(g.gy, g.gm - 1, g.gd);
+      }
 
-      if (date === this.today) addedClass += ' today';
-      if (date === selectedDay) addedClass += ' selected';
+      // console.log(this.today, date)
+
+      if (this.today && date.getTime() === this.today.getTime()) addedClass += ' today';
+      if (selectedDay && date.getTime() === selectedDay.getTime()) addedClass += ' selected';
 
       const enable = this.isDateEnabled(date);
 
       if (!enable) {
         result.push(<div className={'day-items' + addedClass}
-                         ref={date} key={i}
+                         ref={date.getTime().toString()} key={date.getTime().toString()}
                          style={{background: '#ccc', cursor: 'default', marginRight: marginRight}}
         >{number}</div>);
       } else if (enable) {
         result.push(<div className={'day-items' + addedClass}
-                         ref={date} key={i}
+                         ref={date.getTime().toString()} key={date.getTime().toString()}
                          style={{marginRight: marginRight}}
                          onClick={(e) => this.dayClicked(date, e)}
         >{number}</div>);
@@ -96,7 +83,7 @@ class Days extends React.Component {
     return (
       <div className="JC-days">
         <div className="holder">
-          {!!this.state.daysCount && this.renderDays()}
+          {!!this.props.daysCount && this.renderDays()}
         </div>
       </div>
     )

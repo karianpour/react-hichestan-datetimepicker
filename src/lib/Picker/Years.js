@@ -1,12 +1,19 @@
 import React from 'react';
 import {mapToFarsi} from '../dateUtils';
-import moment from 'moment-jalaali';
+import jalaali from 'jalaali-js';
 
-const yearArray = [];
+const jalaaliYearArray = [], gregorianYearArray = [];
 {
-  const m = moment();
-  for(let i = 1370; i<m.jYear()+20; i++){
-    yearArray.push({year: i, yearString: mapToFarsi(i)});
+  const now = new Date();
+  const j = jalaali.toJalaali(now);
+  let n = j.jy+20;
+  for(let i = 1370; i<n; i++){
+    jalaaliYearArray.push({year: i, yearString: mapToFarsi(i)});
+  }
+
+  n = now.getFullYear() + 20;
+  for(let i = 1980; i<n; i++){
+    gregorianYearArray.push({year: i, yearString: mapToFarsi(i)});
   }
 }
 
@@ -15,7 +22,7 @@ class Years extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      year: this.props.year,
+      editable: false,
     }
   }
 
@@ -23,31 +30,25 @@ class Years extends React.Component {
     if(e && e.preventDefault()) e.preventDefault();
     const {year} = this.refs;
     const {changeEvent} = this.props;
-    this.setState({
-      year: year.value,
-    });
 
-    if (year.value.length === 4 && year.value > 1300 && year.value < 1500) {
-      this.setState({editable: false, error: ''});
-      if (!!changeEvent) changeEvent(parseInt(year.value, 10));
-    }
+    this.setState({editable: false, error: ''});
+    if (!!changeEvent) changeEvent(parseInt(year.value, 10));
   };
 
-  componentWillReceiveProps(nextprops) {
-    this.setState({year: nextprops.year})
-  }
-
   renderYearEditor = (year) => {
+    const yearArray = this.props.gregorian ? gregorianYearArray : jalaaliYearArray;
     return (
       <select className="JC-YearInput" ref="year" onChange={this.yearChanged}
-              value={year}>
+              value={year}
+      >
         {yearArray.map(i => <option key={i.year} value={i.year}>{i.yearString}</option>)}
       </select>
     );
   };
 
   render() {
-    const {year, editable} = this.state;
+    const { editable } = this.state;
+    const { year } = this.props;
     const yearString = mapToFarsi(year);
     return (
       <div className="JC-Section">
