@@ -335,14 +335,20 @@ class DateInput extends Component {
       this.values.date = null;
       this.values.valueIsValid = false;
     }else{
-      const date = isValueValidDate(this.values.value, this.props.gregorian);
-      this.values.valueIsValid = !!date;
-      if(this.values.valueIsValid){
-        this.values.date = date;
-        this.values.iso = this.values.date.toISOString();
+      if(newState.date){
+        this.values.valueIsValid = true;
+        this.values.date = newState.date;
+        this.values.iso = newState.iso ? newState.iso : this.values.date.toISOString();
       }else{
-        this.values.date = null;
-        this.values.iso = '';
+        const date = isValueValidDate(this.values.value, this.props.gregorian);
+        this.values.valueIsValid = !!date;
+        if(this.values.valueIsValid){
+          this.values.date = date;
+          this.values.iso = this.values.date.toISOString();
+        }else{
+          this.values.date = null;
+          this.values.iso = '';
+        }
       }
     }
 
@@ -550,7 +556,7 @@ class DateInput extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState){
-    if(nextProps.value !== this.values.iso || nextProps.numberFormat !== this.props.numberFormat){
+    if(nextProps.value !== this.values.iso || nextProps.gregorian !== this.props.gregorian || nextProps.numberFormat !== this.props.numberFormat){
       this.updateState(this.readValuesFromProps(nextProps));
     }
     if(!shallowEqualObjects(nextProps.style, this.props.style)){
@@ -563,7 +569,7 @@ class DateInput extends Component {
   }
 
   render() {
-    const {gregorian, value, onChange, onFocus, onBlur, onInput, onPast, onKeyDown, onShowDialog, pattern, inputMode, type, inputRef, numberFormat, ...rest} = this.props;
+    const {gregorian, value, onChange, onFocus, onBlur, onInput, onPaste, onKeyDown, onShowDialog, pattern, inputMode, defaultValue, type, inputRef, numberFormat, ...rest} = this.props;
     const {valueToShow} = this.values;
 
     // const localInputMode = this.props.type === 'tel' ? 'tel' : 'numeric'; // as we use type=tel, then we do not need it any more

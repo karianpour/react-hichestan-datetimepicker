@@ -8,7 +8,7 @@ class Example extends Component {
     value1_formatted: '',
     value2: '2018-08-23T06:57:12+03:00',
     value2_formatted: '',
-    value3: '',
+    value3: '2018-08-23T06:57:12+03:00',
     value3_formatted: '',
     value4: '2018-08-23T06:57:12+03:00',
     value4_formatted: '',
@@ -41,6 +41,7 @@ class Example extends Component {
             <br/>
             <DateInput
               value={this.state.value1}
+              defaultValue={undefined}
               name={'value1'}
               gregorian={gregorian}
               onChange={this.handleChange}

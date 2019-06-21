@@ -85,13 +85,18 @@ class DateInputWithDialog extends Component {
     ]),
   };
 
-  state = {
-    openDialog: false,
-  };
-
   constructor(props){
     super(props);
-    this.handleEmpty = this.handleEmpty.bind(this);
+    let date = null;
+    if(props.value){
+      date = new Date(props.value);
+      if(date.toString() === 'Invalid Date'){
+        date = null;
+      }
+    }
+
+    this.state = this.createState(date);
+    this.state.openDialog = false;
   }
 
   handleCalendar = (e) => {
@@ -109,6 +114,14 @@ class DateInputWithDialog extends Component {
   };
 
   handleDateChange = (date) => {
+    const newState = this.createState(date);
+
+    this.setState(newState, ()=>{
+      this.fireOnChange();
+    });
+  };
+
+  createState = (date) => {
     const newState = {};
 
     if(!date){
@@ -121,14 +134,12 @@ class DateInputWithDialog extends Component {
       newState.formatted = this.props.gregorian ? formatGregorian(date) : formatJalaali(date);
     }
 
-    this.setState(newState, ()=>{
-      this.fireOnChange();
-    });
+    return newState;
   };
 
-  handleEmpty(){
+  handleEmpty = () => {
     this.handleDateChange('');
-  }
+  };
 
   fireOnChange = () => {
     if(this.props.onChange){

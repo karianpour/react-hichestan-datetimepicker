@@ -10,14 +10,20 @@ class DatePicker extends Component {
 
   constructor(props) {
     super(props);
-    const { gregorian } = props;
+    let { gregorian, selectedDay } = props;
+    if(!selectedDay){
+      selectedDay = new Date();
+    }
+    selectedDay.setHours(0);
+    selectedDay.setMinutes(0);
+    selectedDay.setSeconds(0);
     let selectedYear, currentMonth, selectedMonthFirstDay, daysCount;
     if(gregorian){
-      let j = new Date();
+      let j = selectedDay;
       selectedYear = j.getFullYear();
       currentMonth = j.getMonth() + 1;
     }else{
-      let j = jalaali.toJalaali(new Date());
+      let j = jalaali.toJalaali(selectedDay);
       selectedYear = j.jy;
       currentMonth = j.jm;
     }
@@ -29,7 +35,7 @@ class DatePicker extends Component {
       currentMonth,
       selectedMonthFirstDay,
       daysCount,
-      selectedDay: this.props.selectedDay ? this.props.selectedDay : null,
+      selectedDay: selectedDay ? selectedDay : null,
     };
   }
 
