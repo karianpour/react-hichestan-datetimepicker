@@ -3,39 +3,35 @@ import "./DateTimeInput.css";
 import Years from './Picker/Years';
 import Months from './Picker/Months';
 import Days from './Picker/Days';
-import moment from 'moment-jalaali';
-import {isEqualDate} from './dateUtils';
-
-moment.loadPersian([]);
+import jalaali from 'jalaali-js';
+import {calcFirstDayOfMonth, isEqualDate, gregorianMonthLength} from './dateUtils';
 
 class DatePicker extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      selectedYear: parseInt(moment().format("jYYYY"), 10),
-      currentMonth: parseInt(moment().format("jMM"), 10),
-      selectedMonthFirstDay: moment(moment().format("jYYYY")+"/"+moment().format("jMM")+"/01","jYYYY/jMM/jDD").weekday(),
-      selectedDay: this.props.selectedDay ? moment(new Date(this.props.selectedDay)).format('jYYYY/jMM/jDD') : '',
-    };
-  
-    this.state.daysCount = this.daysInMonth(parseInt(moment().format("jMM"), 10), parseInt(moment().format("jYYYY"), 10));
-  }
-
-  daysInMonth = (month, selectedYear)=>{
-    // console.log('month', month, typeof month);
-    if(0 < month && month < 7) {
-      return 31;
-    }else if(6 < month && month < 12) {
-      return 30;
-    }else if(month === 12) {
-      if(moment.jIsLeapYear(selectedYear)){
-        return 30;
-      }else {
-        return 29;
-      }
+    const { gregorian } = props;
+    let selectedYear, currentMonth, selectedMonthFirstDay, daysCount;
+    if(gregorian){
+      let j = new Date();
+      selectedYear = j.getFullYear();
+      currentMonth = j.getMonth() + 1;
+    }else{
+      let j = jalaali.toJalaali(new Date());
+      selectedYear = j.jy;
+      currentMonth = j.jm;
     }
-  };
+    daysCount = gregorian ? gregorianMonthLength(selectedYear, currentMonth) : jalaali.jalaaliMonthLength(selectedYear, currentMonth);
+    selectedMonthFirstDay = calcFirstDayOfMonth(selectedYear, currentMonth, gregorian);
+    this.state = {
+      gregorian,
+      selectedYear,
+      currentMonth,
+      selectedMonthFirstDay,
+      daysCount,
+      selectedDay: this.props.selectedDay ? this.props.selectedDay : null,
+    };
+  }
 
   cancelPicker = (e)=>{
     e.preventDefault();
@@ -45,12 +41,12 @@ class DatePicker extends Component {
     this.props.cancelHandler();
   };
 
-  daysClicked = (momentDay) => {
-    if(!isEqualDate(this.state.selectedDay, momentDay)){
+  daysClicked = (dayDate) => {
+    if(isEqualDate(this.state.selectedDay, dayDate)){
       this.setState({
-        selectedDay: momentDay,
+        selectedDay: dayDate,
       }, ()=>{
-        this.props.onChange({target: {name: this.props.name, value: momentDay}});
+        this.props.onChange({target: {name: this.props.name, value: dayDate}});
       });
     }else{
       this.props.cancelHandler();
@@ -58,46 +54,61 @@ class DatePicker extends Component {
   };
 
   monthsClicked = (month) => {
-    const {selectedYear} = this.state;
-    let year = selectedYear;
-    let thisMonth = month;
-    this.setState({daysCount: 0});
+    let {selectedYear, gregorian} = this.state;
+    let currentMonth, daysCount, selectedMonthFirstDay;
 
     if(month === 0){
-      this.setState({
-        currentMonth: 12,
-        daysCount: this.daysInMonth(12, selectedYear - 1),
-        selectedYear: selectedYear - 1
-      });
-      thisMonth = 12;
-      year = selectedYear - 1;
+      currentMonth = 12;
+      selectedYear = selectedYear - 1;
     }else if(month === 13){
-      this.setState({
-        currentMonth: 1,
-        daysCount: this.daysInMonth(1, selectedYear + 1),
-        selectedYear: selectedYear + 1
-      });
-      thisMonth = 1;
-      year = selectedYear + 1;
-    }else {
-      this.setState({
-        currentMonth: month,
-        daysCount: this.daysInMonth(month, selectedYear)
-      });
+      currentMonth = 1;
+      selectedYear = selectedYear + 1;
+    } else {
+      currentMonth = month;
     }
-    this.firstDayOfMonth(thisMonth, year);
+    daysCount = gregorian ? gregorianMonthLength(selectedYear, currentMonth) : jalaali.jalaaliMonthLength(selectedYear, currentMonth);
+    selectedMonthFirstDay = calcFirstDayOfMonth(selectedYear, currentMonth, gregorian);
+
+    this.setState({
+      currentMonth,
+      daysCount,
+      selectedYear,
+      selectedMonthFirstDay,
+    });
+};
+
+  yearSelected = (selectedYear) => {
+    let selectedMonthFirstDay, daysCount;
+    selectedMonthFirstDay = calcFirstDayOfMonth(selectedYear, this.state.currentMonth, this.state.gregorian);
+    daysCount = this.state.gregorian ? gregorianMonthLength(selectedYear, this.state.currentMonth) : jalaali.jalaaliMonthLength(selectedYear, this.state.currentMonth);
+    this.setState({
+      selectedYear,
+      selectedMonthFirstDay,
+      daysCount,
+    });
   };
 
-  firstDayOfMonth = (mo, ye) => {
-    let month = mo.toString();
-    let year = ye.toString();
-    if(month.length === 1) month = "0"+month;
-    this.setState({selectedMonthFirstDay: moment(year+"/"+month+"/01","jYYYY/jMM/jDD").weekday()});
-  };
+  gregorianPicker = () => {
+    const gregorian = !this.state.gregorian;
 
-  yearSelected = (year) => {
-    this.setState({selectedYear: year});
-    this.firstDayOfMonth(this.state.currentMonth, year);
+    let {selectedDay} = this.state;
+    let currentMonth, daysCount, selectedYear, selectedMonthFirstDay;
+
+    if(gregorian){
+      let j = selectedDay ? selectedDay : new Date();
+      selectedYear = j.getFullYear();
+      currentMonth = j.getMonth() + 1;
+    }else{
+      let j = jalaali.toJalaali(selectedDay ? selectedDay : new Date());
+      selectedYear = j.jy;
+      currentMonth = j.jm;
+    }
+    daysCount = gregorian ? gregorianMonthLength(selectedYear, currentMonth) : jalaali.jalaaliMonthLength(selectedYear, currentMonth);
+    selectedMonthFirstDay = calcFirstDayOfMonth(selectedYear, currentMonth, gregorian);
+
+    this.setState({
+      gregorian, currentMonth, daysCount, selectedYear, selectedMonthFirstDay,
+    });
   };
 
   render() {
@@ -106,15 +117,14 @@ class DatePicker extends Component {
       closeLabel='بستن',
       style,
       filterDate,
-      // ...other
     } = this.props;
 
-    const {daysCount, selectedDay, currentMonth, selectedYear, selectedMonthFirstDay} = this.state;
+    const {gregorian, daysCount, selectedDay, currentMonth, selectedYear, selectedMonthFirstDay} = this.state;
 
     return (
       <div className={"JDatePicker "+(className?className:"")} style={style}>
-        <Years changeEvent={(returnedYear)=>this.yearSelected(returnedYear)} year={selectedYear} />
-        <Months clickEvent={(returnedMonth)=>this.monthsClicked(returnedMonth)} month={currentMonth} />
+        <Years gregorian={gregorian} changeEvent={(returnedYear)=>this.yearSelected(returnedYear)} year={selectedYear} />
+        <Months gregorian={gregorian} clickEvent={(returnedMonth)=>this.monthsClicked(returnedMonth)} month={currentMonth} />
         <div className="days-titles">
           <div>ش</div>
           <div>ی</div>
@@ -124,9 +134,11 @@ class DatePicker extends Component {
           <div>پ</div>
           <div>ج</div>
         </div>
-        <Days selectedYear={selectedYear} selectedDay={selectedDay} currentMonth={currentMonth} daysCount={daysCount} firstDay={selectedMonthFirstDay} clickEvent={this.daysClicked} filterDate={filterDate}/>
+        <Days gregorian={gregorian} selectedYear={selectedYear} selectedDay={selectedDay} currentMonth={currentMonth} daysCount={daysCount} firstDay={selectedMonthFirstDay} clickEvent={this.daysClicked} filterDate={filterDate}/>
         <div>
           <button className="JD-Cancel" onClick={this.cancelPicker}>{closeLabel}</button>
+          {!gregorian && <button className="JD-Cancel" onClick={this.gregorianPicker}>{'میلادی'}</button>}
+          {gregorian && <button className="JD-Cancel" onClick={this.gregorianPicker}>{'شمسی'}</button>}
         </div>
       </div>
     );

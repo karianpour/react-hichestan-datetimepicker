@@ -5,13 +5,14 @@ which allows the user to type or select the date from the picker.
 
 The component is compatible with react 16.
 
-This module is written using  [moment-jalali](https://github.com/jalaali/moment-jalaali), which is relied on [momentjs](http://momentjs.com/).
+This module is written using  [jalaali-js](https://www.npmjs.com/package/jalaali-js), which is a light js library for jalaali date.
 
 This module is written with inspiration of [react-advance-jalaali-datepicker](https://github.com/A-Kasaaian/react-advance-jalaali-datepicker).
 
 #### Why an other date picker
 There are multiple jalaali date and time pickers on npm and github, but there is a lack of simplicity and compatibility. This lib is aim to be compatible with React 16 and also be compatible with other field inputs.
 The components simply get a `value` and a `name` as props, and fires `onChange` with `event` argument. The `event` object has `target` property containing the `name` and new `value`, so it can be put in a form just like any other input in that form and share the `handleChange` function.
+Beside this module is `moment` free to have a smaller final boundle size.
 
 
 ## Demo
@@ -20,6 +21,7 @@ Here you can experience a live [demo](https://karianpour.github.io/react-hichest
 
 ### Features
 
+- Date / DateTime fields.
 - Farsi digits are rendered, and the farsi keyboard is supported as well as latin.
 - Date picker, with month click and year click to change.
 - Ability to type the date.
@@ -28,6 +30,7 @@ Here you can experience a live [demo](https://karianpour.github.io/react-hichest
 - Highlighting today.
 - Align the picker to the right of the main input.
 - Compatible input onChange event.
+- Gregorian support and converter.
 
 ## Installation
 
@@ -110,7 +113,6 @@ On mobile the out side click works only if the page size and the view matches. I
 
 ### ToDo
 - In mobile device it is not a good experience to type in input text, having select make more sense.
-- Creating date only field.
 - Data formatter function injection, to let the developer set and get the value in any other format that the back-end needs.
 
 
@@ -136,7 +138,7 @@ npm publish
 ### Acknowledgement
 The project is bootstrapped by create-component-lib.
 
-Thanks to the [moment-jalali](https://github.com/jalaali/moment-jalaali), and [momentjs](http://momentjs.com/) libraries.
+Thanks to the [jalaali-js](https://www.npmjs.com/package/jalaali-js), library.
 
 This module is written with inspiration of [react-advance-jalaali-datepicker](https://github.com/A-Kasaaian/react-advance-jalaali-datepicker).
 

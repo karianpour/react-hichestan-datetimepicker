@@ -1,35 +1,18 @@
-import moment from 'moment-jalaali';
+import jalaali from 'jalaali-js';
 
 export const NUMBER_FORMAT_FARSI = 'FARSI';
 export const NUMBER_FORMAT_LATIN = 'LATIN';
 
-export function isEqualMoment(m1, m2) {
-  return !!((!m1 && !m2) || (m1 && m2
-    && (m1.jYear() === m2.jYear())
-    && (m1.jMonth() === m2.jMonth())
-    && (m1.jDate() === m2.jDate())
-    && (m1.hour() === m2.hour())
-    && (m1.minute() === m2.minute())
-    && (m1.second() === m2.second())
-  ));
-}
-
-export function isEqualDateTime(m1, m2) {
-  return !!((!m1 && !m2) || (m1 && m2
-    && (m1 === m2)
-  ));
-}
-
-export function isEqualTime(m1, m2) {
-  return !!((!m1 && !m2) || (m1 && m2
-    && (m1 === m2)
-  ));
-}
+export const DATE_SEPERATOR =  '/';// this is arabic date seperator ' ؍' but it is right to left glyph and as the numbers are left to right there will be caret position problem
+export const MIDDLE_SEPERATOR =  '\xa0';
+export const TIME_SEPERATOR =  ':';
+export const SEPERATORES_REGEX = new RegExp(`[ ${DATE_SEPERATOR}]`, 'g');
 
 export function isEqualDate(m1, m2) {
-  return !!((!m1 && !m2) || (m1 && m2
-    && (m1 === m2)
-  ));
+  if((m1 && !m2) || (!m1 && m2) || (m1 && m2 && m1.getTime() !== m2.getTime())){
+    return true;
+  }
+  return false;
 }
 
 export function mapToFarsi(str) {
@@ -170,16 +153,39 @@ export function inspectMinute (minute, selectionStart, seperatorPosition) {
   return {newMinute, newStartPosition};
 }
 
-export function readDateFromValue (value, DATE_FORMAT) {
+export function readDateFromValue (value) {
   if(!value) return '';
   if (typeof value === 'string') {
     value = mapToLatin(value);
-    let m = moment(new Date(value));
-    if(m.isValid() && m.year() > 1700) return m;
-    m = moment(value, DATE_FORMAT);
-    if(m.isValid()) return m;
-  }else if (value instanceof moment) {
-    return value;
+    let v = new Date(value);
+    if(v.toString() === 'Invalid Date') {
+      let d = isValueValidDateTime(value);
+      if(d){
+        v = d;
+      }else{
+        d = isValueValidDate(value);
+        if(d){
+          v = d;
+        }
+      }
+    }
+    if(v.getFullYear() < 1700){
+      let d = isValueValidDateTime(value);
+      if(d){
+        v = d;
+      }else{
+        d = isValueValidDate(value);
+        if(d){
+          v = d;
+        }
+      }
+    }
+    let j = jalaali.toJalaali(v);
+    return { j, value: v };
+  }else if (value instanceof Date) {
+    if(value.toString() === 'Invalid Date') return '';
+    const j = jalaali.toJalaali(value);
+    return { j, value };
   }else{
     console.warn('unknown value type ', value)
   }
@@ -199,9 +205,6 @@ export function hasStringACharToGoToNext (str) {
   return false;
 }
 
-export const LeapYears = [1387, 1391, 1395, 1399, 1403, 1408, 1412, 1416, 1383, 1379, 1375, 1370, 1366, 1362, 1358, 1354];
-
-
 export function maxDayFor (month, year) {
   if(!month) return 31;
   month = Number(month);
@@ -209,10 +212,189 @@ export function maxDayFor (month, year) {
   if(month > 7 && month < 12) return 30;
   if(!year) return 30;
   year = Number(year);
-  if(month === 12 && LeapYears.find(y => y===year)) return 30;
+  if(month === 12 && jalaali.isLeapJalaaliYear(year)) return 30;
   return 29;
 }
 
-export function baseYear () {
-  return '1397';
+
+const jalaaliBaseYear = jalaali.toJalaali(new Date()).jy.toString();
+const gregorianBaseYear = (new Date()).getFullYear().toString();
+export function baseYear (gregorian) {
+  return gregorian ? gregorianBaseYear : jalaaliBaseYear;
+}
+
+export function formatJalaali(j){
+  if(j instanceof Date){
+    j = jalaali.toJalaali(j);
+  }
+  return constructdate(j.jy, j.jm, j.jd, '/');
+}
+
+export function formatGregorian(g){
+  return constructdate(g.getFullYear(), g.getMonth() + 1, g.getDate(), '/');
+}
+
+export function formatTime(date){
+  const seperator = ':';
+  let _minutes = date.getMinutes().toString();
+	_minutes = '00'.substring(0, 2 - _minutes.length) + _minutes;
+	let _hours = date.getHours().toString();
+	_hours = '00'.substring(0, 2 - _hours.length) + _hours;
+	return _hours + seperator + _minutes;
+}
+
+export function constructdate (_year, _month, _day, seperator) {
+	let _yeary, _monthm, _dayd;
+
+  _dayd = _day.toString();
+	_dayd = '00'.substring(0, 2 - _dayd.length) + _dayd;
+	_monthm = _month.toString();
+	_monthm = '00'.substring(0, 2 - _monthm.length) + _monthm;
+	_yeary = _year.toString();
+	_yeary = '0000'.substring(0, 4 - _yeary.length) + _yeary;
+	return _yeary + seperator + _monthm + seperator + _dayd;
+}
+
+export const isValueValidDate = (value, gregorian) => {
+  if(!value) return false;
+  const splittedValue = splitDateValue(value);
+  if(splittedValue==='' || !splittedValue) {
+    return false;
+  }
+
+  let {year, month, day} = splittedValue;
+  year = Number(year);
+  month = Number(month);
+  day = Number(day);
+
+  if (isNaN(day) || isNaN(month) || isNaN(year)) return false;
+
+  if(!gregorian && (year < 1300 || year > 1450)) return false;
+
+  if(gregorian && (year < 1800 || year > 2150)) return false;
+
+  if(month < 1 || month > 12) return false;
+  
+  if(day < 1 || day > 31) return false;
+
+  if(month > 6 && day > 30) return false;
+
+  if(month === 12 && day > 29 && !jalaali.isLeapJalaaliYear(year)) return false;
+
+
+  if(gregorian){
+    const date = new Date(year, month - 1, day, 0, 0);
+    if(date.toString() === 'Invalid Date'){
+      return false;
+    }
+    return date;
+  }else{
+    if(!jalaali.isValidJalaaliDate(year, month, day)) return false;
+    const g = jalaali.toGregorian(year, month, day);
+    const date = new Date(g.gy, g.gm - 1, g.gd, 0, 0);
+    return date;
+  }
+};
+
+export const isValueValidDateTime = (value) => {
+  if(!value) return false;
+  const splittedValue = splitDateTimeValue(value);
+  if(splittedValue==='' || !splittedValue) {
+    return false;
+  }
+
+  let {year, month, day, hour, minute} = splittedValue;
+  if(hour.trim()==='' || minute.trim()==='') return false;
+
+  year = Number(year);
+  month = Number(month);
+  day = Number(day);
+  hour = Number(hour);
+  minute = Number(minute);
+
+  if (isNaN(day) || isNaN(month) || isNaN(year) || isNaN(hour) || isNaN(minute)) return false;
+
+  if(year < 1300 || year > 1450) return false;
+
+  if(month < 1 || month > 12) return false;
+  
+  if(day < 1 || day > 31) return false;
+
+  if(month > 6 && day > 30) return false;
+
+  if(month === 12 && day > 29 && !jalaali.isLeapJalaaliYear(year)) return false;
+
+  if(hour < 0 || hour >= 24) return false;
+
+  if(minute < 0 || minute >= 60) return false;
+
+  if(!jalaali.isValidJalaaliDate(year, month, day)) return false;
+
+  const g = jalaali.toGregorian(year, month, day);
+  const date = new Date(g.gy, g.gm - 1, g.gd, hour, minute);
+
+  return date;
+};
+
+export const isValueEmpty = (value) => {
+  if(value.replace(SEPERATORES_REGEX, '')==='') return true;
+  return false;
+}; 
+
+export const splitDateValue = (value) => {
+  if(isValueEmpty(value)){
+    return '';
+  }
+  const seperator1 = value.indexOf(DATE_SEPERATOR);
+  const seperator2 = value.indexOf(DATE_SEPERATOR, seperator1+1);
+  if(seperator1===-1 || seperator2===-1) {
+    return null;
+  }
+
+  const year = value.substring(0, seperator1);
+  const month = value.substring(seperator1+1, seperator2);
+  const day = value.substring(seperator2+1);
+  return {
+    year, month, day, seperator1, seperator2
+  };
+};
+
+export const splitDateTimeValue = (value) => {
+  if(isValueEmpty(value)){
+    return '';
+  }
+  const seperator1 = value.indexOf(DATE_SEPERATOR);
+  const seperator2 = value.indexOf(DATE_SEPERATOR, seperator1+1);
+  const seperator3 = value.indexOf(MIDDLE_SEPERATOR, seperator2+1);
+  const seperator4 = value.indexOf(TIME_SEPERATOR, seperator3+1);
+  if(seperator1===-1 || seperator2===-1 || seperator3===-1 || seperator4===-1) {
+    return null;
+  }
+
+  const year = value.substring(0, seperator1);
+  const month = value.substring(seperator1+1, seperator2);
+  const day = value.substring(seperator2+1, seperator3);
+  const hour = value.substring(seperator3+1, seperator4);
+  const minute = value.substring(seperator4+1);
+
+  return {
+    year, month, day, hour, minute, seperator1, seperator2, seperator3, seperator4
+  };
+};
+
+export function calcFirstDayOfMonth(year, month, gregorian){
+  year = +year;
+  month = +month;
+  let fistDayDate;
+  if(gregorian){
+    fistDayDate = new Date(year, month - 1, 1);
+  }else{
+    const firstDayJ = jalaali.toGregorian(year, month, 1);
+    fistDayDate = new Date(firstDayJ.gy, firstDayJ.gm - 1, firstDayJ.gd);
+  }
+  return (fistDayDate.getDay() + 1) % 7;
+}
+
+export function gregorianMonthLength(year, month){
+  return (new Date(year, month, 0)).getDate();
 }

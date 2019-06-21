@@ -3,11 +3,8 @@ import PropTypes from 'prop-types';
 import DateInput from './DateInput';
 import {CalendarIcon, DeleteIcon} from './Picker/Icons';
 import DatePicker from './DatePicker';
-import moment from 'moment-jalaali';
 import './DateInputWithDialog.css';
-
-const DATE_SEPERATOR =  '/';// this is arabic date seperator ' ؍' but it is right to left glyph and as the numbers are left to right there will be caret position problem
-const DATE_FORMAT = `jYYYY${DATE_SEPERATOR}jMM${DATE_SEPERATOR}jDD`;
+import { formatGregorian, formatJalaali } from './dateUtils';
 
 class DateInputWithDialog extends Component {
 
@@ -76,11 +73,15 @@ class DateInputWithDialog extends Component {
      */
     filterDate: PropTypes.func,
     /**
+     * makes the DateInput gregorian.
+     */
+    gregorian: PropTypes.bool,
+    /**
      * Sets the value for the Date-Time input.
      */
     value: PropTypes.oneOfType([
       PropTypes.string,
-      PropTypes.instanceOf(moment)
+      PropTypes.instanceOf(Date),
     ]),
   };
 
@@ -107,17 +108,17 @@ class DateInputWithDialog extends Component {
     });
   };
 
-  handleDateChange = (value) => {
+  handleDateChange = (date) => {
     const newState = {};
 
-    if(!value){
-      newState.formatted = '';
-      newState.moment = null;
+    if(!date){
+      newState.date = null;
       newState.iso = '';
+      newState.formatted = '';
     }else{
-      newState.formatted = value;
-      newState.moment = moment(value, DATE_FORMAT);
-      newState.iso = newState.moment.format();
+      newState.date = date;
+      newState.iso = date.toISOString();
+      newState.formatted = this.props.gregorian ? formatGregorian(date) : formatJalaali(date);
     }
 
     this.setState(newState, ()=>{
@@ -136,7 +137,7 @@ class DateInputWithDialog extends Component {
           name: this.props.name,
           value: this.state.iso,
           formatted: this.state.formatted,
-          moment: this.state.moment,
+          date: this.state.date,
         }
       };
       this.props.onChange(e);
@@ -156,13 +157,19 @@ class DateInputWithDialog extends Component {
       onDismiss,
       style,
       filterDate,
+      gregorian,
       ...rest
     } = this.props;
+
+    const {
+      date
+    } = this.state;
 
     return (
       <div className='date-input-with-dialog-main'>
         <DateInput
           className={`date-input-with-dialog-input ${this.props.className ? this.props.className : ''}`} 
+          gregorian={gregorian}
           disabled={disabled}
           readOnly={readOnly}
           value={value}
@@ -175,6 +182,7 @@ class DateInputWithDialog extends Component {
           <React.Fragment>
             <div className={'OutSideClick'} onClick={this.handleCalendar}> </div>
             <DatePicker
+              gregorian={gregorian}
               onChange={e => {
                 this.handleDateChange(e.target.value);
                 if(autoOk){
@@ -182,7 +190,7 @@ class DateInputWithDialog extends Component {
                 }
               }}
               cancelHandler={this.handleCalendar}
-              selectedDay={value}
+              selectedDay={date}
               style={dialogContainerStyle}
               className={dialogContainerClassName}
               closeLabel={closeLabel}

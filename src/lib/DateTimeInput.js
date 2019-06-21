@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import shallowEqualObjects from 'shallow-equal/objects';
-import moment from 'moment-jalaali';
-import {inspectYear, inspectMonth, inspectDay, inspectHour, inspectMinute, mapToLatin, mapToFarsi, readDateFromValue, hasStringACharToGoToNext, LeapYears, maxDayFor, baseYear, NUMBER_FORMAT_LATIN, NUMBER_FORMAT_FARSI} from './dateUtils';
+import {isValueEmpty, isValueValidDateTime, splitDateTimeValue, formatGregorian, formatJalaali, formatTime, inspectYear, inspectMonth, inspectDay, inspectHour, inspectMinute, mapToLatin, mapToFarsi, readDateFromValue, hasStringACharToGoToNext, maxDayFor, baseYear, NUMBER_FORMAT_LATIN, NUMBER_FORMAT_FARSI} from './dateUtils';
+import jalaali from 'jalaali-js';
 
 const DATE_SEPERATOR =  '/';// this is arabic date seperator ' ؍' but it is right to left glyph and as the numbers are left to right there will be caret position problem
 const MIDDLE_SEPERATOR =  '\xa0';
 const TIME_SEPERATOR =  ':';
-const SEPERATORES_REGEX = new RegExp(` [${DATE_SEPERATOR}${MIDDLE_SEPERATOR}${TIME_SEPERATOR}]`, 'g');
-const DATE_FORMAT = `jYYYY${DATE_SEPERATOR}jMM${DATE_SEPERATOR}jDD${MIDDLE_SEPERATOR}HH${TIME_SEPERATOR}mm`;
 const EMPTY_VALUE = `    ${DATE_SEPERATOR}  ${DATE_SEPERATOR}  ${MIDDLE_SEPERATOR}  ${TIME_SEPERATOR}  `;
 
 class DateInput extends Component {
@@ -62,11 +60,15 @@ class DateInput extends Component {
      */
     onShowDialog: PropTypes.func,
     /**
+     * makes the DateTimeInput gregorian.
+     */
+    gregorian: PropTypes.bool,
+    /**
      * Sets the value for the Date-Time input.
      */
     value: PropTypes.oneOfType([
       PropTypes.string,
-      PropTypes.instanceOf(moment)
+      PropTypes.instanceOf(Date),
     ]),
   };
 
@@ -93,18 +95,20 @@ class DateInput extends Component {
   }
 
   readValuesFromProps = (props) => {
-    const moment = readDateFromValue(props.value, DATE_FORMAT);
-    const valueIsValid = moment && moment.isValid();
-    const value = valueIsValid ? moment.format(DATE_FORMAT) : '';
-    const iso = valueIsValid ? moment.format(): '';
+    const j = readDateFromValue(props.value);
+    const valueIsValid = !!j;
+    const value = valueIsValid ? (props.gregorian ? formatGregorian(j.value) : formatJalaali(j.j)) + MIDDLE_SEPERATOR + formatTime(j.value) : '';
+    const date = valueIsValid ? j.value :  null;
+    const iso = valueIsValid ? j.value.toISOString() :  '';
     const valueToShow = this.mapValue(value, props.numberFormat);
+
 
     return {
       value,
       valueToShow,
       valueIsValid,
       iso,
-      moment,
+      date,
       selectionStart: undefined,
       selectionEnd: undefined,
     };
@@ -115,7 +119,7 @@ class DateInput extends Component {
   };
 
   handleFocus = (event) => {
-    if(this.isValueEmpty(this.values.value)){
+    if(isValueEmpty(this.values.value)){
       this.jumpToDay();
     }
     if(this.props.onFocus){
@@ -124,7 +128,7 @@ class DateInput extends Component {
   };
 
   handleBlur = (event) => {
-    const splittedValue = this.splitValue(this.values.value);
+    const splittedValue = splitDateTimeValue(this.values.value);
     this.updateState(this.sanitizeValues(splittedValue, this.values, true, true, true, true, true));
     if(this.props.onBlur){
       this.props.onBlur(event);
@@ -133,7 +137,7 @@ class DateInput extends Component {
 
   jumpToNext = () => {
     const selectionStart = this.inputRef.current.selectionStart;
-    const splittedValue = this.splitValue(this.values.value);
+    const splittedValue = splitDateTimeValue(this.values.value);
 
     if(this.isCaretAtDay(splittedValue, selectionStart)){
       this.updateState(this.sanitizeValues(splittedValue, this.values, true, false, false, false, false));
@@ -159,7 +163,7 @@ class DateInput extends Component {
 
   jumpToPrevious = () => {
     const selectionStart = this.inputRef.current.selectionStart;
-    const splittedValue = this.splitValue(this.values.value);
+    const splittedValue = splitDateTimeValue(this.values.value);
 
     if(this.isCaretAtDay(splittedValue, selectionStart)){
       this.updateState(this.sanitizeValues(splittedValue, this.values, true, false, false, false, false));
@@ -182,11 +186,6 @@ class DateInput extends Component {
     }
     return false;
   };
-
-  isValueEmpty = (value) => {
-    if(value.replace(SEPERATORES_REGEX, '')==='') return true;
-    return false;
-  }; 
 
   jumpToDay = () => {
     this.values.selectionStart = 10;
@@ -289,47 +288,61 @@ class DateInput extends Component {
   handlePaste = (event) => {
     event.preventDefault();
 
-    const moment = readDateFromValue((event.clipboardData || window.clipboardData).getData('text'), DATE_FORMAT);
-
-    const valueIsValid = moment && moment.isValid();
-    if(valueIsValid){
-      // console.log({parsedValue: moment.format()});
-      const value = valueIsValid ? moment.format(DATE_FORMAT) : '';
-      const iso = valueIsValid ? moment.format(): '';
-      const valueToShow = this.mapValue(value, this.props.numberFormat);
-  
-      const newState = {
-        value,
-        valueToShow,
-        valueIsValid,
-        iso,
-        moment,
-        selectionStart: undefined,
-        selectionEnd: undefined,
-      };
-
-      this.updateState(newState);
-    }
-  
+    const d = (event.clipboardData || window.clipboardData).getData('text').trim();
+    this.stringArrived(d);
   };
 
   handleInput = (event) => {
     event.preventDefault();
     if(this.values.valueToShow===event.target.value) return;
-    const inputValue = event.target.value;
-    // this.rr.current.innerText = `${inputValue}`;
+    const d = event.target.value;
+    this.stringArrived(d)
     
     if(this.inputRef.current.value !== this.values.valueToShow){
       this.inputRef.current.value = this.values.valueToShow;
       this.inputRef.current.setSelectionRange(this.values.selectionStart, this.values.selectionEnd);
     }
 
-    if(hasStringACharToGoToNext(inputValue)){
+    if(hasStringACharToGoToNext(d)){
       this.jumpToNext();
     }
-
-    // this.updateState(this.rollbackValue());
   };
+
+  stringArrived = (d) => {
+    d = mapToLatin(d);
+    let date = isValueValidDateTime(d);
+    if(!date){
+      date = new Date(d);
+      if(date.toString() === 'Invalid Date') {
+        date = false;
+      }
+    }
+    if(!!date){
+      let value;
+      if(this.props.gregorian){
+        value = formatGregorian(date);
+      }else{
+        const j = jalaali.toJalaali(date.getFullYear(), date.getMonth()+1, date.getDate());
+        value = formatJalaali(j);
+      }
+      value = value + MIDDLE_SEPERATOR + formatTime(date);
+      const valueIsValid = true;
+      const iso = date.toISOString();
+      const valueToShow = this.mapValue(value, this.props.numberFormat);
+
+      const newState = {
+        value,
+        valueToShow,
+        valueIsValid,
+        iso,
+        date,
+        selectionStart: undefined,
+        selectionEnd: undefined,
+      };
+
+      this.updateState(newState);
+    }
+  }
 
 
   mapValue = (value, numberFormat) => {
@@ -352,15 +365,16 @@ class DateInput extends Component {
 
     if(!this.values.value) {
       this.values.iso = '';
-      this.values.moment = null;
+      this.values.date = null;
       this.values.valueIsValid = false;
     }else{
-      this.values.valueIsValid = this.isValueValidData(this.values.value);
+      const date = isValueValidDateTime(this.values.value, this.props.gregorian);
+      this.values.valueIsValid = !!date;
       if(this.values.valueIsValid){
-        this.values.moment = moment(this.values.value, DATE_FORMAT);
-        this.values.iso = this.values.moment.format();
+        this.values.date = date;
+        this.values.iso = this.values.date.toISOString();
       }else{
-        this.values.moment = null;
+        this.values.date = null;
         this.values.iso = '';
       }
     }
@@ -432,64 +446,6 @@ class DateInput extends Component {
   };
 
 
-  splitValue = (value) => {
-    if(this.isValueEmpty(value)){
-      return '';
-    }
-    const seperator1 = value.indexOf(DATE_SEPERATOR);
-    const seperator2 = value.indexOf(DATE_SEPERATOR, seperator1+1);
-    const seperator3 = value.indexOf(MIDDLE_SEPERATOR, seperator2+1);
-    const seperator4 = value.indexOf(TIME_SEPERATOR, seperator3+1);
-    if(seperator1===-1 || seperator2===-1 || seperator3===-1 || seperator4===-1) {
-      return null;
-    }
-
-    const year = value.substring(0, seperator1);
-    const month = value.substring(seperator1+1, seperator2);
-    const day = value.substring(seperator2+1, seperator3);
-    const hour = value.substring(seperator3+1, seperator4);
-    const minute = value.substring(seperator4+1);
- 
-    return {
-      year, month, day, hour, minute, seperator1, seperator2, seperator3, seperator4
-    };
-  };
-  
-  isValueValidData = (value) => {
-    if(!value) return false;
-    const splittedValue = this.splitValue(value);
-    if(splittedValue==='' || !splittedValue) {
-      return false;
-    }
-
-    let {year, month, day, hour, minute} = splittedValue;
-    if(hour.trim()==='' || minute.trim()==='') return false;
-
-    year = Number(year);
-    month = Number(month);
-    day = Number(day);
-    hour = Number(hour);
-    minute = Number(minute);
-
-    if (isNaN(day) || isNaN(month) || isNaN(year) || isNaN(hour) || isNaN(minute)) return false;
-
-    if(year < 1300 || year > 1450) return false;
-
-    if(month < 1 || month > 12) return false;
-    
-    if(day < 1 || day > 31) return false;
-
-    if(month > 6 && day > 30) return false;
- 
-    if(month === 12 && day > 29 && !LeapYears.find(y => y === year)) return false;
-
-    if(hour < 0 || hour >= 24) return false;
-
-    if(minute < 0 || minute >= 60) return false;
-
-    return true;
-  };
-
   sanitizeValues = (splittedValue, values, sanitizeDay, sanitizeMonth, sanitizeYear, sanitizeHour, sanitizeMinute) => {
     const {value} = values;
     if(splittedValue==='') {
@@ -528,7 +484,7 @@ class DateInput extends Component {
 
     if(sanitizeYear){
       year = year.trim();
-      year = baseYear().substring(0, 4 - year.length) + year;
+      year = baseYear(this.props.gregorian).substring(0, 4 - year.length) + year;
     }
 
     if(sanitizeHour){
@@ -568,7 +524,7 @@ class DateInput extends Component {
 
   inspectValues = (values) => {
     const {value} = values;
-    const splittedValue = this.splitValue(value);
+    const splittedValue = splitDateTimeValue(value);
     if(!splittedValue) {
       return this.resetValues();
     }
@@ -658,11 +614,11 @@ class DateInput extends Component {
       const value = this.values.valueIsValid ? this.values.value : '';
       if(this.previousValue !== value){
         this.previousValue = value;
-        const target = !this.values.valueIsValid ? {name: this.props.name, formatted: '', value: '', moment: null} : {
+        const target = !this.values.valueIsValid ? {name: this.props.name, formatted: '', value: '', date: null} : {
           name: this.props.name,
           value: this.values.iso,
           formatted: this.values.value,
-          moment: this.values.moment,
+          date: this.values.date,
         };
         this.props.onChange({target});
       }
@@ -683,7 +639,7 @@ class DateInput extends Component {
   }
 
   render() {
-    const {value, onChange, onFocus, onBlur, onInput, onPast, onKeyDown, onShowDialog, pattern, inputMode, type, inputRef, numberFormat, ...rest} = this.props;
+    const {gregorian, value, onChange, onFocus, onBlur, onInput, onPast, onKeyDown, onShowDialog, pattern, inputMode, type, inputRef, numberFormat, ...rest} = this.props;
     const {valueToShow} = this.values;
 
     // const localInputMode = this.props.type === 'tel' ? 'tel' : 'numeric'; // as we use type=tel, then we do not need it any more
