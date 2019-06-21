@@ -205,9 +205,6 @@ export function hasStringACharToGoToNext (str) {
   return false;
 }
 
-export const LeapYears = [1387, 1391, 1395, 1399, 1403, 1408, 1412, 1416, 1383, 1379, 1375, 1370, 1366, 1362, 1358, 1354];
-
-
 export function maxDayFor (month, year) {
   if(!month) return 31;
   month = Number(month);
@@ -215,12 +212,15 @@ export function maxDayFor (month, year) {
   if(month > 7 && month < 12) return 30;
   if(!year) return 30;
   year = Number(year);
-  if(month === 12 && LeapYears.find(y => y===year)) return 30;
+  if(month === 12 && jalaali.isLeapJalaaliYear(year)) return 30;
   return 29;
 }
 
-export function baseYear () {
-  return '1397';
+
+const jalaaliBaseYear = jalaali.toJalaali(new Date()).jy.toString();
+const gregorianBaseYear = (new Date()).getFullYear().toString();
+export function baseYear (gregorian) {
+  return gregorian ? gregorianBaseYear : jalaaliBaseYear;
 }
 
 export function formatJalaali(j){
@@ -228,6 +228,10 @@ export function formatJalaali(j){
     j = jalaali.toJalaali(j);
   }
   return constructdate(j.jy, j.jm, j.jd, '/');
+}
+
+export function formatGregorian(g){
+  return constructdate(g.getFullYear(), g.getMonth() + 1, g.getDate(), '/');
 }
 
 export function formatTime(date){
@@ -251,7 +255,7 @@ export function constructdate (_year, _month, _day, seperator) {
 	return _yeary + seperator + _monthm + seperator + _dayd;
 }
 
-export const isValueValidDate = (value) => {
+export const isValueValidDate = (value, gregorian) => {
   if(!value) return false;
   const splittedValue = splitDateValue(value);
   if(splittedValue==='' || !splittedValue) {
@@ -265,7 +269,9 @@ export const isValueValidDate = (value) => {
 
   if (isNaN(day) || isNaN(month) || isNaN(year)) return false;
 
-  if(year < 1300 || year > 1450) return false;
+  if(!gregorian && (year < 1300 || year > 1450)) return false;
+
+  if(gregorian && (year < 1800 || year > 2150)) return false;
 
   if(month < 1 || month > 12) return false;
   
@@ -273,14 +279,21 @@ export const isValueValidDate = (value) => {
 
   if(month > 6 && day > 30) return false;
 
-  if(month === 12 && day > 29 && !LeapYears.find(y => y === year)) return false;
+  if(month === 12 && day > 29 && !jalaali.isLeapJalaaliYear(year)) return false;
 
-  if(!jalaali.isValidJalaaliDate(year, month, day)) return false;
 
-  const g = jalaali.toGregorian(year, month, day);
-  const date = new Date(g.gy, g.gm - 1, g.gd, 0, 0);
-
-  return date;
+  if(gregorian){
+    const date = new Date(year, month - 1, day, 0, 0);
+    if(date.toString() === 'Invalid Date'){
+      return false;
+    }
+    return date;
+  }else{
+    if(!jalaali.isValidJalaaliDate(year, month, day)) return false;
+    const g = jalaali.toGregorian(year, month, day);
+    const date = new Date(g.gy, g.gm - 1, g.gd, 0, 0);
+    return date;
+  }
 };
 
 export const isValueValidDateTime = (value) => {
@@ -309,7 +322,7 @@ export const isValueValidDateTime = (value) => {
 
   if(month > 6 && day > 30) return false;
 
-  if(month === 12 && day > 29 && !LeapYears.find(y => y === year)) return false;
+  if(month === 12 && day > 29 && !jalaali.isLeapJalaaliYear(year)) return false;
 
   if(hour < 0 || hour >= 24) return false;
 

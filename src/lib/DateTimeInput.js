@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import shallowEqualObjects from 'shallow-equal/objects';
-import {isValueEmpty, isValueValidDateTime, splitDateTimeValue, formatJalaali, formatTime, inspectYear, inspectMonth, inspectDay, inspectHour, inspectMinute, mapToLatin, mapToFarsi, readDateFromValue, hasStringACharToGoToNext, maxDayFor, baseYear, NUMBER_FORMAT_LATIN, NUMBER_FORMAT_FARSI} from './dateUtils';
+import {isValueEmpty, isValueValidDateTime, splitDateTimeValue, formatGregorian, formatJalaali, formatTime, inspectYear, inspectMonth, inspectDay, inspectHour, inspectMinute, mapToLatin, mapToFarsi, readDateFromValue, hasStringACharToGoToNext, maxDayFor, baseYear, NUMBER_FORMAT_LATIN, NUMBER_FORMAT_FARSI} from './dateUtils';
 import jalaali from 'jalaali-js';
 
 const DATE_SEPERATOR =  '/';// this is arabic date seperator ' ؍' but it is right to left glyph and as the numbers are left to right there will be caret position problem
@@ -97,7 +97,7 @@ class DateInput extends Component {
   readValuesFromProps = (props) => {
     const j = readDateFromValue(props.value);
     const valueIsValid = !!j;
-    const value = valueIsValid ? formatJalaali(j.j) + MIDDLE_SEPERATOR + formatTime(j.value) : '';
+    const value = valueIsValid ? (props.gregorian ? formatGregorian(j.value) : formatJalaali(j.j)) + MIDDLE_SEPERATOR + formatTime(j.value) : '';
     const date = valueIsValid ? j.value :  null;
     const iso = valueIsValid ? j.value.toISOString() :  '';
     const valueToShow = this.mapValue(value, props.numberFormat);
@@ -289,14 +289,45 @@ class DateInput extends Component {
     event.preventDefault();
 
     const d = (event.clipboardData || window.clipboardData).getData('text').trim();
-    //FIXME if it is jalaali it should be converted to Date
-    const j = readDateFromValue(d);
+    this.stringArrived(d);
+  };
 
-    const valueIsValid = !!j;
-    if(valueIsValid){
-      const value = valueIsValid ? formatJalaali(j.j) + MIDDLE_SEPERATOR + formatTime(j.value) : '';
-      const date = valueIsValid ? j.value :  null;
-      const iso = valueIsValid ? j.value.toISOString() :  '';
+  handleInput = (event) => {
+    event.preventDefault();
+    if(this.values.valueToShow===event.target.value) return;
+    const d = event.target.value;
+    this.stringArrived(d)
+    
+    if(this.inputRef.current.value !== this.values.valueToShow){
+      this.inputRef.current.value = this.values.valueToShow;
+      this.inputRef.current.setSelectionRange(this.values.selectionStart, this.values.selectionEnd);
+    }
+
+    if(hasStringACharToGoToNext(d)){
+      this.jumpToNext();
+    }
+  };
+
+  stringArrived = (d) => {
+    d = mapToLatin(d);
+    let date = isValueValidDateTime(d);
+    if(!date){
+      date = new Date(d);
+      if(date.toString() === 'Invalid Date') {
+        date = false;
+      }
+    }
+    if(!!date){
+      let value;
+      if(this.props.gregorian){
+        value = formatGregorian(date);
+      }else{
+        const j = jalaali.toJalaali(date.getFullYear(), date.getMonth()+1, date.getDate());
+        value = formatJalaali(j);
+      }
+      value = value + MIDDLE_SEPERATOR + formatTime(date);
+      const valueIsValid = true;
+      const iso = date.toISOString();
       const valueToShow = this.mapValue(value, this.props.numberFormat);
 
       const newState = {
@@ -311,41 +342,7 @@ class DateInput extends Component {
 
       this.updateState(newState);
     }
-  
-  };
-
-  handleInput = (event) => {
-    event.preventDefault();
-    if(this.values.valueToShow===event.target.value) return;
-    const inputValue = mapToLatin(event.target.value);
-    let fireOnChangeInTheEnd = false;
-    
-    const date = isValueValidDateTime(inputValue);
-    if(!!date){
-      const j = jalaali.toJalaali(date.getFullYear(), date.getMonth()+1, date.getDate());
-      this.values.valueIsValid = true;
-      this.values.date = date;
-      this.values.iso = this.values.date.toISOString();
-      this.values.value = formatJalaali(j) + MIDDLE_SEPERATOR + formatTime(date);
-      this.values.valueToShow = this.mapValue(this.values.value, this.props.numberFormat);
-      this.values.selectionStart = 0;
-      this.values.selectionEnd = 0;
-      fireOnChangeInTheEnd = true;
-    }
-    
-    if(this.inputRef.current.value !== this.values.valueToShow){
-      this.inputRef.current.value = this.values.valueToShow;
-      this.inputRef.current.setSelectionRange(this.values.selectionStart, this.values.selectionEnd);
-    }
-
-    if(hasStringACharToGoToNext(inputValue)){
-      this.jumpToNext();
-    }
-
-    if(fireOnChangeInTheEnd){
-      this.fireOnChange();
-    }
-  };
+  }
 
 
   mapValue = (value, numberFormat) => {
@@ -371,7 +368,7 @@ class DateInput extends Component {
       this.values.date = null;
       this.values.valueIsValid = false;
     }else{
-      const date = isValueValidDateTime(this.values.value);
+      const date = isValueValidDateTime(this.values.value, this.props.gregorian);
       this.values.valueIsValid = !!date;
       if(this.values.valueIsValid){
         this.values.date = date;
@@ -487,7 +484,7 @@ class DateInput extends Component {
 
     if(sanitizeYear){
       year = year.trim();
-      year = baseYear().substring(0, 4 - year.length) + year;
+      year = baseYear(this.props.gregorian).substring(0, 4 - year.length) + year;
     }
 
     if(sanitizeHour){
@@ -642,7 +639,7 @@ class DateInput extends Component {
   }
 
   render() {
-    const {value, onChange, onFocus, onBlur, onInput, onPast, onKeyDown, onShowDialog, pattern, inputMode, type, inputRef, numberFormat, ...rest} = this.props;
+    const {gregorian, value, onChange, onFocus, onBlur, onInput, onPast, onKeyDown, onShowDialog, pattern, inputMode, type, inputRef, numberFormat, ...rest} = this.props;
     const {valueToShow} = this.values;
 
     // const localInputMode = this.props.type === 'tel' ? 'tel' : 'numeric'; // as we use type=tel, then we do not need it any more

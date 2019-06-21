@@ -4,7 +4,7 @@ import DateInput from './DateInput';
 import {CalendarIcon, DeleteIcon} from './Picker/Icons';
 import DatePicker from './DatePicker';
 import './DateInputWithDialog.css';
-import { formatJalaali } from './dateUtils';
+import { formatGregorian, formatJalaali } from './dateUtils';
 
 class DateInputWithDialog extends Component {
 
@@ -73,6 +73,10 @@ class DateInputWithDialog extends Component {
      */
     filterDate: PropTypes.func,
     /**
+     * makes the DateInput gregorian.
+     */
+    gregorian: PropTypes.bool,
+    /**
      * Sets the value for the Date-Time input.
      */
     value: PropTypes.oneOfType([
@@ -114,7 +118,7 @@ class DateInputWithDialog extends Component {
     }else{
       newState.date = date;
       newState.iso = date.toISOString();
-      newState.formatted = formatJalaali(date);
+      newState.formatted = this.props.gregorian ? formatGregorian(date) : formatJalaali(date);
     }
 
     this.setState(newState, ()=>{
@@ -153,6 +157,7 @@ class DateInputWithDialog extends Component {
       onDismiss,
       style,
       filterDate,
+      gregorian,
       ...rest
     } = this.props;
 
@@ -164,6 +169,7 @@ class DateInputWithDialog extends Component {
       <div className='date-input-with-dialog-main'>
         <DateInput
           className={`date-input-with-dialog-input ${this.props.className ? this.props.className : ''}`} 
+          gregorian={gregorian}
           disabled={disabled}
           readOnly={readOnly}
           value={value}
@@ -176,6 +182,7 @@ class DateInputWithDialog extends Component {
           <React.Fragment>
             <div className={'OutSideClick'} onClick={this.handleCalendar}> </div>
             <DatePicker
+              gregorian={gregorian}
               onChange={e => {
                 this.handleDateChange(e.target.value);
                 if(autoOk){

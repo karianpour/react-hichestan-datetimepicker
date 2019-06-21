@@ -4,14 +4,15 @@ import {DateTimeInput, DateTimeInputSimple, DateInput, DateInputSimple} from './
 
 class Example extends Component {
   state = {
-    value1: '',
+    value1: '2018-08-23T06:57:12+03:00',
     value1_formatted: '',
-    value2: '',
+    value2: '2018-08-23T06:57:12+03:00',
     value2_formatted: '',
     value3: '',
     value3_formatted: '',
     value4: '2018-08-23T06:57:12+03:00',
     value4_formatted: '',
+    gregorian: true,
   };
 
   handleChange = (event) => {
@@ -25,15 +26,23 @@ class Example extends Component {
     });
   };
 
+  toggleGregorian = () => {
+    this.setState({gregorian: !this.state.gregorian});
+  };
+
   render(){
+
+    const { gregorian } = this.state;
+
     return (
       <React.Fragment>
         <div style={{width: 250}}>
-          <label>ورودی تاریخ بدون پاپ‌آپ
+        <label>ورودی تاریخ با پاپ‌آپ
             <br/>
             <DateInput
               value={this.state.value1}
               name={'value1'}
+              gregorian={gregorian}
               onChange={this.handleChange}
               style={{textAlign: 'right'}}
               placeholder="فیلد تاریخ فقط تایپی" />
@@ -46,11 +55,12 @@ class Example extends Component {
           </label>
           <br/>
           <br/>
-          <label>ورودی تاریخ با پاپ‌آپ
+          <label>ورودی تاریخ بدون پاپ‌آپ
             <br/>
             <DateInputSimple
               value={this.state.value2}
               name={'value2'}
+              gregorian={gregorian}
               onChange={this.handleChange}
               placeholder="فیلد تاریخ فقط تایپی" />
             <br/>
@@ -64,11 +74,12 @@ class Example extends Component {
           <br/>
           <br/>
           <label>
-            ورود زمان
+            ورود زمان با پاپ‌آپ
             <br/>
             <DateTimeInput
               value={this.state.value3}
               name={'value3'}
+              gregorian={gregorian}
               onChange={this.handleChange}/>
             <br/>
             خروجی
@@ -80,11 +91,12 @@ class Example extends Component {
           <br/>
           <br/>
           <label>
-            ورود زمان با پاپ‌آپ
+            ورود زمان بدون پاپ‌آپ
             <br/>
             <DateTimeInputSimple
               value={this.state.value4}
               name={'value4'}
+              gregorian={gregorian}
               onChange={this.handleChange}/>
             <br/>
             خروجی
@@ -95,8 +107,9 @@ class Example extends Component {
           </label>
           <br/>
           <br/>
-          <br/>
+          <button onClick={this.toggleGregorian}>{gregorian ? 'شمسی' : 'میلادی'}</button>
           <p style={{height: 1000}}>
+          <br/>
           خروجی زمان استاندارد را در دیتابیس استفاده کنید
           </p>
           <br/>
