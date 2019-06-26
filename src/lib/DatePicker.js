@@ -13,6 +13,8 @@ class DatePicker extends Component {
     let { gregorian, selectedDay } = props;
     if(!selectedDay){
       selectedDay = new Date();
+    }else{
+      selectedDay = new Date(selectedDay.getTime());
     }
     selectedDay.setHours(0);
     selectedDay.setMinutes(0);

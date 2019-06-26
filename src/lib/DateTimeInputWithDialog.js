@@ -114,6 +114,10 @@ class DateInputWithDialog extends Component {
   };
 
   handleDateChange = (date) => {
+    if(date && this.state.date){
+      date = new Date(date.getTime());
+      date.setHours(this.state.date.getHours(), this.state.date.getMinutes(), this.state.date.getSeconds());
+    }
     const newState = this.createState(date);
 
     this.setState(newState, ()=>{

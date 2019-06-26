@@ -22,39 +22,39 @@ class Years extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      editable: false,
     }
   }
 
-  yearChanged = (e) => {
-    if(e && e.preventDefault()) e.preventDefault();
-    const {year} = this.refs;
-    const {changeEvent} = this.props;
-
-    this.setState({editable: false, error: ''});
-    if (!!changeEvent) changeEvent(parseInt(year.value, 10));
+  nextYear = (e) => {
+    e.preventDefault();
+    this.props.changeEvent(this.props.year + 1);
   };
 
-  renderYearEditor = (year) => {
-    const yearArray = this.props.gregorian ? gregorianYearArray : jalaaliYearArray;
-    return (
-      <select className="JC-YearInput" ref="year" onChange={this.yearChanged}
-              value={year}
-      >
-        {yearArray.map(i => <option key={i.year} value={i.year}>{i.yearString}</option>)}
-      </select>
-    );
+  prevYear = (e) => {
+    e.preventDefault();
+    this.props.changeEvent(this.props.year - 1);
+  };
+
+  nextDecade = (e) => {
+    e.preventDefault();
+    this.props.changeEvent(this.props.year + 10);
+  };
+
+  prevDecade = (e) => {
+    e.preventDefault();
+    this.props.changeEvent(this.props.year - 10);
   };
 
   render() {
-    const { editable } = this.state;
     const { year } = this.props;
     const yearString = mapToFarsi(year);
     return (
       <div className="JC-Section">
-        {!editable && <span className="JC-Title" onClick={() => this.setState({editable: true})}>{yearString}</span>}
-        {editable && this.renderYearEditor(year)}
-        {editable && <div className={'OutSideClick'} onClick={this.yearChanged}> </div>}
+        <div className="JC-Nav" onClick={this.prevDecade}>&#9654;&#9654;</div>
+        <div className="JC-Nav" onClick={this.prevYear}>&#9654;</div>
+        <span className="JC-Title">{yearString}</span>
+        <div className="JC-Nav" onClick={this.nextYear}>&#9664;</div>
+        <div className="JC-Nav" onClick={this.nextDecade}>&#9664;&#9664;</div>
       </div>
     )
   }
