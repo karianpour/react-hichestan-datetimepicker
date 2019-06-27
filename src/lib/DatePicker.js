@@ -130,7 +130,8 @@ class DatePicker extends Component {
     const {gregorian, daysCount, selectedDay, currentMonth, selectedYear, selectedMonthFirstDay} = this.state;
 
     return (
-      <div className={"JDatePicker "+(className?className:"")} style={style}>
+      <div className={"JDatePicker "+(className?className:"")} style={style}
+        onClick={(e)=>{e.preventDefault()}}>
         <Years gregorian={gregorian} changeEvent={(returnedYear)=>this.yearSelected(returnedYear)} year={selectedYear} />
         <Months gregorian={gregorian} clickEvent={(returnedMonth)=>this.monthsClicked(returnedMonth)} month={currentMonth} />
         <div className="days-titles">

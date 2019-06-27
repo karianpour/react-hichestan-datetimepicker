@@ -159,22 +159,22 @@ export function readDateFromValue (value) {
     value = mapToLatin(value);
     let v = new Date(value);
     if(v.toString() === 'Invalid Date') {
-      let d = isValueValidDateTime(value);
+      let d = isValueValidDateTime(value, true);
       if(d){
         v = d;
       }else{
-        d = isValueValidDate(value);
+        d = isValueValidDate(value, true);
         if(d){
           v = d;
         }
       }
     }
     if(v.getFullYear() < 1700){
-      let d = isValueValidDateTime(value);
+      let d = isValueValidDateTime(value, false);
       if(d){
         v = d;
       }else{
-        d = isValueValidDate(value);
+        d = isValueValidDate(value, false);
         if(d){
           v = d;
         }
@@ -279,8 +279,7 @@ export const isValueValidDate = (value, gregorian) => {
 
   if(month > 6 && day > 30) return false;
 
-  if(month === 12 && day > 29 && !jalaali.isLeapJalaaliYear(year)) return false;
-
+  if(!gregorian && month === 12 && day > 29 && !jalaali.isLeapJalaaliYear(year)) return false;
 
   if(gregorian){
     const date = new Date(year, month - 1, day, 0, 0);
@@ -296,7 +295,7 @@ export const isValueValidDate = (value, gregorian) => {
   }
 };
 
-export const isValueValidDateTime = (value) => {
+export const isValueValidDateTime = (value, gregorian) => {
   if(!value) return false;
   const splittedValue = splitDateTimeValue(value);
   if(splittedValue==='' || !splittedValue) {
@@ -314,7 +313,9 @@ export const isValueValidDateTime = (value) => {
 
   if (isNaN(day) || isNaN(month) || isNaN(year) || isNaN(hour) || isNaN(minute)) return false;
 
-  if(year < 1300 || year > 1450) return false;
+  if(!gregorian && (year < 1300 || year > 1450)) return false;
+
+  if(gregorian && (year < 1800 || year > 2150)) return false;
 
   if(month < 1 || month > 12) return false;
   
@@ -322,18 +323,24 @@ export const isValueValidDateTime = (value) => {
 
   if(month > 6 && day > 30) return false;
 
-  if(month === 12 && day > 29 && !jalaali.isLeapJalaaliYear(year)) return false;
+  if(!gregorian && month === 12 && day > 29 && !jalaali.isLeapJalaaliYear(year)) return false;
 
   if(hour < 0 || hour >= 24) return false;
 
   if(minute < 0 || minute >= 60) return false;
 
-  if(!jalaali.isValidJalaaliDate(year, month, day)) return false;
-
-  const g = jalaali.toGregorian(year, month, day);
-  const date = new Date(g.gy, g.gm - 1, g.gd, hour, minute);
-
-  return date;
+  if(gregorian){
+    const date = new Date(year, month - 1, day, hour, minute);
+    if(date.toString() === 'Invalid Date'){
+      return false;
+    }
+    return date;
+  }else{
+    if(!jalaali.isValidJalaaliDate(year, month, day)) return false;
+    const g = jalaali.toGregorian(year, month, day);
+    const date = new Date(g.gy, g.gm - 1, g.gd, hour, minute);
+    return date;
+  }
 };
 
 export const isValueEmpty = (value) => {

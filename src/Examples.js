@@ -4,13 +4,13 @@ import {DateTimeInput, DateTimeInputSimple, DateInput, DateInputSimple} from './
 
 class Example extends Component {
   state = {
-    value1: '',
+    value1: '2018-08-23T06:57:12+03:00',
     value1_formatted: '',
-    value2: '',
+    value2: '2018-08-23T06:57:12+03:00',
     value2_formatted: '',
-    value3: '',
+    value3: '2018-08-23T06:57:12+03:00',
     value3_formatted: '',
-    value4: '',
+    value4: '2018-08-23T06:57:12+03:00',
     value4_formatted: '',
     gregorian: true,
   };

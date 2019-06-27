@@ -90,6 +90,7 @@ class DateInputWithDialog extends Component {
     let date = null;
     if(props.value){
       date = new Date(props.value);
+      this.timeCache = date;
       if(date.toString() === 'Invalid Date'){
         date = null;
       }
@@ -114,9 +115,9 @@ class DateInputWithDialog extends Component {
   };
 
   handleDateChange = (date) => {
-    if(date && this.state.date){
+    if(date && this.timeCache){
       date = new Date(date.getTime());
-      date.setHours(this.state.date.getHours(), this.state.date.getMinutes(), this.state.date.getSeconds());
+      date.setHours(this.timeCache.getHours(), this.timeCache.getMinutes(), this.timeCache.getSeconds());
     }
     const newState = this.createState(date);
 
@@ -157,6 +158,13 @@ class DateInputWithDialog extends Component {
       this.props.onChange(e);
     }
   };
+
+  shouldComponentUpdate(nextProps, nextState){
+    if(nextProps.value){
+      this.timeCache = new Date(nextProps.value);
+    }
+    return true;
+  }
 
   render(){
     const {

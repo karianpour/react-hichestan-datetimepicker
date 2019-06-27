@@ -279,7 +279,7 @@ class DateInput extends Component {
 
   stringArrived = (d) => {
     d = mapToLatin(d);
-    let date = isValueValidDate(d);
+    let date = isValueValidDate(d, this.props.gregorian);
     if(!date){
       date = new Date(d);
       if(date.toString() === 'Invalid Date') {

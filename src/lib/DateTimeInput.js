@@ -310,7 +310,7 @@ class DateInput extends Component {
 
   stringArrived = (d) => {
     d = mapToLatin(d);
-    let date = isValueValidDateTime(d);
+    let date = isValueValidDateTime(d, this.props.gregorian);
     if(!date){
       date = new Date(d);
       if(date.toString() === 'Invalid Date') {
@@ -392,7 +392,7 @@ class DateInput extends Component {
       this.inputRef.current.value = this.values.valueToShow;
     }
     if(this.inputRef.current===document.activeElement){
-      // console.log('has focus :D');
+      // console.log('has focus :D', this.values.selectionStart, this.values.selectionEnd);
       this.inputRef.current.setSelectionRange(this.values.selectionStart, this.values.selectionEnd);
     }else{
       // console.log('has not focus :(');
@@ -426,7 +426,6 @@ class DateInput extends Component {
       selectionStart,
       selectionEnd,
     });
-
     return values; 
   };
 

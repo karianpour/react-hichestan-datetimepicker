@@ -19,6 +19,11 @@ class Months extends React.Component {
     this.setState({monthPickerView: false, selectedMonth: i})
   }
 
+  closeMonthPreview(e) {
+    e.preventDefault();
+    this.setState({monthPickerView: false})
+  }
+
   renderMonths() {
     const {gregorian} = this.props;
     const {selectedMonth} = this.state;
@@ -26,7 +31,8 @@ class Months extends React.Component {
     const months = gregorian ? gregorianMonths : jalaaliMonths;
     for (let i = 1; months.length >= i; i++) {
       if (selectedMonth === i) {
-        result.push(<div key={i} className="MonthItems selected">{months[i - 1]}</div>);
+        result.push(<div key={i} className="MonthItems selected"
+                         onClick={(e) => this.closeMonthPreview(e)}>{months[i - 1]}</div>);
       }else {
         result.push(<div key={i} className="MonthItems"
                          onClick={(e) => this.monthClicked(i, e)}>{months[i - 1]}</div>);
