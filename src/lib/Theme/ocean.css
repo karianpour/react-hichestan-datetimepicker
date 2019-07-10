@@ -78,8 +78,16 @@
         align-items: center;
     }
     .ocean .JD-Cancel {
+        border: 1px solid #5d88d0;
         background: #5d88d0;
         width: 38%;
+        transition: all 0.5s;
+    }
+    .ocean .JD-Cancel:hover {
+        border: 1px solid #5d88d0;
+        background: white;
+        color: #5d88d0;
+        transition: all 0.5s;
     }
     .ocean .MonthPicker {
         box-shadow: 0 0 4px #5d88d0;
