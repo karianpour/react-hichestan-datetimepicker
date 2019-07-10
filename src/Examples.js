@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import {} from './lib';
-import {DateTimeInput, DateTimeInputSimple, DateInput, DateInputSimple} from './lib';
+import { DateTimeInput, DateTimeInputSimple, DateInput, DateInputSimple } from './lib';
+import './lib/Theme/ocean.css';
 
 class Example extends Component {
   state = {
@@ -30,8 +30,13 @@ class Example extends Component {
     this.setState({gregorian: !this.state.gregorian});
   };
 
+  handleThemeChange = (themeName) => {
+    this.setState({
+      currentTheme: themeName
+    })
+  }
   render(){
-
+    console.log(this.state)
     const { gregorian } = this.state;
 
     return (
@@ -46,6 +51,7 @@ class Example extends Component {
               gregorian={gregorian}
               onChange={this.handleChange}
               style={{textAlign: 'right'}}
+              className={this.state.currentTheme}
               placeholder="فیلد تاریخ فقط تایپی" />
             <br/>
             خروجی
@@ -53,6 +59,33 @@ class Example extends Component {
             <input type="text" dir={'ltr'} value={this.state.value1} readOnly/>
             <br/>
             <input type="text" dir={'ltr'} value={this.state.value1_formatted} readOnly/>
+            <br/>
+            <div style={{}}>
+              <button 
+                onClick={()=>this.handleThemeChange("ocean")}
+                style={{
+                  border: "none",
+                  borderRadius: 4,
+                  background: "#5d88d0",
+                  color: "#fff",
+                  padding: 10,
+                  margin: 5
+                }}
+              >
+                Ocean
+              </button>
+              <button 
+                onClick={()=>this.handleThemeChange("undefined")}
+                style={{
+                  border: "none",
+                  borderRadius: 4,
+                  padding: 10,
+                  margin: 5
+                }}
+              >
+                Default
+              </button>
+            </div>
           </label>
           <br/>
           <br/>

@@ -188,9 +188,9 @@ class DateInputWithDialog extends Component {
     } = this.state;
 
     return (
-      <div className='date-input-with-dialog-main'>
+      <div className={`date-input-with-dialog-main ${className ? className : ''}`}>
         <DateTimeInput
-          className={`date-input-with-dialog-input ${this.props.className ? this.props.className : ''}`} 
+          className="date-input-with-dialog-input"
           gregorian={gregorian}
           disabled={disabled}
           readOnly={readOnly}

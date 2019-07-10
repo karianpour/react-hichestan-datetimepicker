@@ -1,0 +1,90 @@
+.ocean {
+    border: 1px solid darkgray;
+    border-radius: 4px;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ocean input {
+    border: none;
+}
+
+    .ocean .JDatePicker {
+        box-shadow: 0 0 4px #d8ddff;
+    }
+    .ocean .date-input-with-dialog-input-buttons {
+        display: block;
+        position: unset;
+        border: none;
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+    }
+
+        .ocean div:hover {
+            color: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .ocean div svg {
+            width: 20px;
+            height: 20px;
+            fill: gray;
+        }
+    .ocean .JDatePicker .JC-Section .JC-Nav,.ocean .JC-Title {
+        color: #5d88d0;
+    }
+.ocean .JDatePicker .day-items {
+    width: 14.28%;
+    float: right;
+    text-align: center;
+    cursor: pointer;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+    .ocean .JDatePicker .JC-Title {
+        display: inline-block;
+        flex-grow: 3;
+        text-align: center;
+        float: right;
+        cursor: pointer;
+        color: #192874;
+    }
+    .ocean .days-titles div {
+        color: #192874;
+    }
+    .ocean .JC-days .day-items {
+        color: #192874;
+    }
+    .ocean .JC-days {
+        background-color: #f6f9ff;
+    }
+    .ocean .JC-days,.ocean .days-titles {
+        padding: 10px;
+    }
+    .ocean .selected {
+        background: #5d88d0 !important;
+        color: white !important;
+        border-radius: 4px;
+    }
+    .ocean .JDatePicker > :last-child {
+        text-align: center;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .ocean .JD-Cancel {
+        background: #5d88d0;
+        width: 38%;
+    }
+    .ocean .MonthPicker {
+        box-shadow: 0 0 4px #5d88d0;
+    }
+        .ocean .MonthPicker .MonthItems {
+            border: 1px solid #f6f9ff;
+            color: #192874;
+        }
