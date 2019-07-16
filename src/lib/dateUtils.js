@@ -205,15 +205,17 @@ export function hasStringACharToGoToNext (str) {
   return false;
 }
 
-export function maxDayFor (month, year) {
+export function maxDayFor (year, month, gregorian) {
   if(!month) return 31;
+  if(!year) return 31;
   month = Number(month);
-  if(month < 7) return 31;
-  if(month > 7 && month < 12) return 30;
-  if(!year) return 30;
   year = Number(year);
-  if(month === 12 && jalaali.isLeapJalaaliYear(year)) return 30;
-  return 29;
+
+  if(!gregorian){
+    return jalaali.jalaaliMonthLength(year, month);
+  }else{
+    return gregorianMonthLength(year, month);
+  }
 }
 
 
@@ -277,9 +279,7 @@ export const isValueValidDate = (value, gregorian) => {
   
   if(day < 1 || day > 31) return false;
 
-  if(month > 6 && day > 30) return false;
-
-  if(!gregorian && month === 12 && day > 29 && !jalaali.isLeapJalaaliYear(year)) return false;
+  if(day > maxDayFor(year, month, gregorian)) return false;
 
   if(gregorian){
     const date = new Date(year, month - 1, day, 0, 0);
@@ -321,9 +321,7 @@ export const isValueValidDateTime = (value, gregorian) => {
   
   if(day < 1 || day > 31) return false;
 
-  if(month > 6 && day > 30) return false;
-
-  if(!gregorian && month === 12 && day > 29 && !jalaali.isLeapJalaaliYear(year)) return false;
+  if(day > maxDayFor(year, month, gregorian)) return false;
 
   if(hour < 0 || hour >= 24) return false;
 

@@ -472,7 +472,7 @@ class DateInput extends Component {
     let newStartPosition = values.selectionStart;
 
     if(this.isCaretAtDay(splittedValue, values.selectionStart)){
-      const inspected = inspectDay(day, values.selectionStart, splittedValue.seperator2, maxDayFor(month));
+      const inspected = inspectDay(day, values.selectionStart, splittedValue.seperator2, maxDayFor(year, month, this.props.gregorian));
       newStartPosition =  inspected.newStartPosition;
       day = inspected.newDay;
     }else if(this.isCaretAtMonth(splittedValue, values.selectionStart)){
