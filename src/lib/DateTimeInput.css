@@ -159,8 +159,21 @@
   border-radius: 5px;
   box-shadow: 2px 2px 7px 4px #000;
   z-index: 1;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
+.JDatePicker .JC-HourMinute {
+  display: flex;
+  flex-flow: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  width: 80px;
+}
 .JDatePicker .JC-Section {
   display: flex;
   flex-flow: row;
@@ -170,13 +183,13 @@
   display: inline-block;
   flex-grow: 1;
   text-align: center;
+  cursor: pointer;
 }
 .JDatePicker .JC-Title {
   display: inline-block;
   flex-grow: 3;
   text-align: center;
   float: right;
-  cursor: pointer;
 }
 .JDatePicker button {
   border: none;

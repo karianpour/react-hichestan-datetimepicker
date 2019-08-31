@@ -8,15 +8,26 @@ export const MIDDLE_SEPERATOR =  '\xa0';
 export const TIME_SEPERATOR =  ':';
 export const SEPERATORES_REGEX = new RegExp(`[ ${DATE_SEPERATOR}]`, 'g');
 
-export function isEqualDate(m1, m2) {
-  if((m1 && !m2) || (!m1 && m2) || (m1 && m2 && m1.getTime() !== m2.getTime())){
+export function isNotEqualDate(m1, m2) {
+  if((m1 && !m2) || (!m1 && m2) || (m1 && m2 && !isTheSameDay(m1, m2))){
+    return true;
+  }
+  return false;
+}
+
+export function isTheSameDay(date1, date2){
+  if(
+    date1.getFullYear()===date2.getFullYear() &&
+    date1.getMonth()===date2.getMonth() &&
+    date1.getDate()===date2.getDate()
+  ){
     return true;
   }
   return false;
 }
 
 export function mapToFarsi(str) {
-  if(!str) return str;
+  if(!str && str!==0 && str!=='0') return str;
   return str.toString().replace(/[1234567890]/gi, e => String.fromCharCode(e.charCodeAt(0) + 1728))
 }
 

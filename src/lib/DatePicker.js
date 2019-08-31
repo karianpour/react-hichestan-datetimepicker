@@ -3,23 +3,27 @@ import "./DateTimeInput.css";
 import Years from './Picker/Years';
 import Months from './Picker/Months';
 import Days from './Picker/Days';
+import Hours from './Picker/Hours';
+import Minutes from './Picker/Minutes';
 import jalaali from 'jalaali-js';
-import {calcFirstDayOfMonth, isEqualDate, gregorianMonthLength} from './dateUtils';
+import {calcFirstDayOfMonth, isNotEqualDate, gregorianMonthLength} from './dateUtils';
 
 class DatePicker extends Component {
 
   constructor(props) {
     super(props);
-    let { gregorian, selectedDay } = props;
+    let { gregorian, selectedDay, pickTime=false } = props;
     if(!selectedDay){
       selectedDay = new Date();
     }else{
       selectedDay = new Date(selectedDay.getTime());
     }
-    selectedDay.setHours(0);
-    selectedDay.setMinutes(0);
+    if(!pickTime){
+      selectedDay.setHours(0);
+      selectedDay.setMinutes(0);
+    }
     selectedDay.setSeconds(0);
-    let selectedYear, currentMonth, selectedMonthFirstDay, daysCount;
+    let selectedYear, currentMonth, selectedMonthFirstDay, daysCount, selectedHour, selectedMinute;
     if(gregorian){
       let j = selectedDay;
       selectedYear = j.getFullYear();
@@ -31,6 +35,8 @@ class DatePicker extends Component {
     }
     daysCount = gregorian ? gregorianMonthLength(selectedYear, currentMonth) : jalaali.jalaaliMonthLength(selectedYear, currentMonth);
     selectedMonthFirstDay = calcFirstDayOfMonth(selectedYear, currentMonth, gregorian);
+    selectedHour = selectedDay.getHours();
+    selectedMinute = selectedDay.getMinutes();
     this.state = {
       gregorian,
       selectedYear,
@@ -38,6 +44,8 @@ class DatePicker extends Component {
       selectedMonthFirstDay,
       daysCount,
       selectedDay: selectedDay ? selectedDay : null,
+      selectedHour,
+      selectedMinute,
     };
   }
 
@@ -50,16 +58,22 @@ class DatePicker extends Component {
   };
 
   daysClicked = (dayDate) => {
-    if(isEqualDate(this.state.selectedDay, dayDate)){
+    if(isNotEqualDate(this.state.selectedDay, dayDate)){
+      const {selectedDay} = this.state;
+      const newDate = new Date(dayDate.getTime());
+      newDate.setHours(selectedDay.getHours());
+      newDate.setMinutes(selectedDay.getMinutes());
       this.setState({
-        selectedDay: dayDate,
-      }, ()=>{
-        this.props.onChange({target: {name: this.props.name, value: dayDate}});
-      });
+        selectedDay: newDate,
+      }, this.fireChange);
     }else{
       this.props.cancelHandler();
     }
   };
+
+  fireChange = ()=>{
+    this.props.onChange({target: {name: this.props.name, value: this.state.selectedDay}});
+  }
 
   monthsClicked = (month) => {
     let {selectedYear, gregorian} = this.state;
@@ -83,7 +97,7 @@ class DatePicker extends Component {
       selectedYear,
       selectedMonthFirstDay,
     });
-};
+  };
 
   yearSelected = (selectedYear) => {
     let selectedMonthFirstDay, daysCount;
@@ -94,6 +108,24 @@ class DatePicker extends Component {
       selectedMonthFirstDay,
       daysCount,
     });
+  };
+
+  hourSelected = (selectedHour) => {
+    let {selectedDay} = this.state;
+    selectedDay.setHours(selectedHour);
+    this.setState({
+      selectedDay,
+      selectedHour,
+    }, this.fireChange);
+  };
+
+  minuteSelected = (selectedMinute) => {
+    let {selectedDay} = this.state;
+    selectedDay.setMinutes(selectedMinute);
+    this.setState({
+      selectedDay,
+      selectedMinute,
+    }, this.fireChange);
   };
 
   gregorianPicker = () => {
@@ -125,9 +157,10 @@ class DatePicker extends Component {
       closeLabel='بستن',
       style,
       filterDate,
+      pickTime=false,
     } = this.props;
 
-    const {gregorian, daysCount, selectedDay, currentMonth, selectedYear, selectedMonthFirstDay} = this.state;
+    const {gregorian, daysCount, selectedDay, currentMonth, selectedYear, selectedMonthFirstDay, selectedHour, selectedMinute} = this.state;
 
     return (
       <div className={"JDatePicker "+(className?className:"")} style={style}
@@ -144,6 +177,19 @@ class DatePicker extends Component {
           <div>ج</div>
         </div>
         <Days gregorian={gregorian} selectedYear={selectedYear} selectedDay={selectedDay} currentMonth={currentMonth} daysCount={daysCount} firstDay={selectedMonthFirstDay} clickEvent={this.daysClicked} filterDate={filterDate}/>
+        {pickTime && (
+          <div style={{
+            display: 'flex',
+            flexWrap: 'nowrap',
+            alignItems: 'center',
+            justifyContent: 'center',
+            direction: 'ltr',
+          }}>
+            <Hours changeEvent={(returnedHour)=>this.hourSelected(returnedHour)} hour={selectedHour} />
+            &nbsp;:&nbsp;
+            <Minutes changeEvent={(returnedMinute)=>this.minuteSelected(returnedMinute)} minute={selectedMinute} />
+          </div>
+        )}
         <div>
           <button className="JD-Cancel" onClick={this.cancelPicker}>{closeLabel}</button>
           {!gregorian && <button className="JD-Cancel" onClick={this.gregorianPicker}>{'میلادی'}</button>}

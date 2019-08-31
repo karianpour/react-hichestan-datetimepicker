@@ -1,5 +1,5 @@
 import React from 'react';
-import { mapToFarsi } from '../dateUtils';
+import { mapToFarsi, isTheSameDay } from '../dateUtils';
 import jalaali from 'jalaali-js';
 
 class Days extends React.Component {
@@ -59,7 +59,7 @@ class Days extends React.Component {
       // console.log(this.today, date)
 
       if (this.today && date.getTime() === this.today.getTime()) addedClass += ' today';
-      if (selectedDay && date.getTime() === selectedDay.getTime()) addedClass += ' selected';
+      if (selectedDay && isTheSameDay(date, selectedDay)) addedClass += ' selected';
 
       const enable = this.isDateEnabled(date);
 

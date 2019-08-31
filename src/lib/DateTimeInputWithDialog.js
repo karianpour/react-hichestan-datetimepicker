@@ -115,10 +115,10 @@ class DateInputWithDialog extends Component {
   };
 
   handleDateChange = (date) => {
-    if(date && this.timeCache){
-      date = new Date(date.getTime());
-      date.setHours(this.timeCache.getHours(), this.timeCache.getMinutes(), this.timeCache.getSeconds());
-    }
+    // if(date && this.timeCache){
+      // date = new Date(date.getTime());
+      // date.setHours(this.timeCache.getHours(), this.timeCache.getMinutes(), this.timeCache.getSeconds());
+    // }
     const newState = this.createState(date);
 
     this.setState(newState, ()=>{
@@ -218,6 +218,7 @@ class DateInputWithDialog extends Component {
               closeLabel={closeLabel}
               onDismiss={onDismiss}
               filterDate={filterDate}
+              pickTime={true}
             />
           </React.Fragment>
         )}
