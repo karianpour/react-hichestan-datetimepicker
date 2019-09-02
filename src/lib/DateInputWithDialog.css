@@ -26,6 +26,10 @@
   border: thin solid black;
   cursor: pointer;
 }
+.date-input-with-dialog-input-buttons:hover {
+  color: blue;
+  border: thin solid blue;
+}
 .date-input-with-dialog-calendar {
   top: 0.2em;
   left: 1.8em;
@@ -35,8 +39,4 @@
   top: 0.2em;
   left: 0;
   background-color: white;
-}
-.date-input-with-dialog-input-buttons:hover {
-  color: blue;
-  border: thin solid blue;
 }
