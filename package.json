@@ -36,21 +36,21 @@
     "react-dom": "^16.8.6"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.4.5",
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "babel-cli": "^6.26.0",
-    "babel-preset-react-app": "^9.0.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-scripts": "^3.0.0",
-    "prop-types": "^15.6.2",
+    "babel-preset-react-app": "^9.0.1",
+    "prop-types": "^15.7.2",
+    "react": "^16.9.0",
     "react-doc-generator": "^1.2.5",
-    "rimraf": "^2.6.2"
+    "react-dom": "^16.9.0",
+    "react-scripts": "^3.1.1",
+    "rimraf": "^2.7.1"
   },
   "dependencies": {
     "jalaali-js": "^1.1.0",
-    "shallow-equal": "^1.0.0"
+    "shallow-equal": "^1.2.0"
   },
   "browserslist": {
     "production": [
