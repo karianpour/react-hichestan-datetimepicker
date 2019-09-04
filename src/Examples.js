@@ -13,6 +13,8 @@ class Example extends Component {
     value4: '2018-08-23T06:57:12+03:00',
     value4_formatted: '',
     gregorian: true,
+    disabled: false,
+    readOnly: false,
   };
 
   handleChange = (event) => {
@@ -30,9 +32,21 @@ class Example extends Component {
     this.setState({gregorian: !this.state.gregorian});
   };
 
+  toggleDisabled = () => {
+    this.setState({
+      disabled: !this.state.disabled,
+    })
+  };
+
+  toggleReadOnly = () => {
+    this.setState({
+      readOnly: !this.state.readOnly,
+    })
+  };
+
   render(){
 
-    const { gregorian } = this.state;
+    const { gregorian, disabled, readOnly } = this.state;
 
     return (
       <React.Fragment>
@@ -44,6 +58,8 @@ class Example extends Component {
               defaultValue={undefined}
               name={'value1'}
               gregorian={gregorian}
+              disabled={disabled}
+              readOnly={readOnly}
               onChange={this.handleChange}
               style={{textAlign: 'right'}}
               placeholder="فیلد تاریخ فقط تایپی" />
@@ -62,6 +78,8 @@ class Example extends Component {
               value={this.state.value2}
               name={'value2'}
               gregorian={gregorian}
+              disabled={disabled}
+              readOnly={readOnly}
               onChange={this.handleChange}
               placeholder="فیلد تاریخ فقط تایپی" />
             <br/>
@@ -81,6 +99,8 @@ class Example extends Component {
               value={this.state.value3}
               name={'value3'}
               gregorian={gregorian}
+              disabled={disabled}
+              readOnly={readOnly}
               onChange={this.handleChange}/>
             <br/>
             خروجی
@@ -98,6 +118,8 @@ class Example extends Component {
               value={this.state.value4}
               name={'value4'}
               gregorian={gregorian}
+              disabled={disabled}
+              readOnly={readOnly}
               onChange={this.handleChange}/>
             <br/>
             خروجی
@@ -108,7 +130,9 @@ class Example extends Component {
           </label>
           <br/>
           <br/>
-          <button onClick={this.toggleGregorian}>{gregorian ? 'شمسی' : 'میلادی'}</button>
+          <button type="button" onClick={this.toggleDisabled}>{disabled?'enable':'disable'}</button>
+          <button type="button" onClick={this.toggleReadOnly}>{readOnly?'writable':'read only'}</button>
+          <button type="button" onClick={this.toggleGregorian}>{gregorian ? 'شمسی' : 'میلادی'}</button>
           <p style={{height: 1000}}>
           <br/>
           خروجی زمان استاندارد را در دیتابیس استفاده کنید

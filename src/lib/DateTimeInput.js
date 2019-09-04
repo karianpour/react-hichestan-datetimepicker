@@ -219,7 +219,9 @@ class DateInput extends Component {
 
   handleKeyDown = (event) => {
     // console.log('keyCode: ', event.keyCode, 'key: ', event.key);
-    if(event.keyCode===8) { //backspace
+    if(this.props.disabled || this.props.readOnly) {
+      event.preventDefault();
+    }else if(event.keyCode===8) { //backspace
       event.preventDefault();
       this.updateState(this.deleteValue(event.target, -1));
     }else if(event.keyCode===46){ //delete
@@ -287,6 +289,7 @@ class DateInput extends Component {
 
   handlePaste = (event) => {
     event.preventDefault();
+    if(this.props.disabled || this.props.readOnly) return;
 
     const d = (event.clipboardData || window.clipboardData).getData('text').trim();
     this.stringArrived(d);
@@ -294,6 +297,7 @@ class DateInput extends Component {
 
   handleInput = (event) => {
     event.preventDefault();
+    if(this.props.disabled || this.props.readOnly) return;
     if(this.values.valueToShow===event.target.value) return;
     const d = event.target.value;
     this.stringArrived(d)
@@ -639,6 +643,12 @@ class DateInput extends Component {
     }
     if(nextProps.className !== this.props.className){
       this.inputRef.current.className = nextProps.className;
+    }
+    if(nextProps.disabled !== this.props.disabled){
+      this.inputRef.current.disabled = nextProps.disabled;
+    }
+    if(nextProps.readOnly !== this.props.readOnly){
+      this.inputRef.current.readOnly = nextProps.readOnly;
     }
     return false;
   }
