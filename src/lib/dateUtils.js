@@ -46,14 +46,21 @@ export function inspectDay (day, selectionStart, seperatorPosition, max) {
   let newStartPosition = selectionStart;
 
   const caretPosition = selectionStart - seperatorPosition - 1;
+
+  console.log({day, selectionStart, seperatorPosition, caretPosition})
+
   if(newDay.length>2){
-    if(caretPosition<=2){
-      newDay = newDay.substring(0, 2);
-      newStartPosition = 8 + caretPosition;
-    }else if(caretPosition>2){
-      newDay = newDay.substring(caretPosition-2, caretPosition);
-      newStartPosition = 10;
-    }
+    // if(caretPosition<=2){
+    //   newDay = newDay.substring(0, 2);
+    //   newStartPosition = 8 + caretPosition;
+    // }else if(caretPosition>2){
+    //   newDay = newDay.substring(caretPosition-2, caretPosition);
+    //   newStartPosition = 10;
+    // }
+    newDay = newDay.substring(caretPosition - (newDay.length > 3 ? 2 : 1), caretPosition);
+  }
+  if(newDay.length===2){
+    newStartPosition = 5;
   }
   if(newDay>max){
     if(caretPosition===0){
@@ -73,13 +80,17 @@ export function inspectMonth (month, selectionStart, seperatorPosition) {
   let newStartPosition = selectionStart;
   const caretPosition = selectionStart - seperatorPosition - 1;
   if(newMonth.length>2){
-    if(caretPosition<=2){
-      newMonth = newMonth.substring(0, 2);
-      newStartPosition = 5 + caretPosition;
-    }else if(caretPosition>2){
-      newMonth = newMonth.substring(caretPosition-2, caretPosition);
-      newStartPosition = 7;
-    }
+    // if(caretPosition<=2){
+    //   newMonth = newMonth.substring(0, 2);
+    //   newStartPosition = 5 + caretPosition;
+    // }else if(caretPosition>2){
+    //   newMonth = newMonth.substring(caretPosition-2, caretPosition);
+    //   newStartPosition = 7;
+    // }
+    newMonth = newMonth.substring(caretPosition - (newMonth.length > 3 ? 2 : 1), caretPosition);
+  }
+  if(newMonth.length===2){
+    newStartPosition = 2;
   }
   if(newMonth>12){
     if(caretPosition===0){
