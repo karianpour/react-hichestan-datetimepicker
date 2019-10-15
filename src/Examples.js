@@ -102,7 +102,8 @@ class Example extends Component {
               gregorian={gregorian}
               disabled={disabled}
               readOnly={readOnly}
-              onChange={this.handleChange}/>
+              onChange={this.handleChange}
+              placeholder="فیلد تاریخ فقط تایپی" />
             <br/>
             خروجی
             <br/>

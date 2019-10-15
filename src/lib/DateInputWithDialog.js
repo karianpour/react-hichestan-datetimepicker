@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import shallowEqualObjects from 'shallow-equal/objects';
 import DateInput from './DateInput';
 import {CalendarIcon, DeleteIcon} from './Picker/Icons';
 import DatePicker from './DatePicker';
@@ -141,6 +142,17 @@ class DateInputWithDialog extends Component {
     this.handleDateChange('');
   };
 
+  handleChange = (event) => {
+    const newState = {
+      date: event.target.date,
+      iso: event.target.value,
+      formatted: event.target.formatted,
+    }
+    this.setState(newState, ()=>{
+      this.fireOnChange();
+    });
+  };
+
   fireOnChange = () => {
     if(this.props.onChange){
       const e = {
@@ -154,6 +166,28 @@ class DateInputWithDialog extends Component {
       this.props.onChange(e);
     }
   };
+
+  shouldComponentUpdate(nextProps, nextState){
+    if(nextProps.value !== this.state.iso || nextProps.value !== this.props.value || nextProps.gregorian !== this.props.gregorian || nextProps.numberFormat !== this.props.numberFormat){
+      return true;
+    }
+    if(!shallowEqualObjects(nextProps.style, this.props.style)){
+      return true;
+    }
+    if(nextProps.className !== this.props.className){
+      return true;
+    }
+    if(nextProps.disabled !== this.props.disabled){
+      return true;
+    }
+    if(nextProps.readOnly !== this.props.readOnly){
+      return true;
+    }
+    if(nextState.openDialog !== this.state.openDialog){
+      return true;
+    }
+    return false;
+  }
 
   render(){
     const {
@@ -169,6 +203,7 @@ class DateInputWithDialog extends Component {
       style,
       filterDate,
       gregorian,
+      onChange,
       ...rest
     } = this.props;
 
@@ -185,6 +220,7 @@ class DateInputWithDialog extends Component {
           readOnly={readOnly}
           value={value}
           onShowDialog={this.handleCalendar}
+          onChange={this.handleChange}
           {...rest}
         />
         <div className={'date-input-with-dialog-input-buttons date-input-with-dialog-calendar'} onClick={this.handleCalendar}><CalendarIcon/></div>

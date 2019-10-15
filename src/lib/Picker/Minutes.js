@@ -42,12 +42,12 @@ class Minutes extends React.Component {
 
     return (
       <div className="JC-HourMinute">
-        <div className="JC-Nav"
+        <div className="JC-Nav JC-Nav-Hour"
           onMouseDown={(e)=>this.start(e, 1)} onMouseUp={(e)=>this.stop(e)}
           onTouchStart={(e)=>this.start(e, 1)} onTouchEnd={(e)=>this.stop(e)}
         ><UpIcon/></div>
         <span className="JC-Title" style={{textAlign: 'left'}}>{minuteString}</span>
-        <div className="JC-Nav"
+        <div className="JC-Nav JC-Nav-Hour"
           onMouseDown={(e)=>this.start(e, -1)} onMouseUp={(e)=>this.stop(e)}
           onTouchStart={(e)=>this.start(e, -1)} onTouchEnd={(e)=>this.stop(e)}
         ><DownIcon/></div>

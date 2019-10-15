@@ -38,6 +38,7 @@ class DatePicker extends Component {
     selectedMonthFirstDay = calcFirstDayOfMonth(selectedYear, currentMonth, gregorian);
     selectedHour = currentDay.getHours();
     selectedMinute = currentDay.getMinutes();
+    console.log({selectedDay})
     this.state = {
       gregorian,
       selectedYear,
@@ -193,23 +194,16 @@ class DatePicker extends Component {
         </div>
         <Days gregorian={gregorian} selectedYear={selectedYear} selectedDay={selectedDay} currentMonth={currentMonth} daysCount={daysCount} firstDay={selectedMonthFirstDay} clickEvent={this.daysClicked} filterDate={filterDate}/>
         {pickTime && (
-          <div style={{
-            display: 'flex',
-            flexWrap: 'nowrap',
-            alignItems: 'center',
-            justifyContent: 'center',
-            direction: 'ltr',
-            padding: 8,
-          }}>
+          <div className="JC-Clock">
             <Hours changeEvent={(returnedHour)=>this.hourSelected(returnedHour)} hour={selectedHour} />
             &nbsp;:&nbsp;
             <Minutes changeEvent={(returnedMinute)=>this.minuteSelected(returnedMinute)} minute={selectedMinute} />
           </div>
         )}
-        <div>
-          <button className="JD-Cancel" onClick={this.cancelPicker}>{closeLabel}</button>
-          {!gregorian && <button className="JD-Cancel" onClick={this.gregorianPicker}>{'میلادی'}</button>}
-          {gregorian && <button className="JD-Cancel" onClick={this.gregorianPicker}>{'شمسی'}</button>}
+        <div className="JC-Buttons">
+          <button onClick={this.cancelPicker}>{closeLabel}</button>
+          {!gregorian && <button onClick={this.gregorianPicker}>{'میلادی'}</button>}
+          {gregorian && <button onClick={this.gregorianPicker}>{'شمسی'}</button>}
         </div>
       </div>
     );

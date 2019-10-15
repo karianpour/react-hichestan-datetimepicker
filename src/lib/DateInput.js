@@ -356,10 +356,10 @@ class DateInput extends Component {
       }
     }
 
-    let fireOnChangeInTheEnd = false;
+    // let fireOnChangeInTheEnd = false;
     //console.log('values on updateState', this.values)
     if(this.inputRef.current.value !== this.values.valueToShow){
-      fireOnChangeInTheEnd = true;
+      // fireOnChangeInTheEnd = true;
       this.inputRef.current.value = this.values.valueToShow;
     }
     if(this.inputRef.current===document.activeElement){
@@ -368,9 +368,9 @@ class DateInput extends Component {
     }else{
       // console.log('has not focus :(');
     }
-    if(fireOnChangeInTheEnd){
+    // if(fireOnChangeInTheEnd){
       this.fireOnChange();
-    }
+    // }
   };
 
   updateValue = (element, enteredValue, numberFormat) => {
@@ -547,6 +547,7 @@ class DateInput extends Component {
     if(this.props.onChange){
       const value = this.values.valueIsValid ? this.values.value : '';
       if(this.previousValue !== value){
+        console.log('fired')
         this.previousValue = value;
         const target = !this.values.valueIsValid ? {name: this.props.name, formatted: '', value: '', date: null} : {
           name: this.props.name,

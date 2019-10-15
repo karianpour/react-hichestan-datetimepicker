@@ -50,12 +50,12 @@ class Years extends React.Component {
     const { year } = this.props;
     const yearString = mapToFarsi(year);
     return (
-      <div className="JC-Section">
-        <div className="JC-Nav" onClick={this.prevDecade}><DoublePreviousIcon/></div>
-        <div className="JC-Nav" onClick={this.prevYear}><PreviousIcon/></div>
+      <div className="JC-Section JC-Section-Year">
+        <div className="JC-Nav JC-Nav-Year" onClick={this.prevDecade}><DoublePreviousIcon/></div>
+        <div className="JC-Nav JC-Nav-Year" onClick={this.prevYear}><PreviousIcon/></div>
         <span className="JC-Title">{yearString}</span>
-        <div className="JC-Nav" onClick={this.nextYear}><NextIcon/></div>
-        <div className="JC-Nav" onClick={this.nextDecade}><DoubleNextIcon/></div>
+        <div className="JC-Nav JC-Nav-Year" onClick={this.nextYear}><NextIcon/></div>
+        <div className="JC-Nav JC-Nav-Year" onClick={this.nextDecade}><DoubleNextIcon/></div>
       </div>
     )
   }

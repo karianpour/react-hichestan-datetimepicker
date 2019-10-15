@@ -57,7 +57,13 @@ export function inspectDay (day, selectionStart, seperatorPosition, max) {
     //   newDay = newDay.substring(caretPosition-2, caretPosition);
     //   newStartPosition = 10;
     // }
+    // debugger;
     newDay = newDay.substring(caretPosition - (newDay.length > 3 ? 2 : 1), caretPosition);
+    if(newDay.length===1){
+      newStartPosition = 9;
+    }else{
+      newStartPosition = 10;
+    }
   }
   if(newDay.length===2){
     newStartPosition = 5;
@@ -87,7 +93,13 @@ export function inspectMonth (month, selectionStart, seperatorPosition) {
     //   newMonth = newMonth.substring(caretPosition-2, caretPosition);
     //   newStartPosition = 7;
     // }
+    // debugger;
     newMonth = newMonth.substring(caretPosition - (newMonth.length > 3 ? 2 : 1), caretPosition);
+    if(newMonth.length===1){
+      newStartPosition = 6;
+    }else{
+      newStartPosition = 7;
+    }
   }
   if(newMonth.length===2){
     newStartPosition = 2;
