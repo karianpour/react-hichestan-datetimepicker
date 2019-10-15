@@ -1,4 +1,5 @@
 import React from 'react';
+import {NextIcon, PreviousIcon} from './Icons';
 
 const jalaaliMonths = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
 const gregorianMonths = ['ژانویه', 'فوریه', 'مارچ', 'آپریل', 'می', 'جون', 'جولای', 'آگوست', 'سپتامبر', 'اکتبر', 'نوامبر', 'دسامبر'];
@@ -57,12 +58,12 @@ class Months extends React.Component {
 
     return (
       <div className="JC-Section">
-        <div className="JC-Nav" onClick={this.prevMonth}>&#9654;</div>
+        <div className="JC-Nav" onClick={this.prevMonth}><PreviousIcon/></div>
         <div className="JC-Title" onClick={(e) => {
           e.preventDefault();
           this.setState({monthPickerView: !monthPickerView})
         }}>{months[month - 1]}</div>
-        <div className="JC-Nav" onClick={this.nextMonth}>&#9664;</div>
+        <div className="JC-Nav" onClick={this.nextMonth}><NextIcon/></div>
         {monthPickerView && <div className="MonthPicker">{this.renderMonths()}</div>}
       </div>
     )

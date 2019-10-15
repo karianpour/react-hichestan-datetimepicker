@@ -12,31 +12,32 @@ class DatePicker extends Component {
 
   constructor(props) {
     super(props);
-    let { gregorian, selectedDay, pickTime=false } = props;
-    if(!selectedDay){
-      selectedDay = new Date();
+    const { gregorian, selectedDay, pickTime=false } = props;
+    let currentDay = selectedDay;
+    if(!currentDay){
+      currentDay = new Date();
     }else{
-      selectedDay = new Date(selectedDay.getTime());
+      currentDay = new Date(currentDay.getTime());
     }
     if(!pickTime){
-      selectedDay.setHours(0);
-      selectedDay.setMinutes(0);
+      currentDay.setHours(0);
+      currentDay.setMinutes(0);
     }
-    selectedDay.setSeconds(0);
+    currentDay.setSeconds(0);
     let selectedYear, currentMonth, selectedMonthFirstDay, daysCount, selectedHour, selectedMinute;
     if(gregorian){
-      let j = selectedDay;
+      let j = currentDay;
       selectedYear = j.getFullYear();
       currentMonth = j.getMonth() + 1;
     }else{
-      let j = jalaali.toJalaali(selectedDay);
+      let j = jalaali.toJalaali(currentDay);
       selectedYear = j.jy;
       currentMonth = j.jm;
     }
     daysCount = gregorian ? gregorianMonthLength(selectedYear, currentMonth) : jalaali.jalaaliMonthLength(selectedYear, currentMonth);
     selectedMonthFirstDay = calcFirstDayOfMonth(selectedYear, currentMonth, gregorian);
-    selectedHour = selectedDay.getHours();
-    selectedMinute = selectedDay.getMinutes();
+    selectedHour = currentDay.getHours();
+    selectedMinute = currentDay.getMinutes();
     this.state = {
       gregorian,
       selectedYear,
@@ -59,10 +60,20 @@ class DatePicker extends Component {
 
   daysClicked = (dayDate) => {
     if(isNotEqualDate(this.state.selectedDay, dayDate)){
-      const {selectedDay} = this.state;
       const newDate = new Date(dayDate.getTime());
-      newDate.setHours(selectedDay.getHours());
-      newDate.setMinutes(selectedDay.getMinutes());
+
+      if(this.props.pickTime){
+        const {selectedHour, selectedMinute} = this.state;
+        newDate.setHours(selectedHour);
+        newDate.setMinutes(selectedMinute);
+      }else{
+        const {selectedDay} = this.state;
+        if(selectedDay){
+          newDate.setHours(selectedDay.getHours());
+          newDate.setMinutes(selectedDay.getMinutes());
+        }
+      }
+
       this.setState({
         selectedDay: newDate,
       }, this.fireChange);
@@ -112,7 +123,9 @@ class DatePicker extends Component {
 
   hourSelected = (selectedHour) => {
     let {selectedDay} = this.state;
-    selectedDay.setHours(selectedHour);
+    if(selectedDay){
+      selectedDay.setHours(selectedHour);
+    }
     this.setState({
       selectedDay,
       selectedHour,
@@ -121,7 +134,9 @@ class DatePicker extends Component {
 
   minuteSelected = (selectedMinute) => {
     let {selectedDay} = this.state;
-    selectedDay.setMinutes(selectedMinute);
+    if(selectedDay){
+      selectedDay.setMinutes(selectedMinute);
+    }
     this.setState({
       selectedDay,
       selectedMinute,
@@ -184,6 +199,7 @@ class DatePicker extends Component {
             alignItems: 'center',
             justifyContent: 'center',
             direction: 'ltr',
+            padding: 8,
           }}>
             <Hours changeEvent={(returnedHour)=>this.hourSelected(returnedHour)} hour={selectedHour} />
             &nbsp;:&nbsp;

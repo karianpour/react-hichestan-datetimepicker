@@ -1,6 +1,7 @@
 import React from 'react';
 import {mapToFarsi} from '../dateUtils';
 import jalaali from 'jalaali-js';
+import {NextIcon, PreviousIcon, DoubleNextIcon, DoublePreviousIcon} from './Icons';
 
 const jalaaliYearArray = [], gregorianYearArray = [];
 {
@@ -50,11 +51,11 @@ class Years extends React.Component {
     const yearString = mapToFarsi(year);
     return (
       <div className="JC-Section">
-        <div className="JC-Nav" onClick={this.prevDecade}>&#9654;&#9654;</div>
-        <div className="JC-Nav" onClick={this.prevYear}>&#9654;</div>
+        <div className="JC-Nav" onClick={this.prevDecade}><DoublePreviousIcon/></div>
+        <div className="JC-Nav" onClick={this.prevYear}><PreviousIcon/></div>
         <span className="JC-Title">{yearString}</span>
-        <div className="JC-Nav" onClick={this.nextYear}>&#9664;</div>
-        <div className="JC-Nav" onClick={this.nextDecade}>&#9664;&#9664;</div>
+        <div className="JC-Nav" onClick={this.nextYear}><NextIcon/></div>
+        <div className="JC-Nav" onClick={this.nextDecade}><DoubleNextIcon/></div>
       </div>
     )
   }

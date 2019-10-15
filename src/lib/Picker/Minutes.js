@@ -1,5 +1,6 @@
 import React from 'react';
 import {mapToFarsi} from '../dateUtils';
+import {UpIcon, DownIcon} from './Icons';
 
 class Minutes extends React.Component {
 
@@ -36,18 +37,20 @@ class Minutes extends React.Component {
 
   render() {
     const { minute } = this.props;
-    const minuteString = mapToFarsi(minute);
+    let minuteString = minute.toString();
+    minuteString = mapToFarsi('00'.substring(0, 2 - minuteString.length) + minuteString);
+
     return (
       <div className="JC-HourMinute">
         <div className="JC-Nav"
           onMouseDown={(e)=>this.start(e, 1)} onMouseUp={(e)=>this.stop(e)}
           onTouchStart={(e)=>this.start(e, 1)} onTouchEnd={(e)=>this.stop(e)}
-        >&#9650;</div>
+        ><UpIcon/></div>
         <span className="JC-Title" style={{textAlign: 'left'}}>{minuteString}</span>
         <div className="JC-Nav"
           onMouseDown={(e)=>this.start(e, -1)} onMouseUp={(e)=>this.stop(e)}
           onTouchStart={(e)=>this.start(e, -1)} onTouchEnd={(e)=>this.stop(e)}
-        >&#9660;</div>
+        ><DownIcon/></div>
       </div>
     )
   }

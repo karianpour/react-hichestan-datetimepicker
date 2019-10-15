@@ -46,12 +46,15 @@
   display: flex;
   flex-flow: row;
   flex-wrap: nowrap;
+  padding: 10px 5px;
 }
 .JDatePicker .JC-Nav {
   display: inline-block;
   flex-grow: 1;
   text-align: center;
   cursor: pointer;
+  /* width: 24px; */
+  height: 24px;
 }
 .JDatePicker .JC-Title {
   display: inline-block;

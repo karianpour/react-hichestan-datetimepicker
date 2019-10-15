@@ -90,3 +90,94 @@ export const DeleteIcon = () => {
 		</svg>
 	);
 };
+
+
+export const NextIcon = () => {
+  return (
+    <svg
+			width="100%"
+			height="100%"
+			viewBox="6 6 12 12"
+		>
+			<g stroke="none" fill="none" fill-rule="evenodd" transform=" scale(-1, 1) translate(-24, 0)">
+				<polygon points="0 0 24 0 24 24 0 24"></polygon>
+				<polygon fill="#1D1D1D" points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
+			</g>
+		</svg>
+  );
+};
+
+export const PreviousIcon = () => {
+  return (
+    <svg
+			width="100%"
+			height="100%"
+			viewBox="6 6 12 12"
+		>
+			<g stroke="none" fill="none" fill-rule="evenodd">
+				<polygon points="0 0 24 0 24 24 0 24"></polygon>
+				<polygon fill="#1D1D1D" points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
+			</g>
+		</svg>
+  );
+};
+
+export const DoubleNextIcon = () => {
+  return (
+    <svg
+			width="100%"
+			height="100%"
+			viewBox="6 6 12 12"
+		>
+			<g stroke="none" fill="none" fill-rule="evenodd" transform=" scale(-1, 1) translate(-24, 0)">
+				<polygon points="0 0 24 0 24 24 0 24"></polygon>
+				<polygon fill="#1D1D1D" points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
+			</g>
+		</svg>
+  );
+};
+
+export const DoublePreviousIcon = () => {
+  return (
+    <svg
+			width="100%"
+			height="100%"
+			viewBox="6 6 12 12"
+		>
+			<g stroke="none" fill="none" fill-rule="evenodd">
+				<polygon points="0 0 24 0 24 24 0 24"></polygon>
+				<polygon fill="#1D1D1D" points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
+			</g>
+		</svg>
+  );
+};
+
+export const UpIcon = () => {
+  return (
+    <svg
+			width="100%"
+			height="100%"
+			viewBox="6 6 12 12"
+		>
+			<g stroke="none" fill="none" fill-rule="evenodd" transform="rotate(-90 12 12)">
+				<polygon points="0 0 24 0 24 24 0 24"></polygon>
+				<polygon fill="#1D1D1D" points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
+			</g>
+		</svg>
+  );
+};
+
+export const DownIcon = () => {
+  return (
+    <svg
+			width="100%"
+			height="100%"
+			viewBox="6 6 12 12"
+		>
+			<g stroke="none" fill="none" fill-rule="evenodd" transform="rotate(90 12 12)">
+				<polygon points="0 0 24 0 24 24 0 24"></polygon>
+				<polygon fill="#1D1D1D" points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
+			</g>
+		</svg>
+  );
+};
