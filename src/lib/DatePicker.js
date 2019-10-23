@@ -38,7 +38,7 @@ class DatePicker extends Component {
     selectedMonthFirstDay = calcFirstDayOfMonth(selectedYear, currentMonth, gregorian);
     selectedHour = currentDay.getHours();
     selectedMinute = currentDay.getMinutes();
-    console.log({selectedDay})
+    // console.log({selectedDay})
     this.state = {
       gregorian,
       selectedYear,

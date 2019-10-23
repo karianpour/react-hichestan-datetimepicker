@@ -547,7 +547,6 @@ class DateInput extends Component {
     if(this.props.onChange){
       const value = this.values.valueIsValid ? this.values.value : '';
       if(this.previousValue !== value){
-        console.log('fired')
         this.previousValue = value;
         const target = !this.values.valueIsValid ? {name: this.props.name, formatted: '', value: '', date: null} : {
           name: this.props.name,
