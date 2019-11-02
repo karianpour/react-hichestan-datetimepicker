@@ -23,7 +23,7 @@ class DatePicker extends Component {
       currentDay.setHours(0);
       currentDay.setMinutes(0);
     }
-    currentDay.setSeconds(0);
+    // currentDay.setSeconds(0);
     let selectedYear, currentMonth, selectedMonthFirstDay, daysCount, selectedHour, selectedMinute;
     if(gregorian){
       let j = currentDay;
@@ -61,18 +61,15 @@ class DatePicker extends Component {
 
   daysClicked = (dayDate) => {
     if(isNotEqualDate(this.state.selectedDay, dayDate)){
-      const newDate = new Date(dayDate.getTime());
+      let newDate;
 
       if(this.props.pickTime){
         const {selectedHour, selectedMinute} = this.state;
+        newDate = new Date(dayDate.getTime());
         newDate.setHours(selectedHour);
         newDate.setMinutes(selectedMinute);
       }else{
-        const {selectedDay} = this.state;
-        if(selectedDay){
-          newDate.setHours(selectedDay.getHours());
-          newDate.setMinutes(selectedDay.getMinutes());
-        }
+        newDate = new Date(Date.UTC(dayDate.getFullYear(), dayDate.getMonth(), dayDate.getDate(), 0, 0));
       }
 
       this.setState({

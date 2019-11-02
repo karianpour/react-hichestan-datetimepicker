@@ -1,6 +1,6 @@
 {
   "name": "react-hichestan-datetimepicker",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "A serie of react components to manipulate persian (jalali) date.",
   "author": "Hichestan",
   "copyright.owner": "Hichestan Corp.",
@@ -40,9 +40,9 @@
     "@babel/core": "^7.6.4",
     "@babel/preset-react": "^7.6.3",
     "prop-types": "^15.7.2",
-    "react": "^16.10.2",
+    "react": "^16.11.0",
     "react-doc-generator": "^1.2.5",
-    "react-dom": "^16.10.2",
+    "react-dom": "^16.11.0",
     "react-scripts": "^3.2.0",
     "rimraf": "^2.7.1"
   },
