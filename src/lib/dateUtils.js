@@ -316,7 +316,7 @@ export const isValueValidDate = (value, gregorian) => {
   if(day > maxDayFor(year, month, gregorian)) return false;
 
   if(gregorian){
-    const date = new Date(year, month - 1, day, 0, 0);
+    const date = new Date(Date.UTC(year, month - 1, day, 0, 0));
     if(date.toString() === 'Invalid Date'){
       return false;
     }
@@ -324,7 +324,7 @@ export const isValueValidDate = (value, gregorian) => {
   }else{
     if(!jalaali.isValidJalaaliDate(year, month, day)) return false;
     const g = jalaali.toGregorian(year, month, day);
-    const date = new Date(g.gy, g.gm - 1, g.gd, 0, 0);
+    const date = new Date(Date.UTC(g.gy, g.gm - 1, g.gd, 0, 0));
     return date;
   }
 };
