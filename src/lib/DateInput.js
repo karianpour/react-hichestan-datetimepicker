@@ -329,7 +329,7 @@ class DateInput extends Component {
   };
 
 
-  updateState = (newState) => {
+  updateState = (newState, noFireOnChange) => {
     if(!newState) return;
 
     this.values = newState;
@@ -369,7 +369,9 @@ class DateInput extends Component {
       // console.log('has not focus :(');
     }
     // if(fireOnChangeInTheEnd){
+    if(!noFireOnChange){
       this.fireOnChange();
+    }
     // }
   };
 
@@ -560,8 +562,8 @@ class DateInput extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState){
-    if(nextProps.value !== this.values.iso || nextProps.gregorian !== this.props.gregorian || nextProps.numberFormat !== this.props.numberFormat){
-      this.updateState(this.readValuesFromProps(nextProps));
+    if((nextProps.value !== this.props.value && nextProps.value !== this.values.iso) || nextProps.gregorian !== this.props.gregorian || nextProps.numberFormat !== this.props.numberFormat){
+      this.updateState(this.readValuesFromProps(nextProps), true);
     }
     if(!shallowEqualObjects(nextProps.style, this.props.style)){
       return true;

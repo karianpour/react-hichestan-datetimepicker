@@ -1,21 +1,22 @@
 {
   "files": {
     "main.css": "/react-hichestan-datetimepicker/static/css/main.0d230cab.chunk.css",
-    "main.js": "/react-hichestan-datetimepicker/static/js/main.8d3e1c39.chunk.js",
-    "main.js.map": "/react-hichestan-datetimepicker/static/js/main.8d3e1c39.chunk.js.map",
-    "runtime-main.js": "/react-hichestan-datetimepicker/static/js/runtime-main.cfc4140e.js",
-    "runtime-main.js.map": "/react-hichestan-datetimepicker/static/js/runtime-main.cfc4140e.js.map",
-    "static/js/2.f2bbfe7e.chunk.js": "/react-hichestan-datetimepicker/static/js/2.f2bbfe7e.chunk.js",
-    "static/js/2.f2bbfe7e.chunk.js.map": "/react-hichestan-datetimepicker/static/js/2.f2bbfe7e.chunk.js.map",
+    "main.js": "/react-hichestan-datetimepicker/static/js/main.9f40485f.chunk.js",
+    "main.js.map": "/react-hichestan-datetimepicker/static/js/main.9f40485f.chunk.js.map",
+    "runtime-main.js": "/react-hichestan-datetimepicker/static/js/runtime-main.47bd35ed.js",
+    "runtime-main.js.map": "/react-hichestan-datetimepicker/static/js/runtime-main.47bd35ed.js.map",
+    "static/js/2.e75c4522.chunk.js": "/react-hichestan-datetimepicker/static/js/2.e75c4522.chunk.js",
+    "static/js/2.e75c4522.chunk.js.map": "/react-hichestan-datetimepicker/static/js/2.e75c4522.chunk.js.map",
     "index.html": "/react-hichestan-datetimepicker/index.html",
-    "precache-manifest.4e28e5fe80019d4ccbc7aa58c6133d4f.js": "/react-hichestan-datetimepicker/precache-manifest.4e28e5fe80019d4ccbc7aa58c6133d4f.js",
+    "precache-manifest.7839465cf8a7cf8cc07764224c45ebb5.js": "/react-hichestan-datetimepicker/precache-manifest.7839465cf8a7cf8cc07764224c45ebb5.js",
     "service-worker.js": "/react-hichestan-datetimepicker/service-worker.js",
-    "static/css/main.0d230cab.chunk.css.map": "/react-hichestan-datetimepicker/static/css/main.0d230cab.chunk.css.map"
+    "static/css/main.0d230cab.chunk.css.map": "/react-hichestan-datetimepicker/static/css/main.0d230cab.chunk.css.map",
+    "static/js/2.e75c4522.chunk.js.LICENSE": "/react-hichestan-datetimepicker/static/js/2.e75c4522.chunk.js.LICENSE"
   },
   "entrypoints": [
-    "static/js/runtime-main.cfc4140e.js",
-    "static/js/2.f2bbfe7e.chunk.js",
+    "static/js/runtime-main.47bd35ed.js",
+    "static/js/2.e75c4522.chunk.js",
     "static/css/main.0d230cab.chunk.css",
-    "static/js/main.8d3e1c39.chunk.js"
+    "static/js/main.9f40485f.chunk.js"
   ]
 }
