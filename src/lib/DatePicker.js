@@ -7,11 +7,20 @@ import Hours from './Picker/Hours';
 import Minutes from './Picker/Minutes';
 import jalaali from 'jalaali-js';
 import {calcFirstDayOfMonth, isNotEqualDate, gregorianMonthLength} from './dateUtils';
+import { createPortal } from 'react-dom';
+
+let modalRoot = null;
 
 class DatePicker extends Component {
 
   constructor(props) {
     super(props);
+    if(!modalRoot){
+      modalRoot = document.createElement( 'div' );
+      // modalRoot.className = 'JDialogModal';
+      document.body.appendChild(modalRoot);
+    }
+
     const { gregorian, selectedDay, pickTime=false } = props;
     let currentDay = selectedDay;
     if(!currentDay){
@@ -172,12 +181,21 @@ class DatePicker extends Component {
       filterDate,
       ltr,
       pickTime=false,
+      divRef,
     } = this.props;
+
+    const myStyle = !divRef ? style : {...style,
+      position: 'absolute',
+      top: divRef.current.offsetTop + divRef.current.offsetHeight + 5, 
+      left: ltr ? 
+        divRef.current.offsetLeft
+        : divRef.current.offsetLeft + divRef.current.offsetWidth - 310,
+    };
 
     const {gregorian, daysCount, selectedDay, currentMonth, selectedYear, selectedMonthFirstDay, selectedHour, selectedMinute} = this.state;
 
-    return (
-      <div className={`JDatePicker${ltr ? ' ltr':''} ${className?className:''}`} style={style}
+    return createPortal(
+      <div className={`JDatePicker${ltr ? ' ltr':''} ${className?className:''}`} style={myStyle}
         onClick={(e)=>{e.preventDefault()}}>
         <Years gregorian={gregorian} changeEvent={(returnedYear)=>this.yearSelected(returnedYear)} year={selectedYear} />
         <Months gregorian={gregorian} clickEvent={(returnedMonth)=>this.monthsClicked(returnedMonth)} month={currentMonth} />
@@ -204,7 +222,7 @@ class DatePicker extends Component {
           {gregorian && <button onClick={this.gregorianPicker}>{'شمسی'}</button>}
         </div>
       </div>
-    );
+    , modalRoot);
   }
 }
 

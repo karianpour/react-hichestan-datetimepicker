@@ -92,6 +92,7 @@ class DateInputWithDialog extends Component {
 
   constructor(props){
     super(props);
+    this.inputRef = React.createRef()
     let date = null;
     if(props.value){
       date = new Date(props.value);
@@ -221,7 +222,7 @@ class DateInputWithDialog extends Component {
     } = this.state;
 
     return (
-      <div className='date-input-with-dialog-main'>
+      <div ref={this.inputRef} className='date-input-with-dialog-main'>
         <DateInput
           className={`date-input-with-dialog-input${ltr ? ' ltr':''} ${this.props.className ? this.props.className : ''}`} 
           gregorian={gregorian}
@@ -238,6 +239,7 @@ class DateInputWithDialog extends Component {
           <React.Fragment>
             <div className={'OutSideClick'} onClick={this.handleCalendar}> </div>
             <DatePicker
+              divRef={this.inputRef}
               gregorian={gregorian}
               onChange={e => {
                 this.handleDateChange(e.target.value);

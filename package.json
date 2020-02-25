@@ -32,8 +32,8 @@
     "docs": "react-doc-generator ./src/lib/ -o DOCUMENTATION.md"
   },
   "peerDependencies": {
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
