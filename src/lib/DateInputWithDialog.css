@@ -13,6 +13,9 @@
   /* height: 100%; K1 it is not needed */
   text-align: right;
 }
+.date-input-with-dialog-input.ltr {
+  text-align: left;
+}
 .date-input-with-dialog-input-buttons {
   display: flex;
   position: absolute;
@@ -31,14 +34,22 @@
   border: thin solid blue;
 }
 .date-input-with-dialog-calendar {
-  top: 0.3em;
+  top: calc(50% - 0.7em);
   left: 1.5em;
   box-sizing: border-box;
   background-color: white;
 }
+.date-input-with-dialog-calendar.ltr {
+  left: unset;
+  right: 1.5em;
+}
 .date-input-with-dialog-empty {
-  top: 0.3em;
+  top: calc(50% - 0.7em);
   left: 0;
   box-sizing: border-box;
   background-color: white;
+}
+.date-input-with-dialog-empty.ltr {
+  left: unset;
+  right: 0em;
 }

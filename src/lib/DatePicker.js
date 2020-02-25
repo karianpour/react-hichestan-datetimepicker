@@ -170,13 +170,14 @@ class DatePicker extends Component {
       closeLabel='بستن',
       style,
       filterDate,
+      ltr,
       pickTime=false,
     } = this.props;
 
     const {gregorian, daysCount, selectedDay, currentMonth, selectedYear, selectedMonthFirstDay, selectedHour, selectedMinute} = this.state;
 
     return (
-      <div className={"JDatePicker "+(className?className:"")} style={style}
+      <div className={`JDatePicker${ltr ? ' ltr':''} ${className?className:''}`} style={style}
         onClick={(e)=>{e.preventDefault()}}>
         <Years gregorian={gregorian} changeEvent={(returnedYear)=>this.yearSelected(returnedYear)} year={selectedYear} />
         <Months gregorian={gregorian} clickEvent={(returnedMonth)=>this.monthsClicked(returnedMonth)} month={currentMonth} />

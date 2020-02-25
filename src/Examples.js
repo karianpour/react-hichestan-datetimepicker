@@ -61,6 +61,7 @@ class Example extends Component {
               disabled={disabled}
               readOnly={readOnly}
               autoOk
+              // ltr={true}
               onChange={this.handleChange}
               style={{textAlign: 'right'}}
               placeholder="فیلد تاریخ فقط تایپی" />
@@ -102,6 +103,7 @@ class Example extends Component {
               gregorian={gregorian}
               disabled={disabled}
               readOnly={readOnly}
+              // ltr={true}
               onChange={this.handleChange}
               placeholder="فیلد تاریخ فقط تایپی" />
             <br/>

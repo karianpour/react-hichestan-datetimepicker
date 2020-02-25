@@ -18,7 +18,6 @@
   min-height: 210px;
   padding: 5px;
   position: absolute;
-  /* left: 0; */
   right: 0;
   top: 130%;
   margin-left: auto;
@@ -33,6 +32,11 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.JDatePicker.ltr {
+  right: unset;
+  left: 0;
 }
 
 .JDatePicker .JC-HourMinute {

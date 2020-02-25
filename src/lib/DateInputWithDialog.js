@@ -78,6 +78,10 @@ class DateInputWithDialog extends Component {
      */
     gregorian: PropTypes.bool,
     /**
+     * makes the DateInput left to right.
+     */
+    ltr: PropTypes.bool,
+    /**
      * Sets the value for the Date-Time input.
      */
     value: PropTypes.oneOfType([
@@ -168,7 +172,11 @@ class DateInputWithDialog extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState){
-    if(nextProps.value !== this.state.iso || nextProps.value !== this.props.value || nextProps.gregorian !== this.props.gregorian || nextProps.numberFormat !== this.props.numberFormat){
+    if(nextProps.value !== this.state.iso
+      || nextProps.value !== this.props.value
+      || nextProps.gregorian !== this.props.gregorian
+      || nextProps.ltr !== this.props.ltr
+      || nextProps.numberFormat !== this.props.numberFormat){
       return true;
     }
     if(!shallowEqualObjects(nextProps.style, this.props.style)){
@@ -203,6 +211,7 @@ class DateInputWithDialog extends Component {
       style,
       filterDate,
       gregorian,
+      ltr,
       onChange,
       ...rest
     } = this.props;
@@ -214,7 +223,7 @@ class DateInputWithDialog extends Component {
     return (
       <div className='date-input-with-dialog-main'>
         <DateInput
-          className={`date-input-with-dialog-input ${this.props.className ? this.props.className : ''}`} 
+          className={`date-input-with-dialog-input${ltr ? ' ltr':''} ${this.props.className ? this.props.className : ''}`} 
           gregorian={gregorian}
           disabled={disabled}
           readOnly={readOnly}
@@ -223,8 +232,8 @@ class DateInputWithDialog extends Component {
           onChange={this.handleChange}
           {...rest}
         />
-        <div className={'date-input-with-dialog-input-buttons date-input-with-dialog-calendar'} onClick={this.handleCalendar}><CalendarIcon/></div>
-        <div className={'date-input-with-dialog-input-buttons date-input-with-dialog-empty'} onClick={this.handleEmpty}><DeleteIcon/></div>
+        <div className={`date-input-with-dialog-input-buttons date-input-with-dialog-calendar${ltr ? ' ltr':''}`} onClick={this.handleCalendar}><CalendarIcon/></div>
+        <div className={`date-input-with-dialog-input-buttons date-input-with-dialog-empty${ltr ? ' ltr':''}`} onClick={this.handleEmpty}><DeleteIcon/></div>
         {this.state.openDialog && (
           <React.Fragment>
             <div className={'OutSideClick'} onClick={this.handleCalendar}> </div>
@@ -243,6 +252,7 @@ class DateInputWithDialog extends Component {
               closeLabel={closeLabel}
               onDismiss={onDismiss}
               filterDate={filterDate}
+              ltr={ltr}
             />
           </React.Fragment>
         )}
