@@ -237,7 +237,6 @@ class DateInputWithDialog extends Component {
         <div className={`date-input-with-dialog-input-buttons date-input-with-dialog-empty${ltr ? ' ltr':''}`} onClick={this.handleEmpty}><DeleteIcon/></div>
         {this.state.openDialog && (
           <React.Fragment>
-            <div className={'OutSideClick'} onClick={this.handleCalendar}> </div>
             <DatePicker
               divRef={this.inputRef}
               gregorian={gregorian}

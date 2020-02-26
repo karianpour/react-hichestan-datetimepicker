@@ -21,7 +21,7 @@ class DatePicker extends Component {
       document.body.appendChild(modalRoot);
     }
 
-    const { gregorian, selectedDay, pickTime=false } = props;
+    const { gregorian, selectedDay, pickTime=false, style, ltr, divRef } = props;
     let currentDay = selectedDay;
     if(!currentDay){
       currentDay = new Date();
@@ -48,6 +48,42 @@ class DatePicker extends Component {
     selectedHour = currentDay.getHours();
     selectedMinute = currentDay.getMinutes();
     // console.log({selectedDay})
+
+
+    let myStyle = style
+    if(divRef?.current?.getBoundingClientRect && document?.documentElement){
+      const rect = divRef.current.getBoundingClientRect();
+
+      const ww = document.documentElement.clientWidth;
+      const wh = document.documentElement.clientHeight;
+
+      const dialogHeight = pickTime ? 435 : 330;
+      const dialogWidth = 320;
+
+      myStyle = {...style,
+        // position: 'fixed',
+        top: rect.top + rect.height + 5,
+      };
+      if(myStyle.top < 10) myStyle.top = 10;
+      if(myStyle.top + dialogHeight > wh) myStyle.top = wh - dialogHeight;
+
+      // const wh = (window.innerHeight || document.documentElement.clientHeight);
+      // const ww = (window.innerWidth || document.documentElement.clientWidth);
+      // debugger;
+
+      if(ltr){
+        myStyle.left = rect.left;
+        myStyle.right = 'unset';
+        if(myStyle.left < 10) myStyle.left = 10;
+        if(myStyle.left + dialogWidth > ww) myStyle.left = ww - dialogWidth;
+      }else{
+        myStyle.left = 'unset';
+        myStyle.right = ww - rect.right;
+        if(myStyle.right < 10) myStyle.right = 10;
+        if(myStyle.right + dialogWidth > ww) myStyle.right = ww - dialogWidth;
+      }
+    }
+
     this.state = {
       gregorian,
       selectedYear,
@@ -57,6 +93,7 @@ class DatePicker extends Component {
       selectedDay: selectedDay ? selectedDay : null,
       selectedHour,
       selectedMinute,
+      style: myStyle,
     };
   }
 
@@ -187,52 +224,17 @@ class DatePicker extends Component {
     const {
       className,
       closeLabel='بستن',
-      style,
       filterDate,
       ltr,
       pickTime=false,
-      divRef,
     } = this.props;
 
-    let myStyle = style
-    if(divRef?.current?.getBoundingClientRect){
-      const rect = divRef.current.getBoundingClientRect();
-
-      const ww = document.documentElement.clientWidth;
-      const wh = document.documentElement.clientHeight;
-
-      const dialogHeight = pickTime ? 435 : 330;
-      const dialogWidth = 320;
-
-      myStyle = {...style,
-        // position: 'fixed',
-        top: rect.top + rect.height + 5,
-      };
-      if(myStyle.top < 10) myStyle.top = 10;
-      debugger
-      if(myStyle.top + dialogHeight > wh) myStyle.top = wh - dialogHeight;
-
-      // const wh = (window.innerHeight || document.documentElement.clientHeight);
-      // const ww = (window.innerWidth || document.documentElement.clientWidth);
-      // debugger;
-
-      if(ltr){
-        myStyle.left = rect.left;
-        myStyle.right = 'unset';
-        if(myStyle.left < 10) myStyle.left = 10;
-        if(myStyle.left + dialogWidth > ww) myStyle.left = ww - dialogWidth;
-      }else{
-        myStyle.left = 'unset';
-        myStyle.right = ww - rect.right;
-        if(myStyle.right < 10) myStyle.right = 10;
-        if(myStyle.right + dialogWidth > ww) myStyle.right = ww - dialogWidth;
-      }
-    }
-
-    const {gregorian, daysCount, selectedDay, currentMonth, selectedYear, selectedMonthFirstDay, selectedHour, selectedMinute} = this.state;
+    const {gregorian, daysCount, selectedDay, currentMonth, selectedYear, selectedMonthFirstDay, selectedHour, selectedMinute, style} = this.state;
 
     return createPortal(
-      <div className={`JDatePicker${ltr ? ' ltr':''} ${className?className:''}`} style={myStyle}
+      <>
+      <div className={'OutSideClick'} onClick={this.cancelPicker}> </div>
+      <div className={`JDatePicker${ltr ? ' ltr':''} ${className?className:''}`} style={style}
         onClick={(e)=>{e.preventDefault()}}>
         <Years gregorian={gregorian} changeEvent={(returnedYear)=>this.yearSelected(returnedYear)} year={selectedYear} />
         <Months gregorian={gregorian} clickEvent={(returnedMonth)=>this.monthsClicked(returnedMonth)} month={currentMonth} />
@@ -259,6 +261,7 @@ class DatePicker extends Component {
           {gregorian && <button onClick={this.gregorianPicker}>{'شمسی'}</button>}
         </div>
       </div>
+      </>
     , modalRoot);
   }
 }

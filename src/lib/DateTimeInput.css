@@ -1,3 +1,8 @@
+:root {
+  --datepicker-color: #8b4242;
+  --datepicker-hover-color: #8b4242EE;
+}
+
 .OutSideClick{
   content: '&quot;&quot';
   position: fixed;
@@ -53,7 +58,7 @@
   padding: 10px 5px;
 }
 .JDatePicker .JC-Section-Year {
-  background-color: #8b4242;
+  background-color: var(--datepicker-color);
   color: #fff;
   border-radius: 4px;
 }
@@ -106,12 +111,12 @@
   cursor: pointer;
   color: #000;
   background-color: #f5f7f900;
-  border: 1px solid #8b4242;
+  border: 1px solid var(--datepicker-color);
   width: 40%;
 }
 .JDatePicker button:hover {
   color: #fff;
-  background-color: #8b4242EE;
+  background-color: var(--datepicker-hover-color);
 }
 .JDatePicker .MonthPicker {
   position: absolute;
@@ -131,7 +136,7 @@
   color: #777;
 }
 .JDatePicker .MonthItems.selected {
-  background: #8b4242;
+  background: var(--datepicker-color);
   color: #fff;
 }
 .JDatePicker .MonthItems {
@@ -179,18 +184,18 @@
   border-radius: 4px;
 }
 .JDatePicker .day-items:hover {
-  background-color: #8b4242;
+  background-color: var(--datepicker-color);
   color: #fff;
 }
 .JDatePicker .day-items.selected {
   font-weight: 900;
-  background-color: #8b4242;
+  background-color: var(--datepicker-color);
   color: #fff;
 }
 .JDatePicker .day-items.today {
   background-color: #eec3c347;
 }
 .JDatePicker .day-items.today:hover {
-  background-color: #8b4242;
+  background-color: var(--datepicker-color);
   color: #fff;
 }
