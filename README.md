@@ -110,6 +110,25 @@ As we always save the date and time in back-end in timestamp, it does not make s
 ### On Mobile
 On mobile the out side click works only if the page size and the view matches. In some cases the out side click div element cannot occupy all the page.
 
+### Theming
+The dialog box uses these css variables for the colors
+```
+  --datepicker-color: #8b4242;
+  --datepicker-button-hover-color: #8b4242EE;
+  --datepicker-background: #fff;
+  --datepicker-days-background: #f7f7f7;
+  --datepicker-today-background: #eec3c347;
+  --datepicker-border-color: grey;
+  --datepicker-shadow-color: #5959597a;
+```
+to change run a js like this:
+
+```
+document.documentElement.style.setProperty("--datepicker-color", "#");
+document.documentElement.style.setProperty("--datepicker-button-hover-color", "black");
+```
+
+you can run it on the main `index.js` file
 
 ### ToDo
 - In mobile device it is not a good experience to type in input text, having select make more sense.

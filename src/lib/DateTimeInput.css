@@ -1,6 +1,11 @@
 :root {
   --datepicker-color: #8b4242;
-  --datepicker-hover-color: #8b4242EE;
+  --datepicker-button-hover-color: #8b4242EE;
+  --datepicker-background: #fff;
+  --datepicker-days-background: #f7f7f7;
+  --datepicker-today-background: #eec3c347;
+  --datepicker-border-color: grey;
+  --datepicker-shadow-color: #5959597a;
 }
 
 .OutSideClick{
@@ -27,9 +32,9 @@
   left: calc(50% - 150px);
   margin-left: auto;
   margin-right: auto;
-  background: #fff;
+  background: var(--datepicker-background);
   border-radius: 5px;
-  box-shadow: 2px 5px 7px 4px #5959597a;
+  box-shadow: 2px 5px 7px 4px var(--datepicker-shadow-color);
   z-index: 1;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -59,7 +64,7 @@
 }
 .JDatePicker .JC-Section-Year {
   background-color: var(--datepicker-color);
-  color: #fff;
+  color: var(--datepicker-background);
   border-radius: 4px;
 }
 .JDatePicker .JC-Buttons {
@@ -73,7 +78,7 @@
   justify-content: center;
   direction: ltr;
   padding: 8px;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid var(--datepicker-border-color);
 }
 .JDatePicker .JC-Nav {
   display: inline-block;
@@ -82,13 +87,13 @@
   cursor: pointer;
   /* width: 24px; */
   height: 24px;
-  color: grey;
+  color: var(--datepicker-border-color);
 }
 .JDatePicker .JC-Nav-Year {
-  color: white;
+  color: var(--datepicker-background);
 }
 .JDatePicker .JC-Nav-Hour {
-  border: 1px solid grey;
+  border: 1px solid var(--datepicker-border-color);
   border-radius: 50%;
   height: 30px;
   width: 30px;
@@ -109,35 +114,35 @@
   padding: 2px 10px;
   border-radius: 5px;
   cursor: pointer;
-  color: #000;
-  background-color: #f5f7f900;
+  color: black;
+  background-color: var(--datepicker-background);
   border: 1px solid var(--datepicker-color);
   width: 40%;
 }
 .JDatePicker button:hover {
-  color: #fff;
-  background-color: var(--datepicker-hover-color);
+  color: var(--datepicker-background);
+  background-color: var(--datepicker-button-hover-color);
 }
 .JDatePicker .MonthPicker {
   position: absolute;
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  background: #fff;
+  background: var(--datepicker-background);
   text-align: center;
   padding: 5px;
   top: 26px;
   border-radius: 5px;
-  box-shadow: 2px 5px 7px 4px #5959597a;
+  box-shadow: 2px 5px 7px 4px var(--datepicker-shadow-color);
   z-index: 1;
 }
 .JDatePicker .MonthItems:hover{
-  background: aliceblue;
-  color: #777;
+  background: var(--datepicker-today-background);
+  color: black;
 }
 .JDatePicker .MonthItems.selected {
   background: var(--datepicker-color);
-  color: #fff;
+  color: var(--datepicker-background);
 }
 .JDatePicker .MonthItems {
   display: inline-block;
@@ -145,14 +150,14 @@
   text-align: center;
   cursor: pointer;
   padding: 4px 0;
-  border: 1px solid #ccc;
+  border: 0.3px solid var(--datepicker-border-color);
   font-size: 14px;
 }
 
 
 .days-titles div {
-  border-top: 1px solid grey;
-  border-bottom: 1px solid grey;
+  border-top: 1px solid var(--datepicker-border-color);
+  border-bottom: 1px solid var(--datepicker-border-color);
   width: 14.28%;
   display: inline-block;
   font-size: 14px;
@@ -167,8 +172,8 @@
 .JDatePicker .JC-days {
   position: relative;
   display: inline-block;
-  background: #f7f7f7;
-  border-bottom: 1px solid gray;
+  background: var(--datepicker-days-background);
+  border-bottom: 1px solid var(--datepicker-border-color);
 }
 .JDatePicker .JC-days .holder {
   padding: 10px 0px;
@@ -185,17 +190,17 @@
 }
 .JDatePicker .day-items:hover {
   background-color: var(--datepicker-color);
-  color: #fff;
+  color: var(--datepicker-background);
 }
 .JDatePicker .day-items.selected {
   font-weight: 900;
   background-color: var(--datepicker-color);
-  color: #fff;
+  color: var(--datepicker-background);
 }
 .JDatePicker .day-items.today {
-  background-color: #eec3c347;
+  background-color: var(--datepicker-today-background);
 }
 .JDatePicker .day-items.today:hover {
   background-color: var(--datepicker-color);
-  color: #fff;
+  color: var(--datepicker-background);
 }
