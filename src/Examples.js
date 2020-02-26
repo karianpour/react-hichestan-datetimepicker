@@ -15,6 +15,7 @@ class Example extends Component {
     gregorian: false,
     disabled: false,
     readOnly: false,
+    ltr: false,
   };
 
   handleChange = (event) => {
@@ -44,9 +45,15 @@ class Example extends Component {
     })
   };
 
+  toggleLtr = () => {
+    this.setState({
+      ltr: !this.state.ltr,
+    })
+  };
+
   render(){
 
-    const { gregorian, disabled, readOnly } = this.state;
+    const { gregorian, disabled, readOnly, ltr } = this.state;
 
     return (
       <React.Fragment>
@@ -61,7 +68,7 @@ class Example extends Component {
               disabled={disabled}
               readOnly={readOnly}
               autoOk
-              // ltr={true}
+              ltr={ltr}
               onChange={this.handleChange}
               style={{textAlign: 'right'}}
               placeholder="فیلد تاریخ فقط تایپی" />
@@ -103,7 +110,7 @@ class Example extends Component {
               gregorian={gregorian}
               disabled={disabled}
               readOnly={readOnly}
-              // ltr={true}
+              ltr={ltr}
               onChange={this.handleChange}
               placeholder="فیلد تاریخ فقط تایپی" />
             <br/>
@@ -137,7 +144,8 @@ class Example extends Component {
           <button type="button" onClick={this.toggleDisabled}>{disabled?'enable':'disable'}</button>
           <button type="button" onClick={this.toggleReadOnly}>{readOnly?'writable':'read only'}</button>
           <button type="button" onClick={this.toggleGregorian}>{gregorian ? 'شمسی' : 'میلادی'}</button>
-          <p style={{height: 1000}}>
+          <button type="button" onClick={this.toggleLtr}>{ltr ? 'rtl' : 'ltr'}</button>
+          <p>
           <br/>
           خروجی زمان استاندارد را در دیتابیس استفاده کنید
           </p>

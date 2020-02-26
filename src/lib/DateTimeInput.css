@@ -17,7 +17,7 @@
   width: 300px;
   min-height: 210px;
   padding: 5px;
-  position: fix;
+  position: fixed;
   top: calc(50% - 150px);
   left: calc(50% - 150px);
   margin-left: auto;

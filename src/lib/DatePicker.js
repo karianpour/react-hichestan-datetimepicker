@@ -60,6 +60,16 @@ class DatePicker extends Component {
     };
   }
 
+  componentDidMount = () => {
+    if(document && document.body && document.body.style)
+      document.body.style.overflow = 'hidden';
+  }
+
+  componentWillUnmount = () => {
+    if(document && document.body && document.body.style)
+      document.body.style.overflow = '';
+  }
+
   cancelPicker = (e)=>{
     e.preventDefault();
     if(this.props.onDismiss){
@@ -184,13 +194,40 @@ class DatePicker extends Component {
       divRef,
     } = this.props;
 
-    const myStyle = !divRef ? style : {...style,
-      position: 'absolute',
-      top: divRef.current.offsetTop + divRef.current.offsetHeight + 5, 
-      left: ltr ? 
-        divRef.current.offsetLeft
-        : divRef.current.offsetLeft + divRef.current.offsetWidth - 310,
-    };
+    let myStyle = style
+    if(divRef?.current?.getBoundingClientRect){
+      const rect = divRef.current.getBoundingClientRect();
+
+      const ww = document.documentElement.clientWidth;
+      const wh = document.documentElement.clientHeight;
+
+      const dialogHeight = pickTime ? 435 : 330;
+      const dialogWidth = 320;
+
+      myStyle = {...style,
+        // position: 'fixed',
+        top: rect.top + rect.height + 5,
+      };
+      if(myStyle.top < 10) myStyle.top = 10;
+      debugger
+      if(myStyle.top + dialogHeight > wh) myStyle.top = wh - dialogHeight;
+
+      // const wh = (window.innerHeight || document.documentElement.clientHeight);
+      // const ww = (window.innerWidth || document.documentElement.clientWidth);
+      // debugger;
+
+      if(ltr){
+        myStyle.left = rect.left;
+        myStyle.right = 'unset';
+        if(myStyle.left < 10) myStyle.left = 10;
+        if(myStyle.left + dialogWidth > ww) myStyle.left = ww - dialogWidth;
+      }else{
+        myStyle.left = 'unset';
+        myStyle.right = ww - rect.right;
+        if(myStyle.right < 10) myStyle.right = 10;
+        if(myStyle.right + dialogWidth > ww) myStyle.right = ww - dialogWidth;
+      }
+    }
 
     const {gregorian, daysCount, selectedDay, currentMonth, selectedYear, selectedMonthFirstDay, selectedHour, selectedMinute} = this.state;
 
