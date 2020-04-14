@@ -56,7 +56,7 @@ class Example extends Component {
     const { gregorian, disabled, readOnly, ltr } = this.state;
 
     return (
-      <React.Fragment>
+      <>
         <div style={{width: 250}}>
         <label>ورودی تاریخ با پاپ‌آپ
             <br/>
@@ -151,7 +151,7 @@ class Example extends Component {
           </p>
           <br/>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }
