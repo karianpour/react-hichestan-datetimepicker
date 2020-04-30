@@ -10,6 +10,8 @@ export const CalendarIcon = () => {
 			width="100%"
 			height="100%"
 			viewBox="0 0 36.449 36.448"
+			fill="currentColor"
+			stroke="currentColor"
 		>
 			<g>
 				<rect x="12.858" y="14.626" width="4.596" height="4.089"/>
@@ -49,43 +51,11 @@ export const DeleteIcon = () => {
 			x="0px" y="0px"
 			viewBox="0 0 469.333 469.333"
 			xmlSpace="preserve"
+			fill="currentColor"
+			stroke="currentColor"
 		>
 			<g>
-				<g>
-					<g>
-						<path d="M338.208,131.125c-4.167-4.167-10.917-4.167-15.083,0l-88.458,88.458l-88.458-88.458c-4.167-4.167-10.917-4.167-15.083,0     c-4.167,4.167-4.167,10.917,0,15.083l88.458,88.458l-88.458,88.458c-4.167,4.167-4.167,10.917,0,15.083     c2.083,2.083,4.813,3.125,7.542,3.125s5.458-1.042,7.542-3.125l88.458-88.458l88.458,88.458c2.083,2.083,4.813,3.125,7.542,3.125     c2.729,0,5.458-1.042,7.542-3.125c4.167-4.167,4.167-10.917,0-15.083l-88.458-88.458l88.458-88.458     C342.375,142.042,342.375,135.292,338.208,131.125z"/>
-					</g>
-				</g>
-			</g>
-			<g>
-			</g>
-			<g>
-			</g>
-			<g>
-			</g>
-			<g>
-			</g>
-			<g>
-			</g>
-			<g>
-			</g>
-			<g>
-			</g>
-			<g>
-			</g>
-			<g>
-			</g>
-			<g>
-			</g>
-			<g>
-			</g>
-			<g>
-			</g>
-			<g>
-			</g>
-			<g>
-			</g>
-			<g>
+				<path d="M338.208,131.125c-4.167-4.167-10.917-4.167-15.083,0l-88.458,88.458l-88.458-88.458c-4.167-4.167-10.917-4.167-15.083,0     c-4.167,4.167-4.167,10.917,0,15.083l88.458,88.458l-88.458,88.458c-4.167,4.167-4.167,10.917,0,15.083     c2.083,2.083,4.813,3.125,7.542,3.125s5.458-1.042,7.542-3.125l88.458-88.458l88.458,88.458c2.083,2.083,4.813,3.125,7.542,3.125     c2.729,0,5.458-1.042,7.542-3.125c4.167-4.167,4.167-10.917,0-15.083l-88.458-88.458l88.458-88.458     C342.375,142.042,342.375,135.292,338.208,131.125z"/>
 			</g>
 		</svg>
 	);
@@ -100,7 +70,6 @@ export const NextIcon = () => {
 			viewBox="6 6 12 12"
 		>
 			<g stroke="none" fill="none" fillRule="evenodd" transform=" scale(-1, 1) translate(-24, 0)">
-				<polygon points="0 0 24 0 24 24 0 24"></polygon>
 				<polygon fill="currentColor" points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
 			</g>
 		</svg>
@@ -113,10 +82,10 @@ export const PreviousIcon = () => {
 			width="50%"
 			height="50%"
 			viewBox="6 6 12 12"
+			fill="currentColor"
 		>
-			<g stroke="none" fill="none" fillRule="evenodd">
-				<polygon points="0 0 24 0 24 24 0 24"></polygon>
-				<polygon fill="currentColor" points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
+			<g>
+				<polygon points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
 			</g>
 		</svg>
   );
@@ -128,10 +97,11 @@ export const DoubleNextIcon = () => {
 			width="50%"
 			height="50%"
 			viewBox="6 6 12 12"
+			fill="currentColor"
 		>
-			<g stroke="none" fill="none" fillRule="evenodd" transform=" scale(-1, 1) translate(-24, 0)">
-				<polygon points="0 0 24 0 24 24 0 24"></polygon>
-				<polygon fill="currentColor" points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
+			<g transform="scale(-1, 1) translate(-24, 0)">
+				<polygon points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
+				<polygon transform="translate(5 0)" points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
 			</g>
 		</svg>
   );
@@ -143,10 +113,11 @@ export const DoublePreviousIcon = () => {
 			width="50%"
 			height="50%"
 			viewBox="6 6 12 12"
+			fill="currentColor"
 		>
-			<g stroke="none" fill="none" fillRule="evenodd">
-				<polygon points="0 0 24 0 24 24 0 24"></polygon>
-				<polygon fill="currentColor" points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
+			<g>
+				<polygon points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
+				<polygon transform="translate(5 0)" points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
 			</g>
 		</svg>
   );
@@ -158,10 +129,10 @@ export const UpIcon = () => {
 			width="50%"
 			height="50%"
 			viewBox="6 6 12 12"
+			fill="currentColor"
 		>
-			<g stroke="none" fill="none" fillRule="evenodd" transform="rotate(-90 12 12)">
-				<polygon points="0 0 24 0 24 24 0 24"></polygon>
-				<polygon fill="currentColor" points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
+			<g transform="rotate(-90 12 12)">
+				<polygon points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
 			</g>
 		</svg>
   );
@@ -173,10 +144,10 @@ export const DownIcon = () => {
 			width="50%"
 			height="50%"
 			viewBox="6 6 12 12"
+			fill="currentColor"
 		>
-			<g stroke="none" fill="none" fillRule="evenodd" transform="rotate(90 12 12)">
-				<polygon points="0 0 24 0 24 24 0 24"></polygon>
-				<polygon fill="currentColor" points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
+			<g transform="rotate(90 12 12)">
+				<polygon points="10.02 6 8.61 7.41 13.19 12 8.61 16.59 10.02 18 16.02 12"></polygon>
 			</g>
 		</svg>
   );
