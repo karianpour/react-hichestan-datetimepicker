@@ -33,7 +33,8 @@
   },
   "peerDependencies": {
     "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react-dom": "^16.12.0",
+    "@babel/runtime": "^7.9.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
