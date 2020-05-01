@@ -73,6 +73,57 @@ and handle the change like normal input:
 
 ```
 
+## Material-ui
+
+If you happened to use it with material-ui v3, this is the way I used it :
+
+```jsx
+export const MaterialDateInput = (props : any) => {
+  let {inputProps, value, ...rest} = props;
+
+  if(value === undefined || value === null){
+    value = '';
+  }
+
+  const shrink = !!value;
+
+  return (
+    <TextField
+      {...rest}
+      value={value}
+      InputLabelProps={shrink ? {shrink} : {}}
+      InputProps={{
+        inputComponent: DateInput,
+        inputProps,
+      }}
+    />
+  )
+}
+
+export const MaterialDateTimeInput = (props : any) => {
+  let {inputProps, value, ...rest} = props;
+
+  if(value === undefined || value === null){
+    value = '';
+  }
+
+  const shrink = !!value;
+
+  return (
+    <TextField
+      {...rest}
+      value={value}
+      InputLabelProps={shrink ? {shrink} : {}}
+      InputProps={{
+        inputComponent: DateTimeInput,
+        inputProps,
+      }}
+    />
+  )
+}
+```
+
+
 #### component types:
 
 | name | Description |
@@ -120,6 +171,10 @@ The dialog box uses these css variables for the colors
   --datepicker-today-background: #eec3c347;
   --datepicker-border-color: grey;
   --datepicker-shadow-color: #5959597a;
+  --datepicker-icon-button-color: #444;
+  --datepicker-icon-button-background-color: #eee;
+  --datepicker-icon-button-hover-color: #111;
+  --datepicker-icon-button-background-hover-color: #bbb;
 ```
 to change run a js like this:
 
