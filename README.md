@@ -183,7 +183,7 @@ document.documentElement.style.setProperty("--datepicker-color", "#");
 document.documentElement.style.setProperty("--datepicker-button-hover-color", "black");
 ```
 
-you can run it on the main `index.js` file
+you can run it on the main `index.js/ts` or `theme.js/ts` file
 
 ### ToDo
 - In mobile device it is not a good experience to type in input text, having select make more sense.
