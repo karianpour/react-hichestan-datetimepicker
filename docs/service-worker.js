@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/react-hichestan-datetimepicker/precache-manifest.0482f4d690108a5e04b5bcbac86fc263.js"
+  "/react-hichestan-datetimepicker/precache-manifest.c47816747c04c7c883ee550218fd58b9.js"
 );
 
 self.addEventListener('message', (event) => {

@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "319ed04cced395072a93c4296a6c9112",
+    "revision": "9f93319811d8b664787855fea2d4a0fd",
     "url": "/react-hichestan-datetimepicker/index.html"
   },
   {
-    "revision": "0ca8aa3a285aaa3944b5",
+    "revision": "1994323c687f8f73348d",
     "url": "/react-hichestan-datetimepicker/static/css/main.bfcdd823.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/react-hichestan-datetimepicker/static/js/2.a3bae373.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "0ca8aa3a285aaa3944b5",
-    "url": "/react-hichestan-datetimepicker/static/js/main.61166ee1.chunk.js"
+    "revision": "1994323c687f8f73348d",
+    "url": "/react-hichestan-datetimepicker/static/js/main.8ef6b278.chunk.js"
   },
   {
     "revision": "0a4f9032b682da5d3654",

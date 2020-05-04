@@ -28,17 +28,17 @@ export function isTheSameDay(date1, date2){
 
 export function mapToFarsi(str) {
   if(!str && str!==0 && str!=='0') return str;
-  return str.toString().replace(/[1234567890]/gi, e => String.fromCharCode(e.charCodeAt(0) + 1728))
+  return str.toString().replace(/[1234567890١٢٣٤٥٦٧٨٩٠]/gi, e => { const c = e.charCodeAt(0); return String.fromCharCode(c + (c < 60 ? 1728 : 144)) })
 }
 
 export function mapToLatin(str) {
   if(!str) return str;
-  return str.toString().replace(/[۱۲۳۴۵۶۷۸۹۰]/gi, e => String.fromCharCode(e.charCodeAt(0) - 1728))
+  return str.toString().replace(/[۱۲۳۴۵۶۷۸۹۰١٢٣٤٥٦٧٨٩٠]/gi, e => { const c = e.charCodeAt(0); return String.fromCharCode(c - (c < 1770 ? 1584 : 1728)) })
 }
 
 export function stripAnyThingButDigits(str) {
   if(!str) return str;
-  return str.toString().replace(/[^1234567890۱۲۳۴۵۶۷۸۹۰]/gi, '');
+  return str.toString().replace(/[^1234567890۱۲۳۴۵۶۷۸۹۰١٢٣٤٥٦٧٨٩٠]/gi, '');
 }
 
 export function inspectDay (day, selectionStart, seperatorPosition, max) {
