@@ -195,6 +195,9 @@ class DateInputWithDialog extends Component {
     if(nextState.openDialog !== this.state.openDialog){
       return true;
     }
+    if(nextProps.placeholder !== this.props.placeholder){
+      return true;
+    }
     return false;
   }
 

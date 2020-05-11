@@ -578,6 +578,9 @@ class DateInput extends Component {
     if(nextProps.readOnly !== this.props.readOnly){
       this.inputRef.current.readOnly = nextProps.readOnly;
     }
+    if(nextProps.placeholder !== this.props.placeholder){
+      this.inputRef.current.placeholder = nextProps.placeholder;
+    }
     return false;
   }
 
