@@ -82,6 +82,10 @@ class DateInputWithDialog extends Component {
      */
     ltr: PropTypes.bool,
     /**
+     * pop the date (time) dialog by clicking on the input.
+     */
+    autoPop: PropTypes.bool,
+    /**
      * Sets the value for the Date-Time input.
      */
     value: PropTypes.oneOfType([
@@ -117,6 +121,12 @@ class DateInputWithDialog extends Component {
         this.props.onShow();
       }
     });
+  };
+
+  handleClick = (event) => {
+    if(this.props.autoPop){
+      this.handleCalendar();
+    }
   };
 
   handleDateChange = (date) => {
@@ -217,6 +227,7 @@ class DateInputWithDialog extends Component {
       gregorian,
       ltr,
       onChange,
+      autoPop,
       ...rest
     } = this.props;
 
@@ -225,7 +236,7 @@ class DateInputWithDialog extends Component {
     } = this.state;
 
     return (
-      <div ref={this.inputRef} className='date-input-with-dialog-main'>
+      <div ref={this.inputRef} className='date-input-with-dialog-main' onClick={this.handleClick}>
         <DateInput
           className={`date-input-with-dialog-input${ltr ? ' ltr':''} ${this.props.className ? this.props.className : ''}`} 
           gregorian={gregorian}

@@ -112,7 +112,7 @@ class Example extends Component {
               readOnly={readOnly}
               ltr={ltr}
               onChange={this.handleChange}
-              placeholder="فیلد تاریخ فقط تایپی" />
+              placeholder="فیلد تاریخ و زمان فقط تایپی" />
             <br/>
             خروجی
             <br/>

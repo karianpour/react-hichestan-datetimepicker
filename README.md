@@ -139,6 +139,7 @@ Property | Type | Required | Default value | Description
 name|string|no||The name that will be set while firing the onChange event in the target object
 onChange|func|no||Callback function that is fired when the date value changes. @param {string} date and time, The new date and time in iso 8601 format like 2018-08-23T21:06:50Z. it is always UTC
 autoOk|bool|no|true|If true, automatically accept and close the picker on select a date.
+autoPop|bool|no|true|If true, automatically open the date dialog by clicking on the input.
 closeLabel|node|no||Override the default text of the &#x27;OK&#x27; button.
 style|object|no|&lt;See the source code&gt;|Override the inline-styles of the root element.
 className|string|no||The css class name of the root element.
