@@ -31,6 +31,7 @@ Here you can experience a live [demo](https://karianpour.github.io/react-hichest
 - Align the picker to the right of the main input.
 - Compatible input onChange event.
 - Gregorian support and converter.
+- Create-React-App and NextJs compatible
 
 ## Installation
 
@@ -77,50 +78,59 @@ and handle the change like normal input:
 
 If you happened to use it with material-ui v3, this is the way I used it :
 
-```jsx
-export const MaterialDateInput = (props : any) => {
-  let {inputProps, value, ...rest} = props;
+```tsx
+import React from 'react';
+import { TextField, TextFieldProps } from '@material-ui/core';
+import { DateTimeInput, DateInput } from 'react-hichestan-datetimepicker';
 
+export const ZarinDateTimeField = ({
+  value,
+  inputProps,
+  ...props
+}:({inputProps?: any} & TextFieldProps)) => {
   if(value === undefined || value === null){
     value = '';
   }
 
+  // a bug in material-ui, it should be done by them
   const shrink = !!value;
 
   return (
     <TextField
-      {...rest}
       value={value}
-      InputLabelProps={shrink ? {shrink} : {}}
-      InputProps={{
-        inputComponent: DateInput,
-        inputProps,
-      }}
-    />
-  )
-}
-
-export const MaterialDateTimeInput = (props : any) => {
-  let {inputProps, value, ...rest} = props;
-
-  if(value === undefined || value === null){
-    value = '';
-  }
-
-  const shrink = !!value;
-
-  return (
-    <TextField
-      {...rest}
-      value={value}
+      {...props}
       InputLabelProps={shrink ? {shrink} : {}}
       InputProps={{
         inputComponent: DateTimeInput,
         inputProps,
       }}
     />
-  )
-}
+)};
+
+export const ZarinDateField = ({
+  value,
+  inputProps,
+  ...props
+}:({inputProps?: any} & TextFieldProps)) => {
+  if(value === undefined || value === null){
+    value = '';
+  }
+
+  // a bug in material-ui, it should be done by them
+  const shrink = !!value;
+
+  return (
+    <TextField
+      value={value}
+      {...props}
+      InputLabelProps={shrink ? {shrink} : {}}
+      InputProps={{
+        inputComponent: DateInput,
+        inputProps,
+      }}
+    />
+)};
+
 ```
 
 
