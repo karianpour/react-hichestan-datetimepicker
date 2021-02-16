@@ -81,13 +81,13 @@ If you happened to use it with material-ui v3, this is the way I used it :
 ```tsx
 import React from 'react';
 import { TextField, TextFieldProps } from '@material-ui/core';
-import { DateTimeInput, DateInput } from 'react-hichestan-datetimepicker';
+import { DateTimeInput, DateTimeInputProps, DateInput, DateInputProps } from 'react-hichestan-datetimepicker';
 
-export const ZarinDateTimeField = ({
+export const MaterialDateTimeField = ({
   value,
   inputProps,
   ...props
-}:({inputProps?: any} & TextFieldProps)) => {
+}:({inputProps?: DateTimeInputProps} & TextFieldProps)) => {
   if(value === undefined || value === null){
     value = '';
   }
@@ -107,11 +107,11 @@ export const ZarinDateTimeField = ({
     />
 )};
 
-export const ZarinDateField = ({
+export const MaterialDateField = ({
   value,
   inputProps,
   ...props
-}:({inputProps?: any} & TextFieldProps)) => {
+}:({inputProps?: DateInputProps} & TextFieldProps)) => {
   if(value === undefined || value === null){
     value = '';
   }

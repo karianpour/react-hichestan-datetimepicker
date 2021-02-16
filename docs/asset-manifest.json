@@ -1,22 +1,20 @@
 {
   "files": {
-    "main.css": "/react-hichestan-datetimepicker/static/css/main.bfcdd823.chunk.css",
-    "main.js": "/react-hichestan-datetimepicker/static/js/main.fdb0a7fa.chunk.js",
-    "main.js.map": "/react-hichestan-datetimepicker/static/js/main.fdb0a7fa.chunk.js.map",
-    "runtime-main.js": "/react-hichestan-datetimepicker/static/js/runtime-main.2914241f.js",
-    "runtime-main.js.map": "/react-hichestan-datetimepicker/static/js/runtime-main.2914241f.js.map",
-    "static/js/2.d11fb192.chunk.js": "/react-hichestan-datetimepicker/static/js/2.d11fb192.chunk.js",
-    "static/js/2.d11fb192.chunk.js.map": "/react-hichestan-datetimepicker/static/js/2.d11fb192.chunk.js.map",
+    "main.css": "/react-hichestan-datetimepicker/static/css/main.20b53125.chunk.css",
+    "main.js": "/react-hichestan-datetimepicker/static/js/main.a469db7a.chunk.js",
+    "main.js.map": "/react-hichestan-datetimepicker/static/js/main.a469db7a.chunk.js.map",
+    "runtime-main.js": "/react-hichestan-datetimepicker/static/js/runtime-main.911a5cdf.js",
+    "runtime-main.js.map": "/react-hichestan-datetimepicker/static/js/runtime-main.911a5cdf.js.map",
+    "static/js/2.3c56619d.chunk.js": "/react-hichestan-datetimepicker/static/js/2.3c56619d.chunk.js",
+    "static/js/2.3c56619d.chunk.js.map": "/react-hichestan-datetimepicker/static/js/2.3c56619d.chunk.js.map",
     "index.html": "/react-hichestan-datetimepicker/index.html",
-    "precache-manifest.d3fd72f914d3efd42fecba325b215019.js": "/react-hichestan-datetimepicker/precache-manifest.d3fd72f914d3efd42fecba325b215019.js",
-    "service-worker.js": "/react-hichestan-datetimepicker/service-worker.js",
-    "static/css/main.bfcdd823.chunk.css.map": "/react-hichestan-datetimepicker/static/css/main.bfcdd823.chunk.css.map",
-    "static/js/2.d11fb192.chunk.js.LICENSE.txt": "/react-hichestan-datetimepicker/static/js/2.d11fb192.chunk.js.LICENSE.txt"
+    "static/css/main.20b53125.chunk.css.map": "/react-hichestan-datetimepicker/static/css/main.20b53125.chunk.css.map",
+    "static/js/2.3c56619d.chunk.js.LICENSE.txt": "/react-hichestan-datetimepicker/static/js/2.3c56619d.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.2914241f.js",
-    "static/js/2.d11fb192.chunk.js",
-    "static/css/main.bfcdd823.chunk.css",
-    "static/js/main.fdb0a7fa.chunk.js"
+    "static/js/runtime-main.911a5cdf.js",
+    "static/js/2.3c56619d.chunk.js",
+    "static/css/main.20b53125.chunk.css",
+    "static/js/main.a469db7a.chunk.js"
   ]
 }

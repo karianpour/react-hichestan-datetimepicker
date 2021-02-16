@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import shallowEqualObjects from 'shallow-equal/objects';
-import DateTimeInput from './DateTimeInput';
+import DateTimeInput from './DateTimeInputSimple';
 import {CalendarIcon, DeleteIcon} from './Picker/Icons';
 import DatePicker from './DatePicker';
 import './DateInputWithDialog.css';
@@ -14,6 +14,10 @@ class DateInputWithDialog extends Component {
      * The name that will be set while firing the onChange event in the target object
      */
     name: PropTypes.string,
+    /**
+     * The number format to show 'FARSI' / 'LATIN'
+     */
+    numberFormat: PropTypes.string,
     /**
      * Callback function that is fired when the date value changes.
      * @param {string} date and time, The new date and time in iso 8601 format like 2018-08-23T21:06:50Z

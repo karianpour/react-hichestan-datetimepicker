@@ -1,6 +1,6 @@
 {
   "name": "react-hichestan-datetimepicker",
-  "version": "2.0.23",
+  "version": "3.0.24",
   "description": "A serie of react components to manipulate persian (jalali) date.",
   "author": "Hichestan",
   "copyright.owner": "Hichestan Corp.",
@@ -28,23 +28,21 @@
     "build-examples": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "build": "rimraf dist && NODE_ENV=production babel src/lib --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
-    "docs": "react-doc-generator ./src/lib/ -o DOCUMENTATION.md"
+    "build": "rimraf dist && NODE_ENV=production babel src/lib --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__"
   },
   "peerDependencies": {
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "@babel/runtime": "^7.9.0"
+    "@babel/runtime": "^7.9.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.11.4",
     "@babel/preset-react": "^7.10.4",
     "prop-types": "^15.7.2",
-    "react": "^16.13.1",
-    "react-doc-generator": "^1.2.5",
-    "react-dom": "^16.13.1",
-    "react-scripts": "^3.4.3",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-scripts": "^4.0.2",
     "rimraf": "^3.0.2"
   },
   "dependencies": {
